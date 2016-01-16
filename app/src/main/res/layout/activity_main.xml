@@ -1,0 +1,133 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hello_world" />
+
+        <EditText
+            android:id="@+id/setScoreEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="输入score"
+            android:inputType="number"
+            android:maxLength="3" />
+
+        <EditText
+            android:id="@+id/setPlayerNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="输入playerName"
+            android:maxLength="20" />
+
+        <EditText
+            android:id="@+id/setIsKPEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:digits="01"
+            android:hint="输入isKP"
+            android:maxLength="1" />
+
+        <EditText
+            android:id="@+id/setSkillsEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="输入skills-以,分割" />
+
+        <Button
+            android:id="@+id/addBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="添加" />
+
+        <EditText
+            android:id="@+id/getDataEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="输入objId获取数据" />
+
+        <Button
+            android:id="@+id/getBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="获取" />
+
+        <Button
+            android:id="@+id/updBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="获取并更新" />
+
+        <Button
+            android:id="@+id/addArrayBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="添加数组类型" />
+
+        <Button
+            android:id="@+id/delBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="删除数据" />
+
+        <Button
+            android:id="@+id/startRelation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="测试关系数据" />
+
+        <Button
+            android:id="@+id/startQuery"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="测试查询" />
+
+        <Button
+            android:id="@+id/startUser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="测试用户" />
+
+        <Button
+            android:id="@+id/startAuthor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="测试权限" />
+
+        <Button
+            android:id="@+id/startFile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="测试文件" />
+
+        <Button
+            android:id="@+id/startLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="测试位置" />
+
+        <Button
+            android:id="@+id/startVolley"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="测试Volley" />
+
+        <Button
+            android:id="@+id/startImageLoader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="测试ImageLoader" />
+
+    </LinearLayout>
+
+</ScrollView>

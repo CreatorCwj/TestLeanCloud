@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">TestLeanCloud</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_relation">RelationActivity</string>
+    <string name="title_activity_query">QueryActivity</string>
+    <string name="title_activity_user">UserActivity</string>
+    <string name="title_activity_author">AuthorActivity</string>
+    <string name="title_activity_file">FileActivity</string>
+    <string name="title_activity_location">LocationActivity</string>
+    <string name="title_activity_parse_list">ParseListActivity</string>
+    <string name="title_activity_okhttp">OKHttpActivity</string>
+    <string name="title_activity_image_loader">ImageLoaderActivity</string>
+</resources>

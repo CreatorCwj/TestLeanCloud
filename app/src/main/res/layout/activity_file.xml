@@ -1,0 +1,54 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hello_world" />
+
+        <EditText
+            android:id="@+id/setPostId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="输入postId" />
+
+        <Button
+            android:id="@+id/addFile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="增加一个关联的file到post" />
+
+        <Button
+            android:id="@+id/getFile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="获取file展示" />
+
+        <Button
+            android:id="@+id/addImageFile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="增加一个关联的image到post" />
+
+        <Button
+            android:id="@+id/getImageFile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="获取image展示" />
+    </LinearLayout>
+
+</ScrollView>
