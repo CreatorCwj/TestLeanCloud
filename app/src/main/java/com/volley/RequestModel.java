@@ -2,6 +2,7 @@ package com.volley;
 
 import android.content.Context;
 
+import com.android.volley.Request;
 import com.volley.listener.RequestCallback;
 import com.volley.listener.RequestCancelCallback;
 
@@ -26,13 +27,13 @@ class RequestModel<T> {
     private String pathUrl;
 
     //方法
-    private int method;
+    private int method = Request.Method.GET;
 
     //TAG 用于取消的tag
     private Object tag;
 
     //映射类
-    public Class<T> clazz;
+    private Class<T> clazz;
 
     //头部
     private Map<String, String> headers;

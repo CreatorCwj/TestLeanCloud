@@ -43,7 +43,7 @@ public class MyApplication extends Application {
         //Volley
         Network.initNetwork(this);
         //ImageLoader
-        ImageLoader.initConfig(this);
+        ImageLoader.initConfig(this, R.drawable.ic_contact);
     }
 
     private void initPush() {
