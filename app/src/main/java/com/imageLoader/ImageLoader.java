@@ -40,6 +40,16 @@ public class ImageLoader {
         initImageLodaer(context, options);
     }
 
+    public static void initConfig(Context context, int loadingImageId, Drawable failImage) {
+        DisplayImageOptions options = ImageDisplayOptions.getOptions(loadingImageId, failImage);
+        initImageLodaer(context, options);
+    }
+
+    public static void initConfig(Context context, Drawable loadingImage, int failImageId) {
+        DisplayImageOptions options = ImageDisplayOptions.getOptions(loadingImage, failImageId);
+        initImageLodaer(context, options);
+    }
+
     public static void initConfig(Context context, int loadingImageId, int failImageId) {
         DisplayImageOptions options = ImageDisplayOptions.getOptions(loadingImageId, failImageId);
         initImageLodaer(context, options);

@@ -1,9 +1,7 @@
 package com.testleancloud;
 
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.adapter.NormalRecyclerAdapter;
@@ -15,6 +13,7 @@ import com.util.Utils;
 import com.volley.Network;
 import com.volley.listener.RequestCallback;
 import com.widget.AutoSwipeRefreshLayout;
+import com.widget.loadmorerecyclerview.LoadMoreRecyclerView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,13 +24,13 @@ import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
 @ContentView(R.layout.activity_image_loader)
-public class ImageLoaderActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class ImageLoaderActivity extends BaseActivity implements AutoSwipeRefreshLayout.OnRefreshListener, LoadMoreRecyclerView.OnLoadListener {
 
     @InjectView(R.id.refreshLayout)
     private AutoSwipeRefreshLayout refreshLayout;
 
     @InjectView(R.id.recyclerView)
-    private RecyclerView recyclerView;
+    private LoadMoreRecyclerView recyclerView;
 
     private NormalRecyclerAdapter adapter;
 
@@ -44,10 +43,16 @@ public class ImageLoaderActivity extends BaseActivity implements SwipeRefreshLay
 
     private void initRecycleView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));//线性
+
 //        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));//gridView
+
+//        StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+//        manager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
 //        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, OrientationHelper.VERTICAL));//瀑布流
+
         adapter = new NormalRecyclerAdapter(this);
         recyclerView.setAdapter(adapter);
+        recyclerView.setCanLoadMore(true);
     }
 
     private void initRefreshLayout() {
@@ -65,9 +70,15 @@ public class ImageLoaderActivity extends BaseActivity implements SwipeRefreshLay
         obtainData();
     }
 
+    @Override
+    public void onLoad() {
+        obtainData();
+    }
+
     private void obtainData() {
         Map<String, String> params = new HashMap<>();
-        params.put("keyword", "美女");
+        params.put("keyword", "足球");
+        params.put("num", "10");
         new Network<>(this, GirlImage.class)
                 .setPathUrl(getResources().getString(R.string.get_images))
                 .setMethod(Request.Method.GET)
@@ -84,12 +95,14 @@ public class ImageLoaderActivity extends BaseActivity implements SwipeRefreshLay
                             adapter.addData(urls);
                         }
                         refreshLayout.setRefreshing(false);
+                        recyclerView.stopLoadMore();
                     }
 
                     @Override
                     public void onRequestError(String errorMessage) {
                         Utils.showToast(ImageLoaderActivity.this, errorMessage);
                         refreshLayout.setRefreshing(false);
+                        recyclerView.stopLoadMore();
                     }
                 }).execute();
     }
@@ -97,6 +110,7 @@ public class ImageLoaderActivity extends BaseActivity implements SwipeRefreshLay
     @Override
     protected void setListener() {
         refreshLayout.setOnRefreshListener(this);
+        recyclerView.setOnLoadListener(this);
         textView.setOnClickListener(this);
     }
 

@@ -5,7 +5,6 @@ import android.graphics.drawable.Drawable;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 /**
  * Created by cwj on 16/1/14.
@@ -21,7 +20,7 @@ public class ImageDisplayOptions {
                 .cacheOnDisk(true)//磁盘缓存
                 .bitmapConfig(Bitmap.Config.RGB_565)//图像解码配置
                 .imageScaleType(ImageScaleType.IN_SAMPLE_INT)//解码规模类型
-                .displayer(new FadeInBitmapDisplayer(300))//显示方式(300duration的渐进显示)
+//                .displayer(new FadeInBitmapDisplayer(300))//显示方式(300duration的渐进显示)
                 .resetViewBeforeLoading(false);//加载前重置
 
         //加载时的图片
@@ -40,6 +39,14 @@ public class ImageDisplayOptions {
             builder.showImageForEmptyUri(failImage);
         }
         return builder.build();
+    }
+
+    public static DisplayImageOptions getOptions(int loadingImageId, Drawable failImage) {
+        return getOptions(loadingImageId, INVALID_IMAGE_ID, null, failImage);
+    }
+
+    public static DisplayImageOptions getOptions(Drawable loadingImage, int failImageId) {
+        return getOptions(INVALID_IMAGE_ID, failImageId, loadingImage, null);
     }
 
     public static DisplayImageOptions getOptions(int loadingImageId, int failImageId) {
