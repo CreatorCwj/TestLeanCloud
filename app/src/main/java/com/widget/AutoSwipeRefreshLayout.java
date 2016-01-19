@@ -84,8 +84,8 @@ public class AutoSwipeRefreshLayout extends SwipeRefreshLayout implements SwipeR
      * 外部主动调用
      */
     public void refresh() {
-        //没有刷新且没有在加载的时候可以调用刷新
-        if (isRefreshing() && isLoading())
+        //刷新或加载时不允许刷新
+        if (isRefreshing() || isLoading())
             return;
         invokeRefresh();
     }

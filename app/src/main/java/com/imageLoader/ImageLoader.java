@@ -30,7 +30,7 @@ public class ImageLoader {
 
     /**
      * InitConfig:传入不同的参数来初始化ImageLoader框架,只能初始化一次
-     * <p>
+     * <p/>
      * 参数:loading/failImageId:加载中和加载失败的图片的drawableId
      * loading/failImage:加载中和加载失败的图片的drawable
      * defaultImage/Id:加载中和加载失败使用统一的图片
@@ -247,6 +247,15 @@ public class ImageLoader {
      */
     public static void clearMemoryCache() {
         com.nostra13.universalimageloader.core.ImageLoader.getInstance().clearMemoryCache();
+    }
+
+    /**
+     * 是否已经初始化
+     *
+     * @return
+     */
+    public static boolean isInitial() {
+        return com.nostra13.universalimageloader.core.ImageLoader.getInstance().isInited();
     }
 
 }

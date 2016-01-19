@@ -61,6 +61,7 @@ public class LoadMoreRecyclerView extends RecyclerView {
 
     public void stopLoadMore() {
         this.isLoading = false;
+        notifyAdapterLoadingOrNot();
     }
 
     public boolean isCanLoadMore() {
@@ -75,19 +76,19 @@ public class LoadMoreRecyclerView extends RecyclerView {
     public void setCanLoadMore(boolean canLoadMore) {
         //设置完可否加载状态后要告知adapter进行刷新
         this.canLoadMore = canLoadMore;
-        RecyclerViewAdapter adapter = (RecyclerViewAdapter) getAdapter();
-        if (adapter != null)
-            adapter.setCanLoadMore(canLoadMore);
+        notifyAdapterCanLoadMoreOrNot();
     }
 
     /**
-     * 初次设置adapter要告知adapter进行刷新
-     * 如果是grid的,那么footer要跨所有列
+     * 1.初次设置adapter要告知adapter进行刷新
+     * 2.如果是grid的,那么footer要跨所有列
      */
     @Override
     public void setAdapter(final Adapter adapter) {
         if (adapter instanceof RecyclerViewAdapter) {
-            ((RecyclerViewAdapter) adapter).setCanLoadMore(isCanLoadMore());
+            //1
+            notifyAdapterCanLoadMoreOrNot();
+            //2
             if (getLayoutManager() instanceof GridLayoutManager) {
                 final GridLayoutManager manager = (GridLayoutManager) getLayoutManager();
                 manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -107,17 +108,19 @@ public class LoadMoreRecyclerView extends RecyclerView {
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
             super.onScrollStateChanged(recyclerView, newState);
-            //空闲状态,可以加载更多,没有在加载和刷新的情况下调用刷新
+            //空闲状态,可以加载更多,没有在加载和刷新的情况下调用加载
             if (newState == RecyclerView.SCROLL_STATE_IDLE && isCanLoadMore() && !isLoading() && !isRefreshing()) {
                 handleLoadMore();
             }
             //根据滑动状态来暂停/开始图片加载
             switch (newState) {
                 case RecyclerView.SCROLL_STATE_SETTLING://快速滑动时暂停
-                    ImageLoader.pause();
+                    if (ImageLoader.isInitial())
+                        ImageLoader.pause();
                     break;
                 default:
-                    ImageLoader.resume();
+                    if (ImageLoader.isInitial())
+                        ImageLoader.resume();
                     break;
             }
         }
@@ -142,15 +145,31 @@ public class LoadMoreRecyclerView extends RecyclerView {
         Adapter adapter = getAdapter();
         if (adapter != null) {
             int count = adapter.getItemCount();
-            if (count > 0) {
+            if (count > 0) {//没数据不让加载
                 LayoutManager manager = getLayoutManager();
                 View lastView = manager.findViewByPosition(count - 1);
                 if (lastView != null && lastView.getTop() > 0) {
                     this.isLoading = true;
+                    notifyAdapterLoadingOrNot();
                     if (onLoadListener != null)
                         onLoadListener.onLoad();
                 }
             }
         }
+    }
+
+    //通知adapter更新是否可以加载的状态
+    private void notifyAdapterCanLoadMoreOrNot() {
+        RecyclerViewAdapter adapter = (RecyclerViewAdapter) getAdapter();
+        if (adapter != null)
+            adapter.setCanLoadMore(isCanLoadMore());
+
+    }
+
+    //通知adapter更新是否正在加载的状态
+    private void notifyAdapterLoadingOrNot() {
+        RecyclerViewAdapter adapter = (RecyclerViewAdapter) getAdapter();
+        if (adapter != null)
+            adapter.setIsLoading(isLoading());
     }
 }

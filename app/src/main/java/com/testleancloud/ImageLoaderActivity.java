@@ -78,7 +78,7 @@ public class ImageLoaderActivity extends BaseActivity implements AutoSwipeRefres
     private void obtainData() {
         Map<String, String> params = new HashMap<>();
         params.put("keyword", "足球");
-        params.put("num", "10");
+        params.put("num", "11");
         new Network<>(this, GirlImage.class)
                 .setPathUrl(getResources().getString(R.string.get_images))
                 .setMethod(Request.Method.GET)
@@ -89,9 +89,10 @@ public class ImageLoaderActivity extends BaseActivity implements AutoSwipeRefres
                     public void onRequestSuccess(GirlImage result) {
                         if (result != null) {
                             List<String> urls = new ArrayList<>();
-                            for (List<String> item : result.getImage()) {
-                                urls.add(item.get(0));
-                            }
+//                            for (List<String> item : result.getImage()) {
+//                                urls.add(item.get(0));
+//                            }
+                            urls.add("http://img1.imgtn.bdimg.com/it/u=2282547951,3816622274&fm=21&gp=0.jpg");
                             adapter.addData(urls);
                         }
                         refreshLayout.setRefreshing(false);
