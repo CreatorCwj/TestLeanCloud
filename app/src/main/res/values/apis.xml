@@ -4,4 +4,5 @@
 
     <string name="get_movies_cinema">/apistore/movie/cinema</string>
     <string name="get_address_weather">/showapi_open_bus/weather_showapi/address</string>
+    <string name="get_images">/3023/image/search</string>
 </resources>
