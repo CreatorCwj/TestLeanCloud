@@ -8,6 +8,7 @@ import com.adapter.NormalRecyclerAdapter;
 import com.android.volley.Request;
 import com.base.BaseActivity;
 import com.model.GirlImage;
+import com.util.MockData;
 import com.util.UIUtils;
 import com.util.Utils;
 import com.volley.Network;
@@ -101,7 +102,7 @@ public class ImageLoaderActivity extends BaseActivity implements AutoSwipeRefres
 //                            for (List<String> item : result.getImage()) {
 //                                urls.add(item.get(0));
 //                            }
-                            urls.add("http://img1.imgtn.bdimg.com/it/u=2282547951,3816622274&fm=21&gp=0.jpg");
+                            urls = MockData.getImageUrls();
                             adapter.addData(urls);
                             if (urls.size() < page.getPageSize()) {//可以停止加载了
                                 recyclerView.setCanLoadMore(false);

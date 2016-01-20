@@ -1,6 +1,8 @@
 package com.application;
 
 import android.app.Application;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 
 import com.avos.avoscloud.AVException;
@@ -43,7 +45,7 @@ public class MyApplication extends Application {
         //Volley
         Network.initNetwork(this);
         //ImageLoader
-        ImageLoader.initConfig(this, R.drawable.ic_contact);
+        ImageLoader.initConfig(this, new ColorDrawable(Color.GRAY));
     }
 
     private void initPush() {
