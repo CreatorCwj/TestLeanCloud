@@ -18,7 +18,6 @@ public abstract class RecyclerViewAdapter<T> extends BaseRecyclerViewAdapter<T> 
     public static final int FOOTER = Integer.MIN_VALUE;
 
     private boolean canLoadMore = false;//canLoadMore决定是否有footer
-    private boolean isLoading = false;//是否正在加载
 
     public RecyclerViewAdapter(Context context) {
         super(context);
@@ -36,7 +35,7 @@ public abstract class RecyclerViewAdapter<T> extends BaseRecyclerViewAdapter<T> 
             onHolderBinded(holder, position);
         } else {//footer
             //如果可以加载且有数据则可见,否则不可见
-            if (isCanLoadMore() && isLoading() && getDataCount() > 0) {
+            if (isCanLoadMore() && getDataCount() > 0) {
                 holder.itemView.setVisibility(View.VISIBLE);
             } else {
                 holder.itemView.setVisibility(View.GONE);
@@ -125,17 +124,4 @@ public abstract class RecyclerViewAdapter<T> extends BaseRecyclerViewAdapter<T> 
         notifyDataSetChanged();
     }
 
-    /**
-     * isLoading是否正在加载,影响是否显示footer
-     *
-     * @return
-     */
-    public boolean isLoading() {
-        return isLoading;
-    }
-
-    public void setIsLoading(boolean isLoading) {
-        this.isLoading = isLoading;
-        notifyDataSetChanged();
-    }
 }

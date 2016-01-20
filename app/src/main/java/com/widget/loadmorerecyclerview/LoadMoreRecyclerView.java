@@ -20,6 +20,7 @@ import com.widget.loadmorerecyclerview.adapter.RecyclerViewAdapter;
  */
 public class LoadMoreRecyclerView extends RecyclerView {
 
+    private Boolean canLoadMoreInit = null;
     private boolean canLoadMore = false;
     private boolean isLoading = false;
     private OnLoadListener onLoadListener;
@@ -61,11 +62,18 @@ public class LoadMoreRecyclerView extends RecyclerView {
 
     public void stopLoadMore() {
         this.isLoading = false;
-        notifyAdapterLoadingOrNot();
     }
 
     public boolean isCanLoadMore() {
         return canLoadMore;
+    }
+
+    public Boolean getCanLoadMoreInit() {
+        return canLoadMoreInit;
+    }
+
+    public void setCanLoadMoreInit(Boolean canLoadMoreInit) {
+        this.canLoadMoreInit = canLoadMoreInit;
     }
 
     /**
@@ -74,6 +82,9 @@ public class LoadMoreRecyclerView extends RecyclerView {
      * @param canLoadMore
      */
     public void setCanLoadMore(boolean canLoadMore) {
+        //第一次设置要记录是否可以加载的状态,一边后续恢复
+        if (canLoadMoreInit == null)
+            canLoadMoreInit = canLoadMore;
         //设置完可否加载状态后要告知adapter进行刷新
         this.canLoadMore = canLoadMore;
         notifyAdapterCanLoadMoreOrNot();
@@ -150,7 +161,6 @@ public class LoadMoreRecyclerView extends RecyclerView {
                 View lastView = manager.findViewByPosition(count - 1);
                 if (lastView != null && lastView.getTop() > 0) {
                     this.isLoading = true;
-                    notifyAdapterLoadingOrNot();
                     if (onLoadListener != null)
                         onLoadListener.onLoad();
                 }
@@ -166,10 +176,4 @@ public class LoadMoreRecyclerView extends RecyclerView {
 
     }
 
-    //通知adapter更新是否正在加载的状态
-    private void notifyAdapterLoadingOrNot() {
-        RecyclerViewAdapter adapter = (RecyclerViewAdapter) getAdapter();
-        if (adapter != null)
-            adapter.setIsLoading(isLoading());
-    }
 }

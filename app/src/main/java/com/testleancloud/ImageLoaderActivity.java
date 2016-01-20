@@ -14,6 +14,7 @@ import com.volley.Network;
 import com.volley.listener.RequestCallback;
 import com.widget.AutoSwipeRefreshLayout;
 import com.widget.loadmorerecyclerview.LoadMoreRecyclerView;
+import com.widget.loadmorerecyclerview.Page;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,6 +35,8 @@ public class ImageLoaderActivity extends BaseActivity implements AutoSwipeRefres
 
     private NormalRecyclerAdapter adapter;
 
+    private Page page;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +56,9 @@ public class ImageLoaderActivity extends BaseActivity implements AutoSwipeRefres
         adapter = new NormalRecyclerAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setCanLoadMore(true);
+
+        page = new Page();
+        page.setPageSize(1);
     }
 
     private void initRefreshLayout() {
@@ -66,17 +72,20 @@ public class ImageLoaderActivity extends BaseActivity implements AutoSwipeRefres
 
     @Override
     public void onRefresh() {
+        page.reset();
         adapter.clearData();
         obtainData();
     }
 
     @Override
     public void onLoad() {
+        page.nextPage();
+        page.setPageSize(15);
         obtainData();
     }
 
     private void obtainData() {
-        Map<String, String> params = new HashMap<>();
+        final Map<String, String> params = new HashMap<>();
         params.put("keyword", "足球");
         params.put("num", "11");
         new Network<>(this, GirlImage.class)
@@ -94,6 +103,10 @@ public class ImageLoaderActivity extends BaseActivity implements AutoSwipeRefres
 //                            }
                             urls.add("http://img1.imgtn.bdimg.com/it/u=2282547951,3816622274&fm=21&gp=0.jpg");
                             adapter.addData(urls);
+                            if (urls.size() < page.getPageSize()) {//可以停止加载了
+                                recyclerView.setCanLoadMore(false);
+                                page.setPageSize(1);
+                            }
                         }
                         refreshLayout.setRefreshing(false);
                         recyclerView.stopLoadMore();
@@ -101,6 +114,7 @@ public class ImageLoaderActivity extends BaseActivity implements AutoSwipeRefres
 
                     @Override
                     public void onRequestError(String errorMessage) {
+                        page.prePage();
                         Utils.showToast(ImageLoaderActivity.this, errorMessage);
                         refreshLayout.setRefreshing(false);
                         recyclerView.stopLoadMore();

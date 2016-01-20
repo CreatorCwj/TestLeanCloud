@@ -62,6 +62,7 @@ public class AutoSwipeRefreshLayout extends SwipeRefreshLayout implements SwipeR
             Object obj = field.get(this);
             if (obj != null && obj instanceof SwipeRefreshLayout.OnRefreshListener) {
                 setRefreshing(true);
+                resetCanLoadState();//恢复load状态
                 ((SwipeRefreshLayout.OnRefreshListener) obj).onRefresh();
             }
         } catch (NoSuchFieldException e) {
@@ -73,11 +74,21 @@ public class AutoSwipeRefreshLayout extends SwipeRefreshLayout implements SwipeR
 
     //判断子view是否处于加载状态,子view只能是LoadMoreRecyclerView
     private boolean isLoading() {
-        View child = getChildAt(1);//0是进度圈
-        if (child != null && child instanceof LoadMoreRecyclerView) {
-            return ((LoadMoreRecyclerView) child).isLoading();
+        LoadMoreRecyclerView child = getRecyclerView();
+        if (child != null) {
+            return child.isLoading();
         }
         return false;
+    }
+
+    private LoadMoreRecyclerView getRecyclerView() {
+        for (int index = 0; index < getChildCount(); ++index) {
+            View v = getChildAt(index);
+            if (v instanceof LoadMoreRecyclerView) {
+                return ((LoadMoreRecyclerView) v);
+            }
+        }
+        return null;
     }
 
     /**
@@ -135,9 +146,19 @@ public class AutoSwipeRefreshLayout extends SwipeRefreshLayout implements SwipeR
             setRefreshing(false);
             return;
         }
-        //否则可以调用刷新
+        //否则可以调用刷新,记住要恢复加载状态
+        resetCanLoadState();
         if (onRefreshListener != null) {
             onRefreshListener.onRefresh();
+        }
+    }
+
+    private void resetCanLoadState() {
+        LoadMoreRecyclerView view = getRecyclerView();
+        if (view != null) {
+            Boolean b = view.getCanLoadMoreInit();
+            if (b != null && b)
+                view.setCanLoadMore(true);
         }
     }
 }
