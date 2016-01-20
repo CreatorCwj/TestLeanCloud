@@ -56,7 +56,7 @@ public class ImageLoaderActivity extends BaseActivity implements AutoSwipeRefres
 
         adapter = new NormalRecyclerAdapter(this);
         recyclerView.setAdapter(adapter);
-        recyclerView.setCanLoadMore(true);
+//        recyclerView.setCanLoadMore(true);
 
         page = new Page();
         page.setPageSize(1);
@@ -66,9 +66,7 @@ public class ImageLoaderActivity extends BaseActivity implements AutoSwipeRefres
         refreshLayout.setColorSchemeResources(
                 android.R.color.holo_green_light, android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-        //一定要设置offset,否则调用setRefreshing(true)时没有效果
-        refreshLayout.setProgressViewOffset(false, -UIUtils.dp2px(this, 24), UIUtils.dp2px(this, 24));
-        refreshLayout.setAutoRefresh(true);
+//        refreshLayout.setAutoRefresh(true);
     }
 
     @Override

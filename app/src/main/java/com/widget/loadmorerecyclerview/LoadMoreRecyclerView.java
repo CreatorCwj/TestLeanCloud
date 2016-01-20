@@ -21,7 +21,7 @@ import com.widget.loadmorerecyclerview.adapter.RecyclerViewAdapter;
 public class LoadMoreRecyclerView extends RecyclerView {
 
     private Boolean canLoadMoreInit = null;
-    private boolean canLoadMore = false;
+    private boolean canLoadMore = true;
     private boolean isLoading = false;
     private OnLoadListener onLoadListener;
 
@@ -78,6 +78,7 @@ public class LoadMoreRecyclerView extends RecyclerView {
 
     /**
      * 是否可以加载更多
+     * 默认为加载
      *
      * @param canLoadMore
      */
@@ -173,7 +174,6 @@ public class LoadMoreRecyclerView extends RecyclerView {
         RecyclerViewAdapter adapter = (RecyclerViewAdapter) getAdapter();
         if (adapter != null)
             adapter.setCanLoadMore(isCanLoadMore());
-
     }
 
 }

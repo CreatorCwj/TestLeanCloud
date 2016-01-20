@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
+import com.util.UIUtils;
 import com.widget.loadmorerecyclerview.LoadMoreRecyclerView;
 
 import java.lang.reflect.Field;
@@ -39,6 +40,8 @@ public class AutoSwipeRefreshLayout extends SwipeRefreshLayout implements SwipeR
     }
 
     private void init() {
+        //一定要设置offset,否则调用setRefreshing(true)时没有效果
+        this.setProgressViewOffset(false, -UIUtils.dp2px(getContext(), 24), UIUtils.dp2px(getContext(), 24));
         this.setOnRefreshListener(this);
         //onResume回调后view会回调此方法来监听layout的改变
         this.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -62,7 +65,6 @@ public class AutoSwipeRefreshLayout extends SwipeRefreshLayout implements SwipeR
             Object obj = field.get(this);
             if (obj != null && obj instanceof SwipeRefreshLayout.OnRefreshListener) {
                 setRefreshing(true);
-                resetCanLoadState();//恢复load状态
                 ((SwipeRefreshLayout.OnRefreshListener) obj).onRefresh();
             }
         } catch (NoSuchFieldException e) {
@@ -112,7 +114,7 @@ public class AutoSwipeRefreshLayout extends SwipeRefreshLayout implements SwipeR
 
     /**
      * 设置是否允许第一次自动刷新
-     * 默认为允许刷新
+     * 默认为允许自动刷新
      *
      * @param autoRefresh
      */
@@ -157,8 +159,11 @@ public class AutoSwipeRefreshLayout extends SwipeRefreshLayout implements SwipeR
         LoadMoreRecyclerView view = getRecyclerView();
         if (view != null) {
             Boolean b = view.getCanLoadMoreInit();
-            if (b != null && b)
+            if (b == null || b) {
                 view.setCanLoadMore(true);
+            } else {
+                view.setCanLoadMore(false);
+            }
         }
     }
 }
