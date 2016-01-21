@@ -8,7 +8,8 @@ import android.view.View;
 import android.view.ViewParent;
 
 import com.imageLoader.ImageLoader;
-import com.widget.AutoSwipeRefreshLayout;
+import com.widget.RLRView;
+import com.widget.loadmorerecyclerview.adapter.BaseRecyclerViewAdapter;
 import com.widget.loadmorerecyclerview.adapter.RecyclerViewAdapter;
 
 /**
@@ -16,30 +17,31 @@ import com.widget.loadmorerecyclerview.adapter.RecyclerViewAdapter;
  * 可上拉加载更多的RecyclerView
  * 支持刷新不加载,加载不刷新
  * 滑动时图片加载模式
- * 与{@link AutoSwipeRefreshLayout}联合使用
+ * 与{@link RLRView}联合使用
  */
 public class LoadMoreRecyclerView extends RecyclerView {
 
     private Boolean canLoadMoreInit = null;
     private boolean canLoadMore = true;
     private boolean isLoading = false;
+
     private OnLoadListener onLoadListener;
+    private BaseRecyclerViewAdapter.OnItemClickListener onItemClickListener;
+    private BaseRecyclerViewAdapter.OnItemLongClickListener onItemLongClickListener;
 
     /**
-     * 加载请实现该接口
+     * 由RLRView控制的load回调
      */
     public interface OnLoadListener {
         void onLoad();
     }
 
     public LoadMoreRecyclerView(Context context) {
-        super(context);
-        init();
+        this(context, null);
     }
 
     public LoadMoreRecyclerView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
+        this(context, attrs, 0);
     }
 
     public LoadMoreRecyclerView(Context context, AttributeSet attrs, int defStyle) {
@@ -54,6 +56,32 @@ public class LoadMoreRecyclerView extends RecyclerView {
 
     public void setOnLoadListener(OnLoadListener onLoadListener) {
         this.onLoadListener = onLoadListener;
+    }
+
+    /**
+     * itemClick
+     *
+     * @param onItemClickListener
+     */
+    public void setOnItemClickListener(BaseRecyclerViewAdapter.OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+        RecyclerViewAdapter adapter = (RecyclerViewAdapter) getAdapter();
+        if (adapter != null) {
+            adapter.setOnItemClickListener(onItemClickListener);
+        }
+    }
+
+    /**
+     * itemLongClick
+     *
+     * @param onItemLongClickListener
+     */
+    public void setOnItemLongClickListener(BaseRecyclerViewAdapter.OnItemLongClickListener onItemLongClickListener) {
+        this.onItemLongClickListener = onItemLongClickListener;
+        RecyclerViewAdapter adapter = (RecyclerViewAdapter) getAdapter();
+        if (adapter != null) {
+            adapter.setOnItemLongClickListener(onItemLongClickListener);
+        }
     }
 
     public boolean isLoading() {
@@ -92,14 +120,16 @@ public class LoadMoreRecyclerView extends RecyclerView {
     }
 
     /**
-     * 1.初次设置adapter要告知adapter进行刷新
-     * 2.如果是grid的,那么footer要跨所有列
+     * 1.一定要是继承RecyclerViewAdapter的adapter
+     * 2.初次设置adapter要告知adapter进行刷新以及更新监听器
+     * 3.如果是grid的,那么footer要跨所有列
      */
     @Override
     public void setAdapter(final Adapter adapter) {
         if (adapter instanceof RecyclerViewAdapter) {
             //1
             notifyAdapterCanLoadMoreOrNot();
+            notifyOnItemClickListener((RecyclerViewAdapter) adapter);
             //2
             if (getLayoutManager() instanceof GridLayoutManager) {
                 final GridLayoutManager manager = (GridLayoutManager) getLayoutManager();
@@ -114,6 +144,11 @@ public class LoadMoreRecyclerView extends RecyclerView {
             }
             super.setAdapter(adapter);
         }
+    }
+
+    private void notifyOnItemClickListener(RecyclerViewAdapter adapter) {
+        adapter.setOnItemClickListener(onItemClickListener);
+        adapter.setOnItemLongClickListener(onItemLongClickListener);
     }
 
     private OnScrollListener onLoadScrollListener = new OnScrollListener() {
@@ -143,11 +178,11 @@ public class LoadMoreRecyclerView extends RecyclerView {
         }
     };
 
-    //父view是否在刷新(父view只能是AutoSwipeRefreshLayout)
+    //父view是否在刷新(父view只能是RLRView)
     private boolean isRefreshing() {
         ViewParent parent = getParent();
-        if (parent instanceof AutoSwipeRefreshLayout) {
-            return ((AutoSwipeRefreshLayout) parent).isRefreshing();
+        if (parent instanceof RLRView) {
+            return ((RLRView) parent).isRefreshing();
         }
         return false;
     }

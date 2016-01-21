@@ -11,15 +11,18 @@
         android:gravity="center"
         android:text="测试ImageLoader+RecycleView" />
 
-    <com.widget.AutoSwipeRefreshLayout
-        android:id="@+id/refreshLayout"
+    <!--<com.widget.RLRView
+        android:id="@+id/rlrView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:columnCount="2"
+        app:layoutType="linear">
 
-        <com.widget.loadmorerecyclerview.LoadMoreRecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </com.widget.AutoSwipeRefreshLayout>
+    </com.widget.RLRView>-->
+
+    <com.widget.loadmorerecyclerview.LoadMoreRecyclerView
+        android:id="@+id/loadMoreView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>

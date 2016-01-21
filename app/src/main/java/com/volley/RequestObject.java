@@ -72,6 +72,7 @@ class RequestObject<T> extends Request<T> {
             return;
         if (request != null && request.getRequestCallback() != null) {
             request.getRequestCallback().onRequestSuccess(result);
+            request.getRequestCallback().onRequestFinally();
         }
     }
 
@@ -84,6 +85,7 @@ class RequestObject<T> extends Request<T> {
             return;
         if (request != null && request.getRequestCallback() != null && error != null) {
             request.getRequestCallback().onRequestError(error.getMessage());
+            request.getRequestCallback().onRequestFinally();
         }
     }
 

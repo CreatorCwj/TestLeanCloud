@@ -30,9 +30,28 @@ public abstract class RecyclerViewAdapter<T> extends BaseRecyclerViewAdapter<T> 
      * @param position
      */
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (getItemViewType(position) != FOOTER) {
             onHolderBinded(holder, position);
+            //点击事件
+            View v = holder.itemView;
+            if (v != null) {
+                v.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (onItemClickListener != null)
+                            onItemClickListener.onItemClick(position);
+                    }
+                });
+                v.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        if (onItemLongClickListener != null)
+                            onItemLongClickListener.onItemLongClick(position);
+                        return true;
+                    }
+                });
+            }
         } else {//footer
             //如果可以加载且有数据则可见,否则不可见
             if (isCanLoadMore() && getDataCount() > 0) {

@@ -102,6 +102,11 @@ public class VolleyActivity extends BaseActivity {
                         textView.setText(errorMessage);
                         dismissProgressDialog();
                     }
+
+                    @Override
+                    public void onRequestFinally() {
+
+                    }
                 })
                 .setRequestCancelCallback(new RequestCancelCallback() {
                     @Override

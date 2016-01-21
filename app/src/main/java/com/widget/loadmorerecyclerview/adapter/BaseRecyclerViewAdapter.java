@@ -9,11 +9,29 @@ import java.util.List;
 
 /**
  * Created by cwj on 16/1/16.
+ * Adapter基类
  */
-abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     protected LayoutInflater layoutInflater;
     protected List<T> dataList;
+
+    protected OnItemClickListener onItemClickListener;
+    protected OnItemLongClickListener onItemLongClickListener;
+
+    /**
+     * ItemClick
+     */
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    /**
+     * ItemLongClick
+     */
+    public interface OnItemLongClickListener {
+        void onItemLongClick(int position);
+    }
 
     public BaseRecyclerViewAdapter(Context context) {
         this.layoutInflater = LayoutInflater.from(context);
@@ -79,4 +97,11 @@ abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerV
         return null;
     }
 
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    public void setOnItemLongClickListener(OnItemLongClickListener onItemLongClickListener) {
+        this.onItemLongClickListener = onItemLongClickListener;
+    }
 }

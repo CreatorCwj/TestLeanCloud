@@ -9,4 +9,7 @@ public interface RequestCallback<T> {
 
     //请求失败
     void onRequestError(String errorMessage);
+
+    //最终执行的
+    void onRequestFinally();
 }
