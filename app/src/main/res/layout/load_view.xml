@@ -5,9 +5,20 @@
     android:padding="5dp">
 
     <ProgressBar
+        android:id="@+id/loadMoreProgressBar"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_centerInParent="true"
         android:indeterminateDrawable="@anim/progress_circle"
-        android:indeterminateDuration="1150" />
+        android:indeterminateDuration="1150"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/loadMoreText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="上拉加载更多"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="15sp" />
 </RelativeLayout>

@@ -1,16 +1,22 @@
 package com.widget.loadmorerecyclerview;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewParent;
 
 import com.imageLoader.ImageLoader;
+import com.testleancloud.R;
 import com.widget.RLRView;
-import com.widget.loadmorerecyclerview.adapter.BaseRecyclerViewAdapter;
 import com.widget.loadmorerecyclerview.adapter.RecyclerViewAdapter;
+
+import java.util.List;
 
 /**
  * Created by cwj on 16/1/17.
@@ -22,18 +28,49 @@ import com.widget.loadmorerecyclerview.adapter.RecyclerViewAdapter;
 public class LoadMoreRecyclerView extends RecyclerView {
 
     private Boolean canLoadMoreInit = null;
-    private boolean canLoadMore = true;
+    private boolean canLoadMore = true;//默认可加载
     private boolean isLoading = false;
 
     private OnLoadListener onLoadListener;
-    private BaseRecyclerViewAdapter.OnItemClickListener onItemClickListener;
-    private BaseRecyclerViewAdapter.OnItemLongClickListener onItemLongClickListener;
+    private OnItemClickListener onItemClickListener;
+    private OnItemLongClickListener onItemLongClickListener;
+
+    /**
+     * 线性
+     */
+    public static final int LINEAR = 0;
+
+    /**
+     * 网格
+     */
+    public static final int GRID = 1;
+
+    /**
+     * 瀑布流
+     */
+    public static final int WATER_FALL = 2;
+
+    private int layoutType = -1;
 
     /**
      * 由RLRView控制的load回调
      */
     public interface OnLoadListener {
         void onLoad();
+    }
+
+    /**
+     * itemClick
+     */
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    /**
+     * itemLongClick
+     */
+    public interface OnItemLongClickListener {
+        void onItemLongClick(int position);
     }
 
     public LoadMoreRecyclerView(Context context) {
@@ -46,11 +83,63 @@ public class LoadMoreRecyclerView extends RecyclerView {
 
     public LoadMoreRecyclerView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init();
+        initAttrs(context, attrs);//初始化布局属性
+        initProps();//初始化其他属性
+    }
+
+    private void initAttrs(Context context, AttributeSet attrs) {
+        if (attrs != null) {
+            TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RefreshAndLoad);
+            //布局样式
+            int layoutType = typedArray.getInt(R.styleable.RefreshAndLoad_layoutType, LINEAR);//默认线性
+            int columnCount = typedArray.getInt(R.styleable.RefreshAndLoad_columnCount, 2);//需要的话默认2列
+            setLayoutType(layoutType, columnCount);
+            //加载状态
+            boolean canLoadMoreTmp = typedArray.getBoolean(R.styleable.RefreshAndLoad_canLoadMore, true);//默认可加载
+            setCanLoadMore(canLoadMoreTmp);//改变可否加载状态
+            //divider
+            int height = typedArray.getDimensionPixelSize(R.styleable.RefreshAndLoad_dividerHeight, 0);
+            int color = typedArray.getColor(R.styleable.RefreshAndLoad_dividerColor, Color.TRANSPARENT);
+            setDivider(height, color);
+            typedArray.recycle();
+        }
+    }
+
+    /**
+     * 设置divider
+     */
+    public void setDivider(int height, int color) {
+        addItemDecoration(new Divider(height, color));
+    }
+
+    /**
+     * 设置layoutManager和列数
+     * 通过new创建时必须得设置
+     *
+     * @param layoutType  布局样式
+     * @param columnCount 列数(线性布局样式时无效)
+     */
+    public void setLayoutType(int layoutType, int columnCount) {
+        if (this.layoutType != layoutType) {//和原来相同则不变
+            this.layoutType = layoutType;
+            switch (this.layoutType) {
+                case LINEAR:
+                    setLayoutManager(new LinearLayoutManager(getContext()));
+                    break;
+                case GRID:
+                    setLayoutManager(new GridLayoutManager(getContext(), columnCount));
+                    break;
+                case WATER_FALL:
+                    StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
+                    manager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
+                    setLayoutManager(manager);
+                    break;
+            }
+        }
     }
 
     //初始化增加自定义的滑动监听
-    private void init() {
+    private void initProps() {
         this.addOnScrollListener(onLoadScrollListener);
     }
 
@@ -58,30 +147,12 @@ public class LoadMoreRecyclerView extends RecyclerView {
         this.onLoadListener = onLoadListener;
     }
 
-    /**
-     * itemClick
-     *
-     * @param onItemClickListener
-     */
-    public void setOnItemClickListener(BaseRecyclerViewAdapter.OnItemClickListener onItemClickListener) {
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
-        RecyclerViewAdapter adapter = (RecyclerViewAdapter) getAdapter();
-        if (adapter != null) {
-            adapter.setOnItemClickListener(onItemClickListener);
-        }
     }
 
-    /**
-     * itemLongClick
-     *
-     * @param onItemLongClickListener
-     */
-    public void setOnItemLongClickListener(BaseRecyclerViewAdapter.OnItemLongClickListener onItemLongClickListener) {
+    public void setOnItemLongClickListener(OnItemLongClickListener onItemLongClickListener) {
         this.onItemLongClickListener = onItemLongClickListener;
-        RecyclerViewAdapter adapter = (RecyclerViewAdapter) getAdapter();
-        if (adapter != null) {
-            adapter.setOnItemLongClickListener(onItemLongClickListener);
-        }
     }
 
     public boolean isLoading() {
@@ -90,6 +161,7 @@ public class LoadMoreRecyclerView extends RecyclerView {
 
     public void stopLoadMore() {
         this.isLoading = false;
+        notifyFooterState();//加载状态改变会影响footer的显示
     }
 
     public boolean isCanLoadMore() {
@@ -100,36 +172,34 @@ public class LoadMoreRecyclerView extends RecyclerView {
         return canLoadMoreInit;
     }
 
-    public void setCanLoadMoreInit(Boolean canLoadMoreInit) {
-        this.canLoadMoreInit = canLoadMoreInit;
+    //置顶
+    public void backToTop() {
+        scrollToPosition(0);
     }
 
     /**
      * 是否可以加载更多
      * 默认为加载
      *
-     * @param canLoadMore
+     * @param canLoadMore 是否可以加载
      */
     public void setCanLoadMore(boolean canLoadMore) {
         //第一次设置要记录是否可以加载的状态,一边后续恢复
         if (canLoadMoreInit == null)
             canLoadMoreInit = canLoadMore;
-        //设置完可否加载状态后要告知adapter进行刷新
         this.canLoadMore = canLoadMore;
-        notifyAdapterCanLoadMoreOrNot();
     }
 
     /**
      * 1.一定要是继承RecyclerViewAdapter的adapter
-     * 2.初次设置adapter要告知adapter进行刷新以及更新监听器
+     * 2.view绑定到adapter上
      * 3.如果是grid的,那么footer要跨所有列
      */
     @Override
     public void setAdapter(final Adapter adapter) {
         if (adapter instanceof RecyclerViewAdapter) {
             //1
-            notifyAdapterCanLoadMoreOrNot();
-            notifyOnItemClickListener((RecyclerViewAdapter) adapter);
+            ((RecyclerViewAdapter) adapter).attachLoadMoreView(this);
             //2
             if (getLayoutManager() instanceof GridLayoutManager) {
                 final GridLayoutManager manager = (GridLayoutManager) getLayoutManager();
@@ -146,9 +216,14 @@ public class LoadMoreRecyclerView extends RecyclerView {
         }
     }
 
-    private void notifyOnItemClickListener(RecyclerViewAdapter adapter) {
-        adapter.setOnItemClickListener(onItemClickListener);
-        adapter.setOnItemLongClickListener(onItemLongClickListener);
+    public void performItemClick(int position) {
+        if (onItemClickListener != null)
+            onItemClickListener.onItemClick(position);
+    }
+
+    public void performItemLongClick(int position) {
+        if (onItemLongClickListener != null)
+            onItemLongClickListener.onItemLongClick(position);
     }
 
     private OnScrollListener onLoadScrollListener = new OnScrollListener() {
@@ -181,10 +256,7 @@ public class LoadMoreRecyclerView extends RecyclerView {
     //父view是否在刷新(父view只能是RLRView)
     private boolean isRefreshing() {
         ViewParent parent = getParent();
-        if (parent instanceof RLRView) {
-            return ((RLRView) parent).isRefreshing();
-        }
-        return false;
+        return parent instanceof RLRView && ((RLRView) parent).isRefreshing();
     }
 
     //最后一个view显示时加载
@@ -197,6 +269,7 @@ public class LoadMoreRecyclerView extends RecyclerView {
                 View lastView = manager.findViewByPosition(count - 1);
                 if (lastView != null && lastView.getTop() > 0) {
                     this.isLoading = true;
+                    notifyFooterState();//加载状态改变会影响footer的显示
                     if (onLoadListener != null)
                         onLoadListener.onLoad();
                 }
@@ -204,11 +277,43 @@ public class LoadMoreRecyclerView extends RecyclerView {
         }
     }
 
-    //通知adapter更新是否可以加载的状态
-    private void notifyAdapterCanLoadMoreOrNot() {
+    /**
+     * 通知footer刷新,根据加载状态改变显示内容
+     */
+    private void notifyFooterState() {
         RecyclerViewAdapter adapter = (RecyclerViewAdapter) getAdapter();
-        if (adapter != null)
-            adapter.setCanLoadMore(isCanLoadMore());
+        if (adapter != null) {
+            int count = adapter.getItemCount();
+            if (count > 0) {//更新footer(仅更新一个item)
+                adapter.notifyItemChanged(count - 1);
+            }
+        }
+    }
+
+    /**
+     * 添加进数据
+     *
+     * @param dataList
+     */
+    @SuppressWarnings("unchecked")
+    public void addData(List dataList) {
+        RecyclerViewAdapter adapter = (RecyclerViewAdapter) getAdapter();
+        if (adapter != null) {
+            adapter.addData(dataList);
+        }
+    }
+
+    /**
+     * 重置数据
+     *
+     * @param dataList
+     */
+    @SuppressWarnings("unchecked")
+    public void resetData(List dataList) {
+        RecyclerViewAdapter adapter = (RecyclerViewAdapter) getAdapter();
+        if (adapter != null) {
+            adapter.resetData(dataList);
+        }
     }
 
 }

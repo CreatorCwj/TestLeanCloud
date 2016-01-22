@@ -2,11 +2,8 @@ package com.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
 import android.view.ViewTreeObserver;
 
@@ -14,7 +11,6 @@ import com.testleancloud.R;
 import com.util.UIUtils;
 import com.widget.loadmorerecyclerview.LoadMoreRecyclerView;
 import com.widget.loadmorerecyclerview.Page;
-import com.widget.loadmorerecyclerview.adapter.BaseRecyclerViewAdapter;
 import com.widget.loadmorerecyclerview.adapter.RecyclerViewAdapter;
 
 import java.lang.reflect.Field;
@@ -34,23 +30,6 @@ public class RLRView extends SwipeRefreshLayout implements SwipeRefreshLayout.On
 
     private OnRefreshListener onRefreshListener;
     private OnLoadListener onLoadListener;
-
-    /**
-     * 线性
-     */
-    public static final int LINEAR = 0;
-
-    /**
-     * 网格
-     */
-    public static final int GRID = 1;
-
-    /**
-     * 瀑布流
-     */
-    public static final int WATER_FALL = 2;
-
-    private int layoutType = -1;
 
     /**
      * 刷新请实现该接口
@@ -84,37 +63,26 @@ public class RLRView extends SwipeRefreshLayout implements SwipeRefreshLayout.On
 
     private void initAttrs(Context context, AttributeSet attrs) {
         if (attrs != null) {
-            TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RLRView);
-            int layoutType = typedArray.getInt(R.styleable.RLRView_layoutType, LINEAR);//默认线性
-            int columnCount = typedArray.getInt(R.styleable.RLRView_columnCount, 2);//需要的话默认2列
+            TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RefreshAndLoad);
+            //布局样式
+            int layoutType = typedArray.getInt(R.styleable.RefreshAndLoad_layoutType, LoadMoreRecyclerView.LINEAR);//默认线性
+            int columnCount = typedArray.getInt(R.styleable.RefreshAndLoad_columnCount, 2);//需要的话默认2列
             setLayoutType(layoutType, columnCount);
+            //加载状态
+            boolean canLoadMore = typedArray.getBoolean(R.styleable.RefreshAndLoad_canLoadMore, true);//默认可加载
+            setCanLoadMore(canLoadMore);
+            //自动刷新状态
+            autoRefresh = typedArray.getBoolean(R.styleable.RefreshAndLoad_autoRefresh, true);
+            //divider
+            int height = typedArray.getDimensionPixelSize(R.styleable.RefreshAndLoad_dividerHeight, 0);
+            int color = typedArray.getColor(R.styleable.RefreshAndLoad_dividerColor, Color.TRANSPARENT);
+            setDivider(height, color);
             typedArray.recycle();
         }
     }
 
-    /**
-     * 设置layoutManager和列数
-     *
-     * @param layoutType
-     * @param columnCount
-     */
-    private void setLayoutType(int layoutType, int columnCount) {
-        if (this.layoutType != layoutType) {//和原来相同则不变
-            this.layoutType = layoutType;
-            switch (this.layoutType) {
-                case LINEAR:
-                    loadMoreRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                    break;
-                case GRID:
-                    loadMoreRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), columnCount));
-                    break;
-                case WATER_FALL:
-                    StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
-                    manager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
-                    loadMoreRecyclerView.setLayoutManager(manager);
-                    break;
-            }
-        }
+    public void setDivider(int height, int color) {
+        loadMoreRecyclerView.setDivider(height, color);
     }
 
     private void addChild() {
@@ -140,6 +108,16 @@ public class RLRView extends SwipeRefreshLayout implements SwipeRefreshLayout.On
                 RLRView.this.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
+    }
+
+    /**
+     * 设置布局样式
+     *
+     * @param layoutType
+     * @param columnCount
+     */
+    public void setLayoutType(int layoutType, int columnCount) {
+        loadMoreRecyclerView.setLayoutType(layoutType, columnCount);
     }
 
     //通过反射拿到listener
@@ -229,7 +207,7 @@ public class RLRView extends SwipeRefreshLayout implements SwipeRefreshLayout.On
      *
      * @param onItemClickListener
      */
-    public void setOnItemClickListener(BaseRecyclerViewAdapter.OnItemClickListener onItemClickListener) {
+    public void setOnItemClickListener(LoadMoreRecyclerView.OnItemClickListener onItemClickListener) {
         loadMoreRecyclerView.setOnItemClickListener(onItemClickListener);
     }
 
@@ -238,7 +216,7 @@ public class RLRView extends SwipeRefreshLayout implements SwipeRefreshLayout.On
      *
      * @param onItemLongClickListener
      */
-    public void setOnItemLongClickListener(BaseRecyclerViewAdapter.OnItemLongClickListener onItemLongClickListener) {
+    public void setOnItemLongClickListener(LoadMoreRecyclerView.OnItemLongClickListener onItemLongClickListener) {
         loadMoreRecyclerView.setOnItemLongClickListener(onItemLongClickListener);
     }
 
@@ -275,6 +253,11 @@ public class RLRView extends SwipeRefreshLayout implements SwipeRefreshLayout.On
         }
     }
 
+    //置顶
+    public void backToTop() {
+        loadMoreRecyclerView.backToTop();
+    }
+
     /**
      * 刷新加载失败,页数恢复
      */
@@ -283,17 +266,35 @@ public class RLRView extends SwipeRefreshLayout implements SwipeRefreshLayout.On
     }
 
     /**
+     * 添加进数据
+     *
+     * @param dataList
+     */
+    @SuppressWarnings("unchecked")
+    public void addData(List dataList) {
+        judgeCanLoadMore(dataList);
+        loadMoreRecyclerView.addData(dataList);
+    }
+
+    /**
+     * 重置数据
+     *
+     * @param dataList
+     */
+    @SuppressWarnings("unchecked")
+    public void resetData(List dataList) {
+        judgeCanLoadMore(dataList);
+        loadMoreRecyclerView.resetData(dataList);
+    }
+
+    /**
      * 拦截一下添加数据,自动判断是否无法加载更多
      *
      * @param dataList
      */
-    public void addData(List dataList) {
-        RecyclerView.Adapter adapter = loadMoreRecyclerView.getAdapter();
-        if (adapter != null && adapter instanceof RecyclerViewAdapter) {
-            if (dataList.size() < page.getPageSize()) {
-                setCanLoadMore(false);
-            }
-            ((RecyclerViewAdapter) adapter).addData(dataList);
+    private void judgeCanLoadMore(List dataList) {
+        if (dataList != null && dataList.size() < page.getPageSize()) {
+            setCanLoadMore(false);
         }
     }
 

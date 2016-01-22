@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -11,18 +12,14 @@
         android:gravity="center"
         android:text="测试ImageLoader+RecycleView" />
 
-    <!--<com.widget.RLRView
+    <com.widget.RLRView
         android:id="@+id/rlrView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:columnCount="2"
+        app:dividerColor="@android:color/darker_gray"
+        app:dividerHeight="1dp"
         app:layoutType="linear">
 
-    </com.widget.RLRView>-->
-
-    <com.widget.loadmorerecyclerview.LoadMoreRecyclerView
-        android:id="@+id/loadMoreView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    </com.widget.RLRView>
 
 </LinearLayout>

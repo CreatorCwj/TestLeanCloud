@@ -16,23 +16,6 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Re
     protected LayoutInflater layoutInflater;
     protected List<T> dataList;
 
-    protected OnItemClickListener onItemClickListener;
-    protected OnItemLongClickListener onItemLongClickListener;
-
-    /**
-     * ItemClick
-     */
-    public interface OnItemClickListener {
-        void onItemClick(int position);
-    }
-
-    /**
-     * ItemLongClick
-     */
-    public interface OnItemLongClickListener {
-        void onItemLongClick(int position);
-    }
-
     public BaseRecyclerViewAdapter(Context context) {
         this.layoutInflater = LayoutInflater.from(context);
         dataList = new ArrayList<>();
@@ -61,7 +44,7 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Re
      *
      * @param data
      */
-    public void setData(List<T> data) {
+    public void resetData(List<T> data) {
         dataList.clear();
         dataList.addAll(data);
         notifyDataSetChanged();
@@ -77,7 +60,7 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Re
     }
 
     /**
-     * 数组总数(不算footer)
+     * 数组总数(不算data之外的)
      *
      * @return
      */
@@ -91,17 +74,10 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Re
      * @param position
      * @return
      */
-    public T getItem(int position) {
+    public T getDataItem(int position) {
         if (position >= 0 && position < dataList.size())
             return dataList.get(position);
         return null;
     }
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
-    }
-
-    public void setOnItemLongClickListener(OnItemLongClickListener onItemLongClickListener) {
-        this.onItemLongClickListener = onItemLongClickListener;
-    }
 }

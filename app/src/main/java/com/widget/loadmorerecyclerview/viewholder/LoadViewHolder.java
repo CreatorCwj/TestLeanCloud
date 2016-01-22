@@ -2,6 +2,10 @@ package com.widget.loadmorerecyclerview.viewholder;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
+import com.testleancloud.R;
 
 /**
  * Created by cwj on 16/1/17.
@@ -9,7 +13,27 @@ import android.view.View;
  */
 public class LoadViewHolder extends RecyclerView.ViewHolder {
 
+    private ProgressBar loadMoreProgressBar;
+    private TextView loadMoreText;
+
     public LoadViewHolder(View itemView) {
         super(itemView);
+        loadMoreProgressBar = (ProgressBar) itemView.findViewById(R.id.loadMoreProgressBar);
+        loadMoreText = (TextView) itemView.findViewById(R.id.loadMoreText);
+    }
+
+    /**
+     * 设置加载状态决定显示
+     *
+     * @param isLoading
+     */
+    public void setLoadState(boolean isLoading) {
+        if (isLoading) {//刷新中
+            loadMoreProgressBar.setVisibility(View.VISIBLE);
+            loadMoreText.setVisibility(View.GONE);
+        } else {
+            loadMoreProgressBar.setVisibility(View.GONE);
+            loadMoreText.setVisibility(View.VISIBLE);
+        }
     }
 }

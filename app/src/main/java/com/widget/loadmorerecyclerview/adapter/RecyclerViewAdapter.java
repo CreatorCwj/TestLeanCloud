@@ -6,21 +6,32 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.testleancloud.R;
+import com.widget.loadmorerecyclerview.LoadMoreRecyclerView;
 import com.widget.loadmorerecyclerview.viewholder.LoadViewHolder;
 
 /**
  * Created by cwj on 16/1/17.
+ * 刷新加载界面用的adapter基类
  * RecyclerView使用的adapter的基类,可以添加FOOTER
  * 自己处理基本的逻辑,暴露出自定义的接口来实现adapter
  */
 public abstract class RecyclerViewAdapter<T> extends BaseRecyclerViewAdapter<T> {
 
-    public static final int FOOTER = Integer.MIN_VALUE;
+    private LoadMoreRecyclerView loadMoreView;
 
-    private boolean canLoadMore = false;//canLoadMore决定是否有footer
+    public static final int FOOTER = Integer.MIN_VALUE;
 
     public RecyclerViewAdapter(Context context) {
         super(context);
+    }
+
+    /**
+     * 依赖的LoadMoreRecyclerView
+     *
+     * @param loadMoreView
+     */
+    public void attachLoadMoreView(LoadMoreRecyclerView loadMoreView) {
+        this.loadMoreView = loadMoreView;
     }
 
     /**
@@ -30,32 +41,41 @@ public abstract class RecyclerViewAdapter<T> extends BaseRecyclerViewAdapter<T> 
      * @param position
      */
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    final public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (getItemViewType(position) != FOOTER) {
-            onHolderBinded(holder, position);
             //点击事件
             View v = holder.itemView;
             if (v != null) {
                 v.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (onItemClickListener != null)
-                            onItemClickListener.onItemClick(position);
+                        if (loadMoreView != null)
+                            loadMoreView.performItemClick(position);
                     }
                 });
                 v.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        if (onItemLongClickListener != null)
-                            onItemLongClickListener.onItemLongClick(position);
+                        if (loadMoreView != null)
+                            loadMoreView.performItemLongClick(position);
                         return true;
                     }
                 });
             }
+            //自己的逻辑
+            onHolderBind(holder, position);
         } else {//footer
             //如果可以加载且有数据则可见,否则不可见
-            if (isCanLoadMore() && getDataCount() > 0) {
+            if (loadMoreView != null && loadMoreView.isCanLoadMore() && getDataCount() > 0) {
                 holder.itemView.setVisibility(View.VISIBLE);
+                //加载中则显示圈,否则显示文字
+                if (holder instanceof LoadViewHolder) {
+                    if (loadMoreView.isLoading()) {
+                        ((LoadViewHolder) holder).setLoadState(true);
+                    } else {
+                        ((LoadViewHolder) holder).setLoadState(false);
+                    }
+                }
             } else {
                 holder.itemView.setVisibility(View.GONE);
             }
@@ -68,7 +88,7 @@ public abstract class RecyclerViewAdapter<T> extends BaseRecyclerViewAdapter<T> 
      * @param holder
      * @param position
      */
-    abstract public void onHolderBinded(RecyclerView.ViewHolder holder, int position);
+    abstract public void onHolderBind(RecyclerView.ViewHolder holder, int position);
 
     /**
      * 得到item总数
@@ -76,8 +96,8 @@ public abstract class RecyclerViewAdapter<T> extends BaseRecyclerViewAdapter<T> 
      * @return
      */
     @Override
-    public int getItemCount() {
-        return dataList.size() + (isCanLoadMore() ? 1 : 0);
+    final public int getItemCount() {
+        return dataList.size() + ((loadMoreView != null && loadMoreView.isCanLoadMore()) ? 1 : 0);
     }
 
     /**
@@ -87,7 +107,7 @@ public abstract class RecyclerViewAdapter<T> extends BaseRecyclerViewAdapter<T> 
      * @return
      */
     @Override
-    public int getItemViewType(int position) {
+    final public int getItemViewType(int position) {
         if (position >= dataList.size()) {
             return FOOTER;
         } else {
@@ -113,7 +133,7 @@ public abstract class RecyclerViewAdapter<T> extends BaseRecyclerViewAdapter<T> 
      * @return
      */
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    final public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == FOOTER) {
             return new LoadViewHolder(layoutInflater.inflate(R.layout.load_view, parent, false));
         }
@@ -128,19 +148,5 @@ public abstract class RecyclerViewAdapter<T> extends BaseRecyclerViewAdapter<T> 
      * @return
      */
     abstract public RecyclerView.ViewHolder onCreateHolder(ViewGroup parent, int viewType);
-
-    /**
-     * canLoadMore决定是否有footer
-     *
-     * @return
-     */
-    public boolean isCanLoadMore() {
-        return canLoadMore;
-    }
-
-    public void setCanLoadMore(boolean canLoadMore) {
-        this.canLoadMore = canLoadMore;
-        notifyDataSetChanged();
-    }
 
 }
