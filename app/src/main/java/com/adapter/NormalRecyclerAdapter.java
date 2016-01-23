@@ -21,12 +21,12 @@ public class NormalRecyclerAdapter extends RecyclerViewAdapter<String> {
     }
 
     @Override
-    public void onHolderBinded(RecyclerView.ViewHolder viewHolder, int position) {
+    public void onHolderBind(RecyclerView.ViewHolder viewHolder, int position) {
         if (viewHolder != null) {
             NormalImageViewHolder normalImageViewHolder = (NormalImageViewHolder) viewHolder;
             ImageView imageView = normalImageViewHolder.imageView;
 //            String imgUrl = "http://pic14.nipic.com/20110522/7411759_164157418126_2.jpg";
-            String imgUrl = getItem(position);
+            String imgUrl = getDataItem(position);
             ImageLoader.loadImage(imageView, imgUrl);
         }
     }

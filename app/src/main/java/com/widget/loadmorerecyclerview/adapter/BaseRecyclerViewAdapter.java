@@ -9,8 +9,9 @@ import java.util.List;
 
 /**
  * Created by cwj on 16/1/16.
+ * Adapter基类
  */
-abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     protected LayoutInflater layoutInflater;
     protected List<T> dataList;
@@ -43,7 +44,7 @@ abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerV
      *
      * @param data
      */
-    public void setData(List<T> data) {
+    public void resetData(List<T> data) {
         dataList.clear();
         dataList.addAll(data);
         notifyDataSetChanged();
@@ -59,7 +60,7 @@ abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     /**
-     * 数组总数(不算footer)
+     * 数组总数(不算data之外的)
      *
      * @return
      */
@@ -73,7 +74,7 @@ abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * @param position
      * @return
      */
-    public T getItem(int position) {
+    public T getDataItem(int position) {
         if (position >= 0 && position < dataList.size())
             return dataList.get(position);
         return null;

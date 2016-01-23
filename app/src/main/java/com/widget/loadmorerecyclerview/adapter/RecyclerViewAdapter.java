@@ -6,37 +6,83 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.testleancloud.R;
+import com.widget.loadmorerecyclerview.LoadMoreRecyclerView;
 import com.widget.loadmorerecyclerview.viewholder.LoadViewHolder;
 
 /**
  * Created by cwj on 16/1/17.
+ * 刷新加载界面用的adapter基类
  * RecyclerView使用的adapter的基类,可以添加FOOTER
  * 自己处理基本的逻辑,暴露出自定义的接口来实现adapter
  */
 public abstract class RecyclerViewAdapter<T> extends BaseRecyclerViewAdapter<T> {
 
-    public static final int FOOTER = Integer.MIN_VALUE;
+    private LoadMoreRecyclerView loadMoreView;
 
-    private boolean canLoadMore = false;//canLoadMore决定是否有footer
+    public static final int FOOTER = Integer.MIN_VALUE;
+    public static final int HEADER = Integer.MAX_VALUE;
 
     public RecyclerViewAdapter(Context context) {
         super(context);
     }
 
     /**
+     * 依赖的LoadMoreRecyclerView
+     *
+     * @param loadMoreView
+     */
+    public void attachLoadMoreView(LoadMoreRecyclerView loadMoreView) {
+        this.loadMoreView = loadMoreView;
+    }
+
+    /**
      * viewholder已绑定
+     * 确保传下去的position是数据里对应的position
      *
      * @param holder
      * @param position
      */
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (getItemViewType(position) != FOOTER) {
-            onHolderBinded(holder, position);
-        } else {//footer
+    final public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+        int type = getItemViewType(position);
+        //算出数据中的实际位置
+        final int realDataPosition = hasHeader() ? position - 1 : position;
+        if (type != FOOTER && type != HEADER) {//normal view
+            //点击事件
+            View v = holder.itemView;
+            if (v != null) {
+                v.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (loadMoreView != null) {
+                            loadMoreView.performItemClick(realDataPosition);
+                        }
+                    }
+                });
+                v.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        if (loadMoreView != null) {
+                            loadMoreView.performItemLongClick(realDataPosition);
+                        }
+                        return true;//结束动作捕捉
+                    }
+                });
+            }
+            //自己的逻辑
+            onHolderBind(holder, realDataPosition);
+        } else if (type == FOOTER) {//footer
             //如果可以加载且有数据则可见,否则不可见
-            if (isCanLoadMore() && getDataCount() > 0) {
+            if (hasFooter() && getDataCount() > 0) {
                 holder.itemView.setVisibility(View.VISIBLE);
+                //加载中则显示圈,否则显示文字
+                if (holder instanceof LoadViewHolder) {
+                    if (loadMoreView.isLoading()) {
+                        ((LoadViewHolder) holder).setLoadState(true);
+                    } else {
+                        ((LoadViewHolder) holder).setLoadState(false);
+                    }
+                }
             } else {
                 holder.itemView.setVisibility(View.GONE);
             }
@@ -45,20 +91,26 @@ public abstract class RecyclerViewAdapter<T> extends BaseRecyclerViewAdapter<T> 
 
     /**
      * 处理后的viewholder已绑定
+     * 确保position是数据里对应的position
      *
      * @param holder
      * @param position
      */
-    abstract public void onHolderBinded(RecyclerView.ViewHolder holder, int position);
+    abstract public void onHolderBind(RecyclerView.ViewHolder holder, int position);
 
     /**
-     * 得到item总数
+     * 得到item总数(可能有header和footer)
      *
      * @return
      */
     @Override
-    public int getItemCount() {
-        return dataList.size() + (isCanLoadMore() ? 1 : 0);
+    final public int getItemCount() {
+        int extra = 0;
+        if (hasHeader())
+            ++extra;
+        if (hasFooter())
+            ++extra;
+        return dataList.size() + extra;
     }
 
     /**
@@ -68,12 +120,26 @@ public abstract class RecyclerViewAdapter<T> extends BaseRecyclerViewAdapter<T> 
      * @return
      */
     @Override
-    public int getItemViewType(int position) {
-        if (position >= dataList.size()) {
+    final public int getItemViewType(int position) {
+
+        if (hasHeader() && position == 0) {//有header且是第一个
+            return HEADER;
+        } else if (hasFooter() && ((!hasHeader() && position == dataList.size())
+                || (hasHeader() && position == dataList.size() + 1))) {//有footer且可以位置正确(有无header)
             return FOOTER;
-        } else {
+        } else {//normal
             return getItemType(position);
         }
+    }
+
+    //是否有header
+    private boolean hasHeader() {
+        return loadMoreView != null && loadMoreView.getHeader() != null;
+    }
+
+    //是否有footer
+    private boolean hasFooter() {
+        return loadMoreView != null && loadMoreView.isCanLoadMore();
     }
 
     /**
@@ -94,9 +160,12 @@ public abstract class RecyclerViewAdapter<T> extends BaseRecyclerViewAdapter<T> 
      * @return
      */
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    final public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == FOOTER) {
             return new LoadViewHolder(layoutInflater.inflate(R.layout.load_view, parent, false));
+        }
+        if (viewType == HEADER) {
+            return loadMoreView.getHeader();
         }
         return onCreateHolder(parent, viewType);
     }
@@ -109,19 +178,5 @@ public abstract class RecyclerViewAdapter<T> extends BaseRecyclerViewAdapter<T> 
      * @return
      */
     abstract public RecyclerView.ViewHolder onCreateHolder(ViewGroup parent, int viewType);
-
-    /**
-     * canLoadMore决定是否有footer
-     *
-     * @return
-     */
-    public boolean isCanLoadMore() {
-        return canLoadMore;
-    }
-
-    public void setCanLoadMore(boolean canLoadMore) {
-        this.canLoadMore = canLoadMore;
-        notifyDataSetChanged();
-    }
 
 }
