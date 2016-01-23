@@ -12,8 +12,8 @@ import com.util.Utils;
 import com.viewholder.ButtonHeaderViewHolder;
 import com.volley.Network;
 import com.volley.listener.RequestCallback;
-import com.widget.RLRView;
-import com.widget.loadmorerecyclerview.LoadMoreRecyclerView;
+import com.widget.rlrView.view.RLRView;
+import com.widget.rlrView.view.LoadMoreRecyclerView;
 
 import java.util.HashMap;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.widget.loadmorerecyclerview.adapter;
+package com.widget.rlrView.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.testleancloud.R;
-import com.widget.loadmorerecyclerview.LoadMoreRecyclerView;
-import com.widget.loadmorerecyclerview.viewholder.LoadViewHolder;
+import com.widget.rlrView.view.LoadMoreRecyclerView;
+import com.widget.rlrView.viewHolder.LoadViewHolder;
 
 /**
  * Created by cwj on 16/1/17.
