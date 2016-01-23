@@ -1,4 +1,4 @@
-package com.widget.loadmorerecyclerview;
+package com.widget.rlrView.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -13,9 +13,9 @@ import android.view.ViewParent;
 
 import com.imageLoader.ImageLoader;
 import com.testleancloud.R;
-import com.widget.RLRView;
-import com.widget.loadmorerecyclerview.adapter.RecyclerViewAdapter;
-import com.widget.loadmorerecyclerview.viewholder.HeaderViewHolder;
+import com.widget.rlrView.other.Divider;
+import com.widget.rlrView.adapter.RecyclerViewAdapter;
+import com.widget.rlrView.viewHolder.HeaderViewHolder;
 
 import java.util.List;
 

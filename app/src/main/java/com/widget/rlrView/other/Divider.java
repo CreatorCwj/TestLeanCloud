@@ -1,4 +1,4 @@
-package com.widget.loadmorerecyclerview;
+package com.widget.rlrView.other;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -7,7 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.widget.loadmorerecyclerview.adapter.RecyclerViewAdapter;
+import com.widget.rlrView.adapter.RecyclerViewAdapter;
 
 /**
  * Created by cwj on 16/1/22.

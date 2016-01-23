@@ -1,8 +1,8 @@
-package com.widget.loadmorerecyclerview;
+package com.widget.rlrView.other;
 
 /**
  * Created by cwj on 16/1/19.
- * 分页类,有待完善
+ * 分页类
  */
 public class Page {
 

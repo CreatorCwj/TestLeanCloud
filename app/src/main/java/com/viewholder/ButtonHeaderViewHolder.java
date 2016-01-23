@@ -6,7 +6,7 @@ import android.widget.Button;
 
 import com.testleancloud.R;
 import com.util.Utils;
-import com.widget.loadmorerecyclerview.viewholder.HeaderViewHolder;
+import com.widget.rlrView.viewHolder.HeaderViewHolder;
 
 /**
  * Created by cwj on 16/1/23.
