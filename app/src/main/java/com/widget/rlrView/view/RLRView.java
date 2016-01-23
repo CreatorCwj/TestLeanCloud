@@ -1,4 +1,4 @@
-package com.widget;
+package com.widget.rlrView.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -9,9 +9,9 @@ import android.view.ViewTreeObserver;
 
 import com.testleancloud.R;
 import com.util.UIUtils;
-import com.widget.loadmorerecyclerview.LoadMoreRecyclerView;
-import com.widget.loadmorerecyclerview.Page;
-import com.widget.loadmorerecyclerview.adapter.RecyclerViewAdapter;
+import com.widget.rlrView.other.Page;
+import com.widget.rlrView.adapter.RecyclerViewAdapter;
+import com.widget.rlrView.viewHolder.HeaderViewHolder;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -263,6 +263,24 @@ public class RLRView extends SwipeRefreshLayout implements SwipeRefreshLayout.On
      */
     public void rlError() {
         page.prePage();
+    }
+
+    /**
+     * 添加头部
+     *
+     * @param headerViewHolder
+     */
+    public <T extends HeaderViewHolder> void addHeader(T headerViewHolder) {
+        loadMoreRecyclerView.addHeader(headerViewHolder);
+    }
+
+    /**
+     * 得到头部view
+     *
+     * @return
+     */
+    public HeaderViewHolder getHeader() {
+        return loadMoreRecyclerView.getHeader();
     }
 
     /**

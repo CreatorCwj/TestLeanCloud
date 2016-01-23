@@ -8,7 +8,7 @@ import android.widget.ImageView;
 
 import com.imageLoader.ImageLoader;
 import com.testleancloud.R;
-import com.widget.loadmorerecyclerview.adapter.RecyclerViewAdapter;
+import com.widget.rlrView.adapter.RecyclerViewAdapter;
 
 
 /**

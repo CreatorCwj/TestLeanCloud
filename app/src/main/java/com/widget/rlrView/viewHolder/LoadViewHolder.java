@@ -1,4 +1,4 @@
-package com.widget.loadmorerecyclerview.viewholder;
+package com.widget.rlrView.viewHolder;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

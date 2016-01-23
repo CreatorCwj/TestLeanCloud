@@ -1,4 +1,4 @@
-package com.widget.loadmorerecyclerview;
+package com.widget.rlrView.other;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -7,7 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.widget.loadmorerecyclerview.adapter.RecyclerViewAdapter;
+import com.widget.rlrView.adapter.RecyclerViewAdapter;
 
 /**
  * Created by cwj on 16/1/22.
@@ -30,10 +30,11 @@ public class Divider extends RecyclerView.ItemDecoration {
         int childCount = parent.getChildCount();
         for (int i = 0; i < childCount; ++i) {
             View child = parent.getChildAt(i);
-            //footer不添加divider
+            //footer和deader不添加divider
             int position = parent.getChildAdapterPosition(child);
             RecyclerViewAdapter adapter = (RecyclerViewAdapter) parent.getAdapter();
-            if (adapter != null && adapter.getItemViewType(position) == RecyclerViewAdapter.FOOTER) {
+            if (adapter != null && (adapter.getItemViewType(position) == RecyclerViewAdapter.FOOTER
+                    || adapter.getItemViewType(position) == RecyclerViewAdapter.HEADER)) {
                 continue;
             }
             RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child

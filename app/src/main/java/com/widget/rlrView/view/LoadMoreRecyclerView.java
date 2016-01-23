@@ -1,4 +1,4 @@
-package com.widget.loadmorerecyclerview;
+package com.widget.rlrView.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -13,8 +13,9 @@ import android.view.ViewParent;
 
 import com.imageLoader.ImageLoader;
 import com.testleancloud.R;
-import com.widget.RLRView;
-import com.widget.loadmorerecyclerview.adapter.RecyclerViewAdapter;
+import com.widget.rlrView.other.Divider;
+import com.widget.rlrView.adapter.RecyclerViewAdapter;
+import com.widget.rlrView.viewHolder.HeaderViewHolder;
 
 import java.util.List;
 
@@ -30,6 +31,8 @@ public class LoadMoreRecyclerView extends RecyclerView {
     private Boolean canLoadMoreInit = null;
     private boolean canLoadMore = true;//默认可加载
     private boolean isLoading = false;
+
+    private HeaderViewHolder headerViewHolder;//头部
 
     private OnLoadListener onLoadListener;
     private OnItemClickListener onItemClickListener;
@@ -288,6 +291,24 @@ public class LoadMoreRecyclerView extends RecyclerView {
                 adapter.notifyItemChanged(count - 1);
             }
         }
+    }
+
+    /**
+     * 添加头部
+     *
+     * @param headerViewHolder
+     */
+    public <T extends HeaderViewHolder> void addHeader(T headerViewHolder) {
+        this.headerViewHolder = headerViewHolder;
+    }
+
+    /**
+     * 得到头部view
+     *
+     * @return
+     */
+    public HeaderViewHolder getHeader() {
+        return headerViewHolder;
     }
 
     /**

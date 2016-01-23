@@ -12,7 +12,7 @@
         android:gravity="center"
         android:text="测试ImageLoader+RecycleView" />
 
-    <com.widget.RLRView
+    <com.widget.rlrView.view.RLRView
         android:id="@+id/rlrView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,6 +20,6 @@
         app:dividerHeight="1dp"
         app:layoutType="linear">
 
-    </com.widget.RLRView>
+    </com.widget.rlrView.view.RLRView>
 
 </LinearLayout>

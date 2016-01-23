@@ -9,10 +9,11 @@ import com.base.BaseActivity;
 import com.model.GirlImage;
 import com.util.MockData;
 import com.util.Utils;
+import com.viewholder.ButtonHeaderViewHolder;
 import com.volley.Network;
 import com.volley.listener.RequestCallback;
-import com.widget.RLRView;
-import com.widget.loadmorerecyclerview.LoadMoreRecyclerView;
+import com.widget.rlrView.view.RLRView;
+import com.widget.rlrView.view.LoadMoreRecyclerView;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,21 +33,20 @@ public class ImageLoaderActivity extends BaseActivity implements RLRView.OnRefre
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initRefreshLayout();
-        initRecycleView();
+        initRLRView();
+        initHeaderView();
     }
 
-    private void initRecycleView() {
-        adapter = new NormalRecyclerAdapter(this);
-        rlrView.setAdapter(adapter);
-//        rlrView.setCanLoadMore(true);
+    private void initHeaderView() {
+        rlrView.addHeader(new ButtonHeaderViewHolder(this, R.layout.header_view));
     }
 
-    private void initRefreshLayout() {
+    private void initRLRView() {
         rlrView.setColorSchemeResources(
                 android.R.color.holo_green_light, android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-//        rlrView.setAutoRefresh(true);
+        adapter = new NormalRecyclerAdapter(this);
+        rlrView.setAdapter(adapter);
     }
 
     @Override
