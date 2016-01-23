@@ -20,6 +20,7 @@ public abstract class RecyclerViewAdapter<T> extends BaseRecyclerViewAdapter<T> 
     private LoadMoreRecyclerView loadMoreView;
 
     public static final int FOOTER = Integer.MIN_VALUE;
+    public static final int HEADER = Integer.MAX_VALUE;
 
     public RecyclerViewAdapter(Context context) {
         super(context);
@@ -36,37 +37,43 @@ public abstract class RecyclerViewAdapter<T> extends BaseRecyclerViewAdapter<T> 
 
     /**
      * viewholder已绑定
+     * 确保传下去的position是数据里对应的position
      *
      * @param holder
      * @param position
      */
     @Override
     final public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        if (getItemViewType(position) != FOOTER) {
+        int type = getItemViewType(position);
+        //算出数据中的实际位置
+        final int realDataPosition = hasHeader() ? position - 1 : position;
+        if (type != FOOTER && type != HEADER) {//normal view
             //点击事件
             View v = holder.itemView;
             if (v != null) {
                 v.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (loadMoreView != null)
-                            loadMoreView.performItemClick(position);
+                        if (loadMoreView != null) {
+                            loadMoreView.performItemClick(realDataPosition);
+                        }
                     }
                 });
                 v.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        if (loadMoreView != null)
-                            loadMoreView.performItemLongClick(position);
-                        return true;
+                        if (loadMoreView != null) {
+                            loadMoreView.performItemLongClick(realDataPosition);
+                        }
+                        return true;//结束动作捕捉
                     }
                 });
             }
             //自己的逻辑
-            onHolderBind(holder, position);
-        } else {//footer
+            onHolderBind(holder, realDataPosition);
+        } else if (type == FOOTER) {//footer
             //如果可以加载且有数据则可见,否则不可见
-            if (loadMoreView != null && loadMoreView.isCanLoadMore() && getDataCount() > 0) {
+            if (hasFooter() && getDataCount() > 0) {
                 holder.itemView.setVisibility(View.VISIBLE);
                 //加载中则显示圈,否则显示文字
                 if (holder instanceof LoadViewHolder) {
@@ -84,6 +91,7 @@ public abstract class RecyclerViewAdapter<T> extends BaseRecyclerViewAdapter<T> 
 
     /**
      * 处理后的viewholder已绑定
+     * 确保position是数据里对应的position
      *
      * @param holder
      * @param position
@@ -91,13 +99,18 @@ public abstract class RecyclerViewAdapter<T> extends BaseRecyclerViewAdapter<T> 
     abstract public void onHolderBind(RecyclerView.ViewHolder holder, int position);
 
     /**
-     * 得到item总数
+     * 得到item总数(可能有header和footer)
      *
      * @return
      */
     @Override
     final public int getItemCount() {
-        return dataList.size() + ((loadMoreView != null && loadMoreView.isCanLoadMore()) ? 1 : 0);
+        int extra = 0;
+        if (hasHeader())
+            ++extra;
+        if (hasFooter())
+            ++extra;
+        return dataList.size() + extra;
     }
 
     /**
@@ -108,11 +121,25 @@ public abstract class RecyclerViewAdapter<T> extends BaseRecyclerViewAdapter<T> 
      */
     @Override
     final public int getItemViewType(int position) {
-        if (position >= dataList.size()) {
+
+        if (hasHeader() && position == 0) {//有header且是第一个
+            return HEADER;
+        } else if (hasFooter() && ((!hasHeader() && position == dataList.size())
+                || (hasHeader() && position == dataList.size() + 1))) {//有footer且可以位置正确(有无header)
             return FOOTER;
-        } else {
+        } else {//normal
             return getItemType(position);
         }
+    }
+
+    //是否有header
+    private boolean hasHeader() {
+        return loadMoreView != null && loadMoreView.getHeader() != null;
+    }
+
+    //是否有footer
+    private boolean hasFooter() {
+        return loadMoreView != null && loadMoreView.isCanLoadMore();
     }
 
     /**
@@ -136,6 +163,9 @@ public abstract class RecyclerViewAdapter<T> extends BaseRecyclerViewAdapter<T> 
     final public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == FOOTER) {
             return new LoadViewHolder(layoutInflater.inflate(R.layout.load_view, parent, false));
+        }
+        if (viewType == HEADER) {
+            return loadMoreView.getHeader();
         }
         return onCreateHolder(parent, viewType);
     }
