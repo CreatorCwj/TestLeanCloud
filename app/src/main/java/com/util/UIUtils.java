@@ -5,12 +5,12 @@ import android.util.TypedValue;
 
 /**
  * Created by cwj on 16/1/14.
+ * UI相关工具
  */
 public class UIUtils {
 
     /**
      * 将dp单位转为px单位
-     *
      */
     public static int dp2px(Context context, float dpValue) {
 
