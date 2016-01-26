@@ -16,11 +16,6 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".RelationActivity"
@@ -55,11 +50,42 @@
 
         <activity
             android:name=".VolleyActivity"
-            android:label="@string/title_activity_okhttp" >
-        </activity>
+            android:label="@string/title_activity_okhttp" />
         <activity
             android:name=".ImageLoaderActivity"
-            android:label="@string/title_activity_image_loader" >
+            android:label="@string/title_activity_image_loader" />
+        <activity
+            android:name=".TestMDActivity"
+            android:label="@string/title_activity_test_md" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".SimpleAnimActivity"
+            android:label="@string/title_activity_simple_anim" >
+        </activity>
+        <activity
+            android:name=".CollapsingActivity"
+            android:label="@string/title_activity_default_behavior" >
+        </activity>
+        <activity
+            android:name=".ScrollAndHideActivity"
+            android:label="@string/title_activity_scroll_and_hide" >
+        </activity>
+        <activity
+            android:name=".TestTabLayout"
+            android:label="@string/title_activity_test_tab_layout" >
+        </activity>
+        <activity
+            android:name=".BehaviorActivity"
+            android:label="@string/title_activity_behavior" >
+        </activity>
+        <activity
+            android:name=".JianShuActivity"
+            android:label="@string/title_activity_jian_shu" >
         </activity>
     </application>
 
