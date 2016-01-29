@@ -9,8 +9,8 @@ import android.view.ViewTreeObserver;
 
 import com.testleancloud.R;
 import com.util.UIUtils;
-import com.widget.rlrView.other.Page;
 import com.widget.rlrView.adapter.RecyclerViewAdapter;
+import com.widget.rlrView.other.Page;
 import com.widget.rlrView.viewHolder.HeaderViewHolder;
 
 import java.lang.reflect.Field;
@@ -94,6 +94,10 @@ public class RLRView extends SwipeRefreshLayout implements SwipeRefreshLayout.On
     private void initProps() {
         this.setOnRefreshListener(this);
         loadMoreRecyclerView.setOnLoadListener(this);
+        //加载圈颜色,可在外部自己设置
+        this.setColorSchemeResources(
+                android.R.color.holo_red_light, android.R.color.holo_blue_light,
+                android.R.color.holo_orange_light);
         //一定要设置offset,否则调用setRefreshing(true)时没有效果
         this.setProgressViewOffset(false, -UIUtils.dp2px(getContext(), 24), UIUtils.dp2px(getContext(), 24));
         //onResume回调后view会回调此方法来监听layout的改变
