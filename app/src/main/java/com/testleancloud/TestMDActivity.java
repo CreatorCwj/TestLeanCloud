@@ -30,6 +30,9 @@ public class TestMDActivity extends BaseActivity {
     @InjectView(R.id.testJianShu)
     private Button testJianShu;
 
+    @InjectView(R.id.testSticky)
+    private Button testSticky;
+
     @Override
     protected void setListener() {
         testSimpleAnim.setOnClickListener(this);
@@ -38,6 +41,7 @@ public class TestMDActivity extends BaseActivity {
         testTabLayout.setOnClickListener(this);
         testBehavior.setOnClickListener(this);
         testJianShu.setOnClickListener(this);
+        testSticky.setOnClickListener(this);
     }
 
     @Override
@@ -60,6 +64,9 @@ public class TestMDActivity extends BaseActivity {
                 break;
             case R.id.testJianShu:
                 startActivity(new Intent(TestMDActivity.this, JianShuActivity.class));
+                break;
+            case R.id.testSticky:
+                startActivity(new Intent(TestMDActivity.this, StickyActivity.class));
                 break;
         }
     }

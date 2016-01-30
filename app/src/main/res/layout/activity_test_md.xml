@@ -49,6 +49,12 @@
             android:layout_height="wrap_content"
             android:text="测试简书效果Behavior" />
 
+        <Button
+            android:id="@+id/testSticky"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="测试Sticky" />
+
     </LinearLayout>
 
 </ScrollView>

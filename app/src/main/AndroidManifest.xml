@@ -87,6 +87,10 @@
             android:name=".JianShuActivity"
             android:label="@string/title_activity_jian_shu" >
         </activity>
+        <activity
+            android:name=".StickyActivity"
+            android:label="@string/title_activity_sticky" >
+        </activity>
     </application>
 
 </manifest>
