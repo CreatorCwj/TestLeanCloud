@@ -23,4 +23,5 @@
     <string name="title_activity_behavior">BehaviorActivity</string>
     <string name="title_activity_jian_shu">JianShuActivity</string>
     <string name="title_activity_sticky">StickyActivity</string>
+    <string name="title_activity_big_bitmap">BigBitmapActivity</string>
 </resources>

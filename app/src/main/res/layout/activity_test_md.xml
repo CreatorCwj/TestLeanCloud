@@ -55,6 +55,12 @@
             android:layout_height="wrap_content"
             android:text="测试Sticky" />
 
+        <Button
+            android:id="@+id/testBigBitmap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="测试大图查看模式" />
+
     </LinearLayout>
 
 </ScrollView>
