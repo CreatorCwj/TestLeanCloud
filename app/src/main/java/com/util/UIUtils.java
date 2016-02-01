@@ -1,6 +1,7 @@
 package com.util;
 
 import android.content.Context;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 
 /**
@@ -16,5 +17,37 @@ public class UIUtils {
 
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpValue, context.getResources().getDisplayMetrics());
 
+    }
+
+    /**
+     * 获取屏幕宽度
+     *
+     * @param context
+     * @return
+     */
+    public static int getScreenWidthPX(Context context) {
+        DisplayMetrics dm = context.getResources().getDisplayMetrics();
+        return dm.widthPixels;
+    }
+
+    /**
+     * 获取屏幕高度
+     *
+     * @param context
+     * @return
+     */
+    public static int getScreenHeightPX(Context context) {
+        DisplayMetrics dm = context.getResources().getDisplayMetrics();
+        return dm.heightPixels;
+    }
+
+    /**
+     * 获取屏幕宽高像素值
+     *
+     * @param context 上下文
+     * @return 返回宽高数组
+     */
+    public static int[] getScreenWithHeightPX(Context context) {
+        return new int[]{getScreenWidthPX(context), getScreenHeightPX(context)};
     }
 }

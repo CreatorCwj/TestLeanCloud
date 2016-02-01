@@ -3,11 +3,11 @@ package com.imageLoader;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.imageLoader.listener.ImageLoadingStateListener;
 import com.imageLoader.listener.ImageProgressStateListener;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -30,7 +30,7 @@ public class ImageLoader {
 
     /**
      * InitConfig:传入不同的参数来初始化ImageLoader框架,只能初始化一次
-     * <p/>
+     * <p>
      * 参数:loading/failImageId:加载中和加载失败的图片的drawableId
      * loading/failImage:加载中和加载失败的图片的drawable
      * defaultImage/Id:加载中和加载失败使用统一的图片
@@ -98,20 +98,27 @@ public class ImageLoader {
 
                     @Override
                     public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                        if (callback != null)
+                        if (callback != null) {
                             callback.onLoadingFailed(imageView, imgUrl, failReason.getType());
+                            callback.onLoadingFinally(imageView, imgUrl);
+                        }
                     }
 
                     @Override
                     public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                        if (callback != null)
+                        Log.i("ImageLoader-ImageSize", "w:" + loadedImage.getWidth() + " h:" + loadedImage.getHeight());
+                        if (callback != null) {
                             callback.onLoadingComplete(imageView, imgUrl, loadedImage);
+                            callback.onLoadingFinally(imageView, imgUrl);
+                        }
                     }
 
                     @Override
                     public void onLoadingCancelled(String imageUri, View view) {
-                        if (callback != null)
+                        if (callback != null) {
                             callback.onLoadingCancelled(imageView, imgUrl);
+                            callback.onLoadingFinally(imageView, imgUrl);
+                        }
                     }
                 }, new ImageLoadingProgressListener() {
                     @Override
@@ -122,6 +129,9 @@ public class ImageLoader {
                             progress = ((double) current / total) * 100;
                             result = (int) progress;
                         }
+                        //result有时会超出100(current>total),不知道为啥。。。
+                        if (result > 100)
+                            result = 100;
                         Log.i("ImageLoader-Progress", result + "%");
                         if (callback != null)
                             callback.onProgress(imageView, imgUrl, current, total, result);
@@ -158,7 +168,7 @@ public class ImageLoader {
      * @param imageView
      * @param imgUrl
      */
-    public static void loadImageToSizeFromDp(ImageView imageView, String imgUrl, int width, int height, final ImageLoadingStateListener listener) {
+    public static void loadImageToSizeFromDp(ImageView imageView, String imgUrl, int width, int height, final ImageProgressStateListener listener) {
         int pxWidth = UIUtils.dp2px(imageView.getContext(), width);
         int pxHeight = UIUtils.dp2px(imageView.getContext(), height);
         loadImageToSize(imageView, imgUrl, pxWidth, pxHeight, listener);
@@ -167,14 +177,16 @@ public class ImageLoader {
     /**
      * 加载图片:指定PX尺寸(如果超过实际大小则加载实际大小,可以控制ImageView的scaleType来拉伸等操作)
      * 有回调方法
+     * 不需要imageView时传null即可
+     * 缓存取时没有进度
      *
      * @param imageView
      * @param imgUrl
      */
-    public static void loadImageToSize(final ImageView imageView, final String imgUrl, int width, int height, final ImageLoadingStateListener listener) {
+    public static void loadImageToSize(@Nullable final ImageView imageView, final String imgUrl, int width, int height, final ImageProgressStateListener listener) {
         ImageSize imageSize = new ImageSize(width, height);
         com.nostra13.universalimageloader.core.ImageLoader.getInstance()
-                .loadImage(imgUrl, imageSize, new ImageLoadingListener() {
+                .loadImage(imgUrl, imageSize, null, new ImageLoadingListener() {
                     @Override
                     public void onLoadingStarted(String imageUri, View view) {
                         if (listener != null)
@@ -183,8 +195,10 @@ public class ImageLoader {
 
                     @Override
                     public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                        if (listener != null)
+                        if (listener != null) {
                             listener.onLoadingFailed(imageView, imgUrl, failReason.getType());
+                            listener.onLoadingFinally(imageView, imgUrl);
+                        }
                     }
 
                     @Override
@@ -192,15 +206,31 @@ public class ImageLoader {
                         Log.i("ImageLoader-ImageSize", "w:" + loadedImage.getWidth() + " h:" + loadedImage.getHeight());
                         if (listener != null) {
                             listener.onLoadingComplete(imageView, imgUrl, loadedImage);
-                        } else {
+                            listener.onLoadingFinally(imageView, imgUrl);
+                        } else if (imageView != null) {
                             imageView.setImageBitmap(loadedImage);
                         }
                     }
 
                     @Override
                     public void onLoadingCancelled(String imageUri, View view) {
-                        if (listener != null)
+                        if (listener != null) {
                             listener.onLoadingCancelled(imageView, imgUrl);
+                            listener.onLoadingFinally(imageView, imgUrl);
+                        }
+                    }
+                }, new ImageLoadingProgressListener() {
+                    @Override
+                    public void onProgressUpdate(String imageUri, View view, int current, int total) {
+                        int result = 0;
+                        double progress;
+                        if (total != 0) {
+                            progress = ((double) current / total) * 100;
+                            result = (int) progress;
+                        }
+                        Log.i("ImageLoader-Progress", result + "%");
+                        if (listener != null)
+                            listener.onProgress(imageView, imgUrl, current, total, result);
                     }
                 });
     }
