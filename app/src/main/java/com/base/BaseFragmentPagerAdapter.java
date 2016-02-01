@@ -9,8 +9,6 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.base.BaseViewPagerFragment;
-
 import java.util.List;
 
 /**
@@ -44,8 +42,16 @@ public abstract class BaseFragmentPagerAdapter<T extends BaseViewPagerFragment> 
         this.viewPager = viewPager;
         this.fragments = fragments;
         this.firstPage = firstPage;
+        attachFragment();
         initViewPager();
         setFirstPage();
+    }
+
+    //双向绑定,fragment处理生命周期使用
+    private void attachFragment() {
+        for (int i = 0; i < fragments.size(); ++i) {
+            fragments.get(i).attachToAdapter(this, i);
+        }
     }
 
     private void setFirstPage() {
@@ -67,9 +73,9 @@ public abstract class BaseFragmentPagerAdapter<T extends BaseViewPagerFragment> 
             ft.commit();//提交生效,立即执行的话会执行fragment的生命周期
             fm.executePendingTransactions();//立刻执行事务,commit只是提交,是否理科执行依赖于系统性能
             //第一次加载首页要手动调用一下首页的onViewPagerFragmentResume
-            if (position == firstPage) {
+            /*if (position == firstPage) {
                 ((BaseViewPagerFragment) fragment).onViewPagerFragmentResume();
-            }
+            }*/
         }
         //添加过的删除时只是把view移除了,再添加时只需把view加进来即可
         if (fragment.getView() != null && fragment.getView().getParent() == null) {
@@ -115,5 +121,14 @@ public abstract class BaseFragmentPagerAdapter<T extends BaseViewPagerFragment> 
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    /**
+     * 供Fragment调用
+     *
+     * @return
+     */
+    public int getCurrentIndex() {
+        return currentIndex;
     }
 }

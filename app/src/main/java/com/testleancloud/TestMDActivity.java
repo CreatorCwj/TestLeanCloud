@@ -40,6 +40,9 @@ public class TestMDActivity extends BaseActivity {
     @InjectView(R.id.testBigBitmap)
     private Button testBigBitmap;
 
+    @InjectView(R.id.testDatePicker)
+    private Button testDatePicker;
+
     @Override
     protected void setListener() {
         testSimpleAnim.setOnClickListener(this);
@@ -50,6 +53,7 @@ public class TestMDActivity extends BaseActivity {
         testJianShu.setOnClickListener(this);
         testSticky.setOnClickListener(this);
         testBigBitmap.setOnClickListener(this);
+        testDatePicker.setOnClickListener(this);
     }
 
     @Override
@@ -82,6 +86,9 @@ public class TestMDActivity extends BaseActivity {
                 intent.putStringArrayListExtra(BigBitmapActivity.INTENT_URL_KEY, (ArrayList<String>) urls);
                 intent.putExtra(BigBitmapActivity.INTENT_FIRST_PAGE_KEY, 2);
                 startActivity(intent);
+                break;
+            case R.id.testDatePicker:
+                startActivity(new Intent(TestMDActivity.this, DatePickerActivity.class));
                 break;
         }
     }

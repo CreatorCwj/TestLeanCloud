@@ -20,6 +20,8 @@ public abstract class BaseActivity extends RoboActivity implements View.OnClickL
 
     protected final String TAG = "Activity";
 
+    protected final Object NETWORK_TAG = this;
+
     @InjectView(R.id.textView)
     protected TextView textView;
 
@@ -70,7 +72,7 @@ public abstract class BaseActivity extends RoboActivity implements View.OnClickL
 
     @Override
     protected void onDestroy() {
-        Network.cancelRequest(this);
+        Network.cancelRequest(NETWORK_TAG);
         super.onDestroy();
     }
 }

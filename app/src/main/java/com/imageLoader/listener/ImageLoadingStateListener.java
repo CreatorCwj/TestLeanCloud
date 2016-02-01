@@ -9,7 +9,7 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
  * Created by cwj on 16/1/14.
  * ImageLoader加载状态回调
  */
-public abstract class ImageLoadingStateListener {
+abstract class ImageLoadingStateListener {
 
     /**
      * 开始加载

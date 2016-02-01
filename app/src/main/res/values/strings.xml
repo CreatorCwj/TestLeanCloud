@@ -24,4 +24,6 @@
     <string name="title_activity_jian_shu">JianShuActivity</string>
     <string name="title_activity_sticky">StickyActivity</string>
     <string name="title_activity_big_bitmap">BigBitmapActivity</string>
+    <string name="title_activity_test">TestActivity</string>
+    <string name="title_activity_date_picker">DatePickerActivity</string>
 </resources>

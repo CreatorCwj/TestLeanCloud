@@ -2,9 +2,15 @@ package com.widget.rlrView.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewTreeObserver;
 
 import com.testleancloud.R;
@@ -18,7 +24,7 @@ import java.util.List;
 
 /**
  * Created by cwj on 16/1/16.
- * 可设置自动刷新与否以及外部手动刷新的刷新控件
+ * 可设置是否刷新、自动刷新与否以及外部手动刷新的刷新控件
  * 支持刷新不加载,加载不刷新
  * 与{@link LoadMoreRecyclerView}联合使用
  */
@@ -27,6 +33,7 @@ public class RLRView extends SwipeRefreshLayout implements SwipeRefreshLayout.On
     private boolean autoRefresh = true;
     private LoadMoreRecyclerView loadMoreRecyclerView;
     private Page page;
+    private Drawable emptyDrawable;
 
     private OnRefreshListener onRefreshListener;
     private OnLoadListener onLoadListener;
@@ -77,8 +84,47 @@ public class RLRView extends SwipeRefreshLayout implements SwipeRefreshLayout.On
             int height = typedArray.getDimensionPixelSize(R.styleable.RefreshAndLoad_dividerHeight, 0);
             int color = typedArray.getColor(R.styleable.RefreshAndLoad_dividerColor, Color.TRANSPARENT);
             setDivider(height, color);
+            //empty显示
+            int id = typedArray.getResourceId(R.styleable.RefreshAndLoad_emptyView, -1);
+            setEmptyView(id);
             typedArray.recycle();
         }
+    }
+
+    private void setEmptyView(int id) {
+        if (id != -1) {
+            try {
+                emptyDrawable = getResources().getDrawable(id, null);
+                return;
+            } catch (Exception e) {
+                Log.i("RLRView", "empty不是图片");
+            }
+            try {
+                View view = LayoutInflater.from(getContext()).inflate(id, null);
+                getDrawableFromView(view);
+            } catch (Exception e) {
+                Log.i("RLRView", "empty也不是view");
+            }
+        }
+    }
+
+    private void getDrawableFromView(final View view) {
+        getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int width = getWidth();
+                int height = getHeight();
+                view.setDrawingCacheEnabled(true);
+                view.destroyDrawingCache();
+                view.measure(View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
+                        View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY));
+                view.layout(0, 0, width, height);
+                view.buildDrawingCache();
+                Bitmap bitmap = view.getDrawingCache();
+                emptyDrawable = new BitmapDrawable(getResources(), bitmap);
+                RLRView.this.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
     }
 
     public void setDivider(int height, int color) {
@@ -104,8 +150,8 @@ public class RLRView extends SwipeRefreshLayout implements SwipeRefreshLayout.On
         this.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                //可以自动刷新且没有在加载的时候调用刷新
-                if (isAutoRefresh() && !isLoading()) {
+                //可以允许刷新且自动刷新且没有在加载的时候调用刷新
+                if (isEnabled() && isAutoRefresh() && !isLoading()) {
                     invokeRefresh();
                 }
                 //防止后续调用,调用一次后即可取消
@@ -163,8 +209,8 @@ public class RLRView extends SwipeRefreshLayout implements SwipeRefreshLayout.On
      * 外部主动调用
      */
     public void refresh() {
-        //刷新或加载时不允许刷新
-        if (isRefreshing() || isLoading())
+        //刷新或加载时不允许刷新,不允许刷新时不调用
+        if (!isEnabled() || isRefreshing() || isLoading())
             return;
         invokeRefresh();
     }
@@ -244,7 +290,8 @@ public class RLRView extends SwipeRefreshLayout implements SwipeRefreshLayout.On
     @Override
     final public void onRefresh() {
         //swipe手势刷新时会调用此方法将refresh状态设置为true,如果此时在加载,不可以刷新,而且要讲刷新状态设置为false
-        if (isLoading()) {
+        //为了统一写法加上isEnable判断,其实不可刷新时调不到这里
+        if (!isEnabled() || isLoading()) {
             setRefreshing(false);
             return;
         }
@@ -263,10 +310,12 @@ public class RLRView extends SwipeRefreshLayout implements SwipeRefreshLayout.On
     }
 
     /**
-     * 刷新加载失败,页数恢复
+     * 刷新加载失败,页数恢复(如果是刷新失败的话则要清空(防止刷新前没清空导致刷新失败后还能直接加载))
      */
     public void rlError() {
         page.prePage();
+        if (isRefreshing())
+            clearData();
     }
 
     /**
@@ -310,6 +359,13 @@ public class RLRView extends SwipeRefreshLayout implements SwipeRefreshLayout.On
     }
 
     /**
+     * 清空数据
+     */
+    public void clearData() {
+        loadMoreRecyclerView.clearData();
+    }
+
+    /**
      * 拦截一下添加数据,自动判断是否无法加载更多
      *
      * @param dataList
@@ -343,6 +399,20 @@ public class RLRView extends SwipeRefreshLayout implements SwipeRefreshLayout.On
 
     private void stopRefresh() {
         setRefreshing(false);
+        //根据数据数量看是否显示空数据界面(0数据时显示),header也隐藏
+        //空数据界面可以传入也可以在layout指定
+        RecyclerViewAdapter adapter = (RecyclerViewAdapter) loadMoreRecyclerView.getAdapter();
+        if (adapter != null && emptyDrawable != null) {
+            if (adapter.getDataCount() == 0) {
+                setBackground(emptyDrawable);
+                if (loadMoreRecyclerView.getHeader() != null && loadMoreRecyclerView.getHeader().itemView.getVisibility() == VISIBLE)
+                    loadMoreRecyclerView.getHeader().itemView.setVisibility(View.GONE);
+            } else {
+                setBackground(null);
+                if (loadMoreRecyclerView.getHeader() != null && loadMoreRecyclerView.getHeader().itemView.getVisibility() == GONE)
+                    loadMoreRecyclerView.getHeader().itemView.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     private void stopLoadMore() {
