@@ -1,5 +1,7 @@
 package com.util;
 
+import com.model.CitySiftModel;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,5 +44,34 @@ public class MockData {
             urls.add(data.get(i));
         }
         return urls;
+    }
+
+    public static List<CitySiftModel> getCities() {
+        List<CitySiftModel> list = new ArrayList<>();
+        list.add(new CitySiftModel(0, "北京", "beijing"));
+        list.add(new CitySiftModel(1, "天津", "tianjin"));
+        list.add(new CitySiftModel(2, "上海", "shanghai"));
+        list.add(new CitySiftModel(3, "广州", "guangzhou"));
+        list.add(new CitySiftModel(4, "石家庄", "shijiazhuang"));
+        list.add(new CitySiftModel(5, "河南", "henan"));
+        list.add(new CitySiftModel(6, "四川", "sichuan"));
+        list.add(new CitySiftModel(7, "湖南", "hunan"));
+        list.add(new CitySiftModel(8, "北京", "beijing"));
+        list.add(new CitySiftModel(9, "天津", "tianjin"));
+        list.add(new CitySiftModel(10, "上海", "shanghai"));
+        list.add(new CitySiftModel(11, "广州", "guangzhou"));
+        list.add(new CitySiftModel(12, "石家庄", "shijiazhuang"));
+        list.add(new CitySiftModel(13, "河南", "henan"));
+        list.add(new CitySiftModel(14, "四川", "sichuan"));
+        list.add(new CitySiftModel(15, "湖南", "hunan"));
+        list.add(new CitySiftModel(16, "北京", "beijing"));
+        list.add(new CitySiftModel(17, "天津", "tianjin"));
+        list.add(new CitySiftModel(18, "上海", "shanghai"));
+        list.add(new CitySiftModel(19, "广州", "guangzhou"));
+        list.add(new CitySiftModel(20, "石家庄", "shijiazhuang"));
+        list.add(new CitySiftModel(21, "河南", "henan"));
+        list.add(new CitySiftModel(22, "四川", "sichuan"));
+        list.add(new CitySiftModel(23, "湖南", "hunan"));
+        return list;
     }
 }

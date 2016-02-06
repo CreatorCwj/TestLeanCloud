@@ -43,6 +43,9 @@ public class TestMDActivity extends BaseActivity {
     @InjectView(R.id.testDatePicker)
     private Button testDatePicker;
 
+    @InjectView(R.id.testIndexLV)
+    private Button testIndexLV;
+
     @Override
     protected void setListener() {
         testSimpleAnim.setOnClickListener(this);
@@ -54,6 +57,7 @@ public class TestMDActivity extends BaseActivity {
         testSticky.setOnClickListener(this);
         testBigBitmap.setOnClickListener(this);
         testDatePicker.setOnClickListener(this);
+        testIndexLV.setOnClickListener(this);
     }
 
     @Override
@@ -89,6 +93,9 @@ public class TestMDActivity extends BaseActivity {
                 break;
             case R.id.testDatePicker:
                 startActivity(new Intent(TestMDActivity.this, DatePickerActivity.class));
+                break;
+            case R.id.testIndexLV:
+                startActivity(new Intent(TestMDActivity.this, IndexListViewActivity.class));
                 break;
         }
     }

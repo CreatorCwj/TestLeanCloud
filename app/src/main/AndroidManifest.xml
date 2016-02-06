@@ -112,6 +112,10 @@
             android:name=".DatePickerActivity"
             android:label="@string/title_activity_date_picker" >
         </activity>
+        <activity
+            android:name=".IndexListViewActivity"
+            android:label="@string/title_activity_index_list_view" >
+        </activity>
     </application>
 
 </manifest>
