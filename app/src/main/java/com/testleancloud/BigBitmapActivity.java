@@ -4,13 +4,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.adapter.BigBitmapFragmentAdapter;
 import com.fragment.BigBitmapFragment;
+import com.imageLoader.ImageLoader;
+import com.widget.dialog.SelectDialog;
 import com.widget.viewPagers.ClickViewPager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import roboguice.activity.RoboFragmentActivity;
@@ -32,12 +36,29 @@ public class BigBitmapActivity extends RoboFragmentActivity implements ViewPager
     private List<String> imgUrls;
     private int firstPage;//当前(第一个)显示页
 
+    private SelectDialog selectDialog;//长按弹出框
+    private String[] items = new String[]{"保存图片"};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         handleIntent();
         initTextView();
         initViewPager();
+        initSelectDialog();
+    }
+
+    private void initSelectDialog() {
+        selectDialog = new SelectDialog(this, Arrays.asList(items));
+        selectDialog.getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectDialog.cancel();
+                if (position == 0) {//保存图片
+                    ImageLoader.saveImage(BigBitmapActivity.this, imgUrls.get(viewPager.getCurrentItem()));
+                }
+            }
+        });
     }
 
     private void initTextView() {
@@ -55,12 +76,24 @@ public class BigBitmapActivity extends RoboFragmentActivity implements ViewPager
                 fragments.add(BigBitmapFragment.newInstance(url));
             }
             new BigBitmapFragmentAdapter(this, getSupportFragmentManager(), viewPager, fragments, firstPage);
-            viewPager.addOnPageChangeListener(this);
+            setViewPagerListener();
         }
+    }
+
+    private void setViewPagerListener() {
+        viewPager.addOnPageChangeListener(this);
+        //点击关闭
         viewPager.setOnClickListener(new ClickViewPager.OnClickListener() {
             @Override
             public void onClick() {
                 finish();
+            }
+        });
+        //长按保存
+        viewPager.setOnLongClickListener(new ClickViewPager.OnLongClickListener() {
+            @Override
+            public void onLongClick() {
+                selectDialog.show();
             }
         });
     }

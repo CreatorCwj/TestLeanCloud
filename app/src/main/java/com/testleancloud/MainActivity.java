@@ -114,7 +114,7 @@ public class MainActivity extends BaseActivity {
         String objId = getDataEditText.getText().toString();
         if (TextUtils.isEmpty(objId))
             return;
-        showProgressDialog();
+        showLoadingDialog();
         AVQuery<AVObject> query = AVQuery.getQuery(CLASS_NAME);//根据表名查询
         query.getInBackground(objId, new GetCallback<AVObject>() {
             @Override
@@ -125,7 +125,7 @@ public class MainActivity extends BaseActivity {
                 } else {
                     textView.setText(e.getMessage());
                 }
-                dismissProgressDialog();
+                cancelLoadingDialog();
             }
         });
     }
@@ -140,7 +140,7 @@ public class MainActivity extends BaseActivity {
         String skills = setSkillsEditText.getText().toString();
         if (TextUtils.isEmpty(score) || TextUtils.isEmpty(playerName) || TextUtils.isEmpty(isKP) || TextUtils.isEmpty(skills))
             return;
-        showProgressDialog();
+        showLoadingDialog();
         AVObject po = new AVObject(CLASS_NAME);//放入指定表，第一次则创建表
         po.put(SCORE, Integer.parseInt(score));//属性自己定义类型并放入值,和Map一样
         po.put(PLAYER_NAME, playerName);
@@ -156,7 +156,7 @@ public class MainActivity extends BaseActivity {
         String objId = getDataEditText.getText().toString();
         if (TextUtils.isEmpty(objId))
             return;
-        showProgressDialog();
+        showLoadingDialog();
         AVQuery<AVObject> query = AVQuery.getQuery(CLASS_NAME);//根据表名查询
         query.getInBackground(objId, new GetCallback<AVObject>() {
             @Override
@@ -170,7 +170,7 @@ public class MainActivity extends BaseActivity {
                 } else {
                     textView.setText(e.getMessage());
                 }
-                dismissProgressDialog();
+                cancelLoadingDialog();
             }
         });
     }
@@ -182,7 +182,7 @@ public class MainActivity extends BaseActivity {
         String objId = getDataEditText.getText().toString();
         if (TextUtils.isEmpty(objId))
             return;
-        showProgressDialog();
+        showLoadingDialog();
         AVQuery<AVObject> query = AVQuery.getQuery(CLASS_NAME);//根据表名查询
         query.getInBackground(objId, new GetCallback<AVObject>() {
             @Override
@@ -192,7 +192,7 @@ public class MainActivity extends BaseActivity {
                 } else {
                     textView.setText(e.getMessage());
                 }
-                dismissProgressDialog();
+                cancelLoadingDialog();
             }
         });
     }
@@ -204,7 +204,7 @@ public class MainActivity extends BaseActivity {
         String objId = getDataEditText.getText().toString();
         if (TextUtils.isEmpty(objId))
             return;
-        showProgressDialog();
+        showLoadingDialog();
         AVQuery<AVObject> query = AVQuery.getQuery(CLASS_NAME);//根据表名查询
         query.getInBackground(objId, new GetCallback<AVObject>() {
             @Override
@@ -215,7 +215,7 @@ public class MainActivity extends BaseActivity {
                 } else {
                     textView.setText(e.getMessage());
                 }
-                dismissProgressDialog();
+                cancelLoadingDialog();
             }
         });
     }

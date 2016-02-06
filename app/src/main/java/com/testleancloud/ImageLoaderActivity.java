@@ -64,7 +64,7 @@ public class ImageLoaderActivity extends BaseActivity implements RLRView.OnRefre
 
     @Override
     public void onLoad() {
-        obtainData(false);
+//        obtainData(false);
     }
 
     private void obtainData(final boolean isRefresh) {
@@ -79,7 +79,6 @@ public class ImageLoaderActivity extends BaseActivity implements RLRView.OnRefre
                 .setRequestCallback(new RequestCallback<GirlImage>() {
                     @Override
                     public void onRequestSuccess(GirlImage result) {
-
                         switch (num % STATE.values().length) {
                             case 0://normal
                                 List<String> urls;
@@ -129,6 +128,7 @@ public class ImageLoaderActivity extends BaseActivity implements RLRView.OnRefre
         switch (v.getId()) {
             case R.id.textView:
                 rlrView.backToTop();
+                showLoadingDialog("加载中...");
                 break;
             default:
                 break;

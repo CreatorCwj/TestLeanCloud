@@ -14,6 +14,7 @@ import com.imageLoader.listener.ImageProgressStateListener;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.testleancloud.R;
 import com.util.UIUtils;
+import com.util.Utils;
 import com.widget.RoundProgressBar;
 
 import roboguice.inject.InjectView;
@@ -55,7 +56,7 @@ public class BigBitmapFragment extends BaseViewPagerFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ImageLoader.loadImage(imageView, imgUrl, new ImageProgressStateListener() {
+        ImageLoader.displayImage(imageView, imgUrl, new ImageProgressStateListener() {
             @Override
             public void onProgress(ImageView imageView, String imgUrl, int current, int total, int progress) {
                 super.onProgress(imageView, imgUrl, current, total, progress);
@@ -73,6 +74,7 @@ public class BigBitmapFragment extends BaseViewPagerFragment {
             public void onLoadingFailed(ImageView imageView, String imgUrl, FailReason.FailType failType) {
                 super.onLoadingFailed(imageView, imgUrl, failType);
                 //会用默认的option里指定的失败图片
+                Utils.showToast(getActivity(), "加载图片失败");
             }
 
             @Override
@@ -85,6 +87,7 @@ public class BigBitmapFragment extends BaseViewPagerFragment {
             @Override
             public void onLoadingCancelled(ImageView imageView, String imgUrl) {
                 super.onLoadingCancelled(imageView, imgUrl);
+                Utils.showToast(getActivity(), "加载图片失败");
             }
 
             @Override
@@ -104,7 +107,7 @@ public class BigBitmapFragment extends BaseViewPagerFragment {
      * @param loadedImage
      */
     private void adjustImageView(Bitmap loadedImage) {
-        int[] screenSize = UIUtils.getScreenWithHeightPX(getActivity());
+        int[] screenSize = UIUtils.getScreenWidthHeightPX(getActivity());
         //width
         int newWidth = loadedImage.getWidth() * 4;
         if (newWidth > screenSize[0])

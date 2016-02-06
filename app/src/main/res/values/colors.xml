@@ -4,4 +4,5 @@
     <color name="windowBackground">@android:color/white</color>
     <color name="colorPrimaryDark">#3DBFB1</color>
     <color name="navigationBarColor">@android:color/black</color>
+    <color name="black">#353535</color>
 </resources>

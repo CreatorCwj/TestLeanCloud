@@ -83,7 +83,7 @@ public class UserActivity extends BaseActivity {
         User user = AVUser.getCurrentUser(User.class);
         if (TextUtils.isEmpty(mobile) || mobile.length() != 11 || user == null || !user.isAuthenticated())
             return;
-        showProgressDialog("设置手机号...");
+        showLoadingDialog("设置手机号...");
         user.setMobilePhoneNumber(mobile);//先设置手机号
         user.saveInBackground(new SaveCallback() {
             @Override
@@ -97,12 +97,12 @@ public class UserActivity extends BaseActivity {
                             } else {
                                 textView.setText(e.getMessage());
                             }
-                            dismissProgressDialog();
+                            cancelLoadingDialog();
                         }
                     });
                 } else {
                     textView.setText(e.getMessage());
-                    dismissProgressDialog();
+                    cancelLoadingDialog();
                 }
             }
         });
@@ -116,7 +116,7 @@ public class UserActivity extends BaseActivity {
         AVUser user = AVUser.getCurrentUser();
         if (TextUtils.isEmpty(code) || user == null || !user.isAuthenticated())
             return;
-        showProgressDialog("正在验证手机号");
+        showLoadingDialog("正在验证手机号");
         AVUser.verifyMobilePhoneInBackground(code, new AVMobilePhoneVerifyCallback() {
             @Override
             public void done(AVException e) {
@@ -125,7 +125,7 @@ public class UserActivity extends BaseActivity {
                 } else {
                     textView.setText(e.getMessage());
                 }
-                dismissProgressDialog();
+                cancelLoadingDialog();
             }
         });
     }
@@ -138,7 +138,7 @@ public class UserActivity extends BaseActivity {
         AVUser currentUser = AVUser.getCurrentUser();
         if (TextUtils.isEmpty(email) || currentUser == null || !currentUser.isAuthenticated())
             return;
-        showProgressDialog("修改邮箱...");
+        showLoadingDialog("修改邮箱...");
 
         currentUser.setEmail(email);
         currentUser.saveInBackground(saveCallback);
@@ -152,7 +152,7 @@ public class UserActivity extends BaseActivity {
         AVUser currentUser = AVUser.getCurrentUser();
         if (TextUtils.isEmpty(email) || currentUser == null || !currentUser.isAuthenticated())
             return;
-        showProgressDialog("重置密码中...");
+        showLoadingDialog("重置密码中...");
         AVUser.requestPasswordResetInBackground(email, new RequestPasswordResetCallback() {
             @Override
             public void done(AVException e) {
@@ -161,7 +161,7 @@ public class UserActivity extends BaseActivity {
                 } else {
                     textView.setText(e.getMessage());
                 }
-                dismissProgressDialog();
+                cancelLoadingDialog();
             }
         });
     }
@@ -174,14 +174,14 @@ public class UserActivity extends BaseActivity {
         final AVUser currentUser = AVUser.getCurrentUser();
         if (TextUtils.isEmpty(password) || currentUser == null || !currentUser.isAuthenticated())
             return;
-        showProgressDialog("正在修改密码...");
+        showLoadingDialog("正在修改密码...");
         currentUser.setPassword(password);//修改完密码后session-token会失效(再去修改用户信息时异常),重新登陆(重置了session-token)
         currentUser.saveInBackground(new SaveCallback() {
             @Override
             public void done(AVException e) {
                 if (e == null) {//修改成功
-                    dismissProgressDialog();
-                    showProgressDialog("正在重新登陆");
+                    cancelLoadingDialog();
+                    showLoadingDialog("正在重新登陆");
                     AVUser.logInInBackground(currentUser.getUsername(), password, new LogInCallback<User>() {
                         @Override
                         public void done(User newUser, AVException e) {
@@ -191,12 +191,12 @@ public class UserActivity extends BaseActivity {
                             } else {
                                 textView.setText(e.getMessage());
                             }
-                            dismissProgressDialog();
+                            cancelLoadingDialog();
                         }
                     }, User.class);
                 } else {
                     textView.setText(e.getMessage());
-                    dismissProgressDialog();
+                    cancelLoadingDialog();
                 }
             }
         });
@@ -218,7 +218,7 @@ public class UserActivity extends BaseActivity {
             Utils.showToast(this, "当前登陆用户无授权,请重新登录");
             return;
         }
-        showProgressDialog("正在更改username");
+        showLoadingDialog("正在更改username");
         user.setUsername(usernmae);//自己的用户信息登陆后可以修改
         user.saveInBackground(new SaveCallback() {
             @Override
@@ -232,7 +232,7 @@ public class UserActivity extends BaseActivity {
                 if (user1 != null) {
                     Log.i("Session-token", user1.getUsername() + user1.getSessionToken());
                 }
-                dismissProgressDialog();
+                cancelLoadingDialog();
             }
         });
 
@@ -259,7 +259,7 @@ public class UserActivity extends BaseActivity {
         final String displayName = setDisplayname.getText().toString();
         if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password) || TextUtils.isEmpty(email) || TextUtils.isEmpty(displayName))
             return;
-        showProgressDialog("正在注册用户...");
+        showLoadingDialog("正在注册用户...");
         User user = new User();
         user.setUsername(username);//默认字段有getset方法
         user.setPassword(password);
@@ -278,7 +278,7 @@ public class UserActivity extends BaseActivity {
                 } else {//根据exception可以判断哪错了
                     textView.setText(e.getMessage());
                 }
-                dismissProgressDialog();
+                cancelLoadingDialog();
             }
         });
     }
@@ -292,9 +292,9 @@ public class UserActivity extends BaseActivity {
         if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password))
             return;
         if (AVUser.getCurrentUser() != null) {
-            showProgressDialog("当前用户为:" + AVUser.getCurrentUser().getUsername() + "\n正在切换用户...");
+            showLoadingDialog("当前用户为:" + AVUser.getCurrentUser().getUsername() + "\n正在切换用户...");
         } else {
-            showProgressDialog("正在登陆...");
+            showLoadingDialog("正在登陆...");
         }
         AVUser.logInInBackground(username, password, new LogInCallback<AVUser>() {
             @Override
@@ -307,7 +307,7 @@ public class UserActivity extends BaseActivity {
                 } else {
                     textView.setText(e.getMessage());
                 }
-                dismissProgressDialog();
+                cancelLoadingDialog();
             }
         });
     }
@@ -317,7 +317,7 @@ public class UserActivity extends BaseActivity {
      */
     public void logout() {
         if (AVUser.getCurrentUser() != null) {
-            showProgressDialog("当前用户为:" + AVUser.getCurrentUser().getUsername() + "\n正在注销用户...");
+            showLoadingDialog("当前用户为:" + AVUser.getCurrentUser().getUsername() + "\n正在注销用户...");
         } else {
             Utils.showToast(UserActivity.this, "当前无用户登陆");//无用户登陆时注销也不会错
             return;
@@ -332,7 +332,7 @@ public class UserActivity extends BaseActivity {
 //                } else {
 //                    textView.setText(e.getMessage());
 //                }
-//                dismissProgressDialog();
+//                dismissLoadingDialog();
 //            }
 //        });
     }

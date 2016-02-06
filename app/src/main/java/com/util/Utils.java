@@ -1,5 +1,6 @@
 package com.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -15,7 +16,7 @@ public class Utils {
      * Toast提示
      */
     public static void showToast(Context context, String content, int duration) {
-        if (context == null)
+        if (context == null || (context instanceof Activity && ((Activity) context).isFinishing()))
             return;
         Toast.makeText(context, content, duration).show();
     }

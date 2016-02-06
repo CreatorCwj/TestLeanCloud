@@ -19,6 +19,9 @@ public class TestMDActivity extends BaseActivity {
     @InjectView(R.id.testSimpleAnim)
     private Button testSimpleAnim;
 
+    @InjectView(R.id.testMain)
+    private Button testMain;
+
     @InjectView(R.id.testDefaultBehavior)
     private Button testDefaultBehavior;
 
@@ -46,6 +49,9 @@ public class TestMDActivity extends BaseActivity {
     @InjectView(R.id.testIndexLV)
     private Button testIndexLV;
 
+    @InjectView(R.id.testDialog)
+    private Button testDialog;
+
     @Override
     protected void setListener() {
         testSimpleAnim.setOnClickListener(this);
@@ -58,6 +64,8 @@ public class TestMDActivity extends BaseActivity {
         testBigBitmap.setOnClickListener(this);
         testDatePicker.setOnClickListener(this);
         testIndexLV.setOnClickListener(this);
+        testDialog.setOnClickListener(this);
+        testMain.setOnClickListener(this);
     }
 
     @Override
@@ -96,6 +104,12 @@ public class TestMDActivity extends BaseActivity {
                 break;
             case R.id.testIndexLV:
                 startActivity(new Intent(TestMDActivity.this, IndexListViewActivity.class));
+                break;
+            case R.id.testDialog:
+                startActivity(new Intent(TestMDActivity.this, DialogActivity.class));
+                break;
+            case R.id.testMain:
+                startActivity(new Intent(TestMDActivity.this, MainActivity.class));
                 break;
         }
     }
