@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.testleancloud.R;
+import com.util.UIUtils;
 import com.widget.dialog.base.BaseDialog;
 
 import java.util.List;
@@ -49,12 +50,16 @@ public class SelectDialog extends BaseDialog {
 
     @Override
     protected View onCreateView() {
-        return LayoutInflater.from(context).inflate(R.layout.select_dialog, null);
+        listView = new ListView(context);
+        return listView;
     }
 
     @Override
     protected void onViewCreated(View view) {
-        listView = (ListView) view;
+        listView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        listView.setDivider(context.getResources().getDrawable(R.color.dividerColor, null));
+        listView.setDividerHeight(UIUtils.dp2px(context, 1));
+        listView.setVerticalScrollBarEnabled(false);
     }
 
     @Override

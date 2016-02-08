@@ -1,0 +1,35 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/content_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <RadioGroup
+        android:id="@+id/main_radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            style="@style/MainRadioButtonStyle"
+            android:text="首页" />
+
+        <RadioButton
+            style="@style/MainRadioButtonStyle"
+            android:text="商家" />
+
+        <RadioButton
+            style="@style/MainRadioButtonStyle"
+            android:text="我的" />
+
+        <RadioButton
+            style="@style/MainRadioButtonStyle"
+            android:text="设置" />
+    </RadioGroup>
+
+</LinearLayout>

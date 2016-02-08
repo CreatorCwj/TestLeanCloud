@@ -85,6 +85,12 @@
             android:layout_height="wrap_content"
             android:text="测试自定义dialog" />
 
+        <Button
+            android:id="@+id/testMainAdapter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="测试主界面" />
+
     </LinearLayout>
 
 </ScrollView>

@@ -37,7 +37,7 @@ public class TestTabLayout extends RoboFragmentActivity {
         for (int i = 1; i <= 6; ++i) {
             list.add(TabFragment.newInstance(i));
         }
-        tabFragmentAdapter = new TabFragmentAdapter(this, getSupportFragmentManager(), viewPager, list, 2);
+        tabFragmentAdapter = new TabFragmentAdapter(this, viewPager, list, 2);
     }
 
     private void initTabLayout() {

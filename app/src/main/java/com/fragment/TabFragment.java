@@ -1,5 +1,6 @@
 package com.fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +47,33 @@ public class TabFragment extends BaseViewPagerFragment {
         super.onViewCreated(view, savedInstanceState);
         textView = (TextView) view.findViewById(R.id.fragment_content);
         textView.setText("TAB" + pos);
+
+        //test color
+        int color;
+        switch (pos) {
+            case 1:
+                color = Color.WHITE;
+                break;
+            case 2:
+                color = Color.RED;
+                break;
+            case 3:
+                color = Color.GREEN;
+                break;
+            case 4:
+                color = Color.BLUE;
+                break;
+            case 5:
+                color = Color.YELLOW;
+                break;
+            case 6:
+                color = Color.GRAY;
+                break;
+            default:
+                color = Color.WHITE;
+                break;
+        }
+        view.setBackgroundColor(color);
     }
 
     /**

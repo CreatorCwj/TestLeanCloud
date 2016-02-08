@@ -1,7 +1,6 @@
 package com.adapter;
 
-import android.content.Context;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 
 import com.base.BaseFragmentPagerAdapter;
@@ -14,12 +13,13 @@ import java.util.List;
  */
 public class TabFragmentAdapter extends BaseFragmentPagerAdapter<TabFragment> {
 
-    public TabFragmentAdapter(Context context, FragmentManager fm, ViewPager viewPager, List<TabFragment> fragments) {
-        super(context, fm, viewPager, fragments);
+
+    public TabFragmentAdapter(FragmentActivity fa, ViewPager viewPager, List<TabFragment> fragments) {
+        super(fa, viewPager, fragments);
     }
 
-    public TabFragmentAdapter(Context context, FragmentManager fm, ViewPager viewPager, List<TabFragment> fragments, int firstPage) {
-        super(context, fm, viewPager, fragments, firstPage);
+    public TabFragmentAdapter(FragmentActivity fa, ViewPager viewPager, List<TabFragment> fragments, int firstPage) {
+        super(fa, viewPager, fragments, firstPage);
     }
 
     @Override
