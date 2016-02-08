@@ -54,7 +54,7 @@ public class FileActivity extends BaseActivity {
         String postId = setPostId.getText().toString();
         if (TextUtils.isEmpty(postId))
             return;
-        showProgressDialog("上传图片...");
+        showLoadingDialog("上传图片...");
 
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_contact);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -76,7 +76,7 @@ public class FileActivity extends BaseActivity {
         String postId = setPostId.getText().toString();
         if (TextUtils.isEmpty(postId))
             return;
-        showProgressDialog("获取图片...");
+        showLoadingDialog("获取图片...");
         AVQuery<Post> query = AVQuery.getQuery(Post.class);
         query.getInBackground(postId, new GetCallback<Post>() {
             @Override
@@ -93,7 +93,7 @@ public class FileActivity extends BaseActivity {
                                 } else {
                                     textView.setText(e.getMessage());
                                 }
-                                dismissProgressDialog();
+                                cancelLoadingDialog();
                             }
                         }, new ProgressCallback() {
                             @Override
@@ -102,11 +102,11 @@ public class FileActivity extends BaseActivity {
                             }
                         });
                     } else {
-                        dismissProgressDialog();
+                        cancelLoadingDialog();
                     }
                 } else {
                     textView.setText(e.getMessage());
-                    dismissProgressDialog();
+                    cancelLoadingDialog();
                 }
             }
         });
@@ -119,7 +119,7 @@ public class FileActivity extends BaseActivity {
         String postId = setPostId.getText().toString();
         if (TextUtils.isEmpty(postId))
             return;
-        showProgressDialog("获取文件...");
+        showLoadingDialog("获取文件...");
         AVQuery<Post> query = AVQuery.getQuery(Post.class);
         query.getInBackground(postId, new GetCallback<Post>() {
             @Override
@@ -135,7 +135,7 @@ public class FileActivity extends BaseActivity {
                                 } else {
                                     textView.setText(e.getMessage());
                                 }
-                                dismissProgressDialog();
+                                cancelLoadingDialog();
                             }
                         }, new ProgressCallback() {//有时会从cache里取,cache里取时不会调用此方法
                             @Override
@@ -145,11 +145,11 @@ public class FileActivity extends BaseActivity {
                             }
                         });
                     } else {
-                        dismissProgressDialog();
+                        cancelLoadingDialog();
                     }
                 } else {
                     textView.setText(e.getMessage());
-                    dismissProgressDialog();
+                    cancelLoadingDialog();
                 }
             }
         });
@@ -162,7 +162,7 @@ public class FileActivity extends BaseActivity {
         String postId = setPostId.getText().toString();
         if (TextUtils.isEmpty(postId))
             return;
-        showProgressDialog("上传文件...");
+        showLoadingDialog("上传文件...");
 
         String fileData = "I am a file data in the cloud!!!";
         AVFile file = new AVFile("file.txt", fileData.getBytes());
@@ -175,7 +175,7 @@ public class FileActivity extends BaseActivity {
                 } else {
                     textView.setText(e.getMessage());
                 }
-                dismissProgressDialog();
+                dismissLoadingDialog();
             }
         }, new ProgressCallback() {
             @Override

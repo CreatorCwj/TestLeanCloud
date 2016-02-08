@@ -85,7 +85,7 @@ public class RelationActivity extends BaseActivity {
         final String commentId = setCommentId.getText().toString();
         if (TextUtils.isEmpty(commentId))
             return;
-        showProgressDialog();
+        showLoadingDialog();
         AVQuery<Comment> query = AVQuery.getQuery(Comment.class);
         query.getInBackground(commentId, new GetCallback<Comment>() {
             @Override
@@ -103,16 +103,16 @@ public class RelationActivity extends BaseActivity {
                                     sb.append(post.text());
                                 }
                                 textView.setText(sb.toString());
-                                dismissProgressDialog();
+                                cancelLoadingDialog();
                             } else {
                                 textView.setText(e.getMessage());
-                                dismissProgressDialog();
+                                cancelLoadingDialog();
                             }
                         }
                     });
                 } else {
                     textView.setText(e.getMessage());
-                    dismissProgressDialog();
+                    cancelLoadingDialog();
                 }
             }
         });
@@ -125,7 +125,7 @@ public class RelationActivity extends BaseActivity {
         final String commentId = setCommentId.getText().toString();
         if (TextUtils.isEmpty(commentId))
             return;
-        showProgressDialog();
+        showLoadingDialog();
         AVQuery<AVObject> query = AVQuery.getQuery(COMMENT_CLASS_NAME);
         query.getInBackground(commentId, new GetCallback<AVObject>() {
             @Override
@@ -139,16 +139,16 @@ public class RelationActivity extends BaseActivity {
                             if (e == null) {
                                 String postContent = getPostContent(postObject);
                                 textView.setText(getCommentContent(commentObject, postContent));
-                                dismissProgressDialog();
+                                cancelLoadingDialog();
                             } else {
                                 textView.setText(e.getMessage());
-                                dismissProgressDialog();
+                                cancelLoadingDialog();
                             }
                         }
                     });
                 } else {
                     textView.setText(e.getMessage());
-                    dismissProgressDialog();
+                    cancelLoadingDialog();
                 }
             }
         });
@@ -162,7 +162,7 @@ public class RelationActivity extends BaseActivity {
         String commentCotent = setCommentContent.getText().toString();
         if (TextUtils.isEmpty(postId) || TextUtils.isEmpty(commentCotent))
             return;
-        showProgressDialog();
+        showLoadingDialog();
         final AVObject comPo = new AVObject(COMMENT_CLASS_NAME);
         comPo.put(COMMENT_CONTENT, commentCotent);
         AVQuery<AVObject> postPo = AVQuery.getQuery(POST_CLASS_NAME);
@@ -175,7 +175,7 @@ public class RelationActivity extends BaseActivity {
                     comPo.saveInBackground(saveCallback);
                 } else {
                     textView.setText(e.getMessage());
-                    dismissProgressDialog();
+                    cancelLoadingDialog();
                 }
             }
         });
@@ -188,7 +188,7 @@ public class RelationActivity extends BaseActivity {
         String title = setPostTitle.getText().toString();
         if (TextUtils.isEmpty(title))
             return;
-        showProgressDialog();
+        showLoadingDialog();
         AVObject po = new AVObject(POST_CLASS_NAME);
         po.put(POST_TITLE, title);
         po.saveInBackground(saveCallback);
@@ -201,7 +201,7 @@ public class RelationActivity extends BaseActivity {
         String commentId = setCommentId.getText().toString();
         if (TextUtils.isEmpty(commentId))
             return;
-        showProgressDialog();
+        showLoadingDialog();
         AVQuery<AVObject> query = new AVQuery<>(COMMENT_CLASS_NAME);
         query.getInBackground(commentId, new GetCallback<AVObject>() {
             @Override
@@ -219,16 +219,16 @@ public class RelationActivity extends BaseActivity {
                                     sb.append(getPostContent(postObject) + "\n");
                                 }
                                 textView.setText(sb.toString());
-                                dismissProgressDialog();
+                                cancelLoadingDialog();
                             } else {
                                 textView.setText(e.getMessage());
-                                dismissProgressDialog();
+                                cancelLoadingDialog();
                             }
                         }
                     });
                 } else {
                     textView.setText(e.getMessage());
-                    dismissProgressDialog();
+                    cancelLoadingDialog();
                 }
             }
         });
@@ -242,7 +242,7 @@ public class RelationActivity extends BaseActivity {
         final String postId = setPostId.getText().toString();
         if (TextUtils.isEmpty(commentId) || TextUtils.isEmpty(postId))
             return;
-        showProgressDialog();
+        showLoadingDialog();
         AVQuery<AVObject> query = new AVQuery<>(COMMENT_CLASS_NAME);
         query.getInBackground(commentId, new GetCallback<AVObject>() {
             @Override
@@ -259,13 +259,13 @@ public class RelationActivity extends BaseActivity {
                                 commentObject.saveInBackground(saveCallback);
                             } else {
                                 textView.setText(e.getMessage());
-                                dismissProgressDialog();
+                                cancelLoadingDialog();
                             }
                         }
                     });
                 } else {
                     textView.setText(e.getMessage());
-                    dismissProgressDialog();
+                    cancelLoadingDialog();
                 }
             }
         });

@@ -13,8 +13,8 @@ import android.view.ViewParent;
 
 import com.imageLoader.ImageLoader;
 import com.testleancloud.R;
-import com.widget.rlrView.other.Divider;
 import com.widget.rlrView.adapter.RecyclerViewAdapter;
+import com.widget.rlrView.other.Divider;
 import com.widget.rlrView.viewHolder.HeaderViewHolder;
 
 import java.util.List;
@@ -24,7 +24,7 @@ import java.util.List;
  * 可上拉加载更多的RecyclerView
  * 支持刷新不加载,加载不刷新
  * 滑动时图片加载模式
- * 与{@link RLRView}联合使用
+ * 与{@link RLRView}联合使用,不用单独使用这个view
  */
 public class LoadMoreRecyclerView extends RecyclerView {
 
@@ -264,10 +264,10 @@ public class LoadMoreRecyclerView extends RecyclerView {
 
     //最后一个view显示时加载
     private void handleLoadMore() {
-        Adapter adapter = getAdapter();
+        RecyclerViewAdapter adapter = (RecyclerViewAdapter) getAdapter();
         if (adapter != null) {
             int count = adapter.getItemCount();
-            if (count > 0) {//没数据不让加载
+            if (count > 0 && adapter.getDataCount() > 0) {//没数据不让加载
                 LayoutManager manager = getLayoutManager();
                 View lastView = manager.findViewByPosition(count - 1);
                 if (lastView != null && lastView.getTop() > 0) {
@@ -334,6 +334,16 @@ public class LoadMoreRecyclerView extends RecyclerView {
         RecyclerViewAdapter adapter = (RecyclerViewAdapter) getAdapter();
         if (adapter != null) {
             adapter.resetData(dataList);
+        }
+    }
+
+    /**
+     * 清空数据
+     */
+    public void clearData() {
+        RecyclerViewAdapter adapter = (RecyclerViewAdapter) getAdapter();
+        if (adapter != null) {
+            adapter.clearData();
         }
     }
 

@@ -18,7 +18,7 @@ public class LoadViewHolder extends RecyclerView.ViewHolder {
 
     public LoadViewHolder(View itemView) {
         super(itemView);
-        loadMoreProgressBar = (ProgressBar) itemView.findViewById(R.id.loadMoreProgressBar);
+        loadMoreProgressBar = (ProgressBar) itemView.findViewById(R.id.circleProgressBar);
         loadMoreText = (TextView) itemView.findViewById(R.id.loadMoreText);
     }
 

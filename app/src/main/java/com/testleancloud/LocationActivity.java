@@ -8,7 +8,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.avos.avoscloud.AVException;
-import com.avos.avoscloud.AVGeoPoint;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.FindCallback;
@@ -48,14 +47,14 @@ public class LocationActivity extends BaseActivity {
         String placeId = setPlaceId.getText().toString();
         if (TextUtils.isEmpty(placeId))
             return;
-        showProgressDialog("正在查询指定place...");
+        showLoadingDialog("正在查询指定place...");
         AVQuery<Place> specQuery = AVObject.getQuery(Place.class);
         specQuery.getInBackground(placeId, new GetCallback<Place>() {
             @Override
             public void done(Place object, AVException e) {
                 if (e == null) {
-                    dismissProgressDialog();
-                    showProgressDialog("正在查找目标place...");
+                    cancelLoadingDialog();
+                    showLoadingDialog("正在查找目标place...");
                     AVQuery<Place> query = AVObject.getQuery(Place.class);
 //                    query.whereNear(Place.PLACE_LOCATION, object.getLocation());//按距离排序由近到远
                     query.whereWithinKilometers(Place.PLACE_LOCATION, object.getLocation(), 5);//5km之内的
@@ -71,12 +70,12 @@ public class LocationActivity extends BaseActivity {
                             } else {
                                 textView.setText(e.getMessage());
                             }
-                            dismissProgressDialog();
+                            cancelLoadingDialog();
                         }
                     });
                 } else {
                     textView.setText(e.getMessage());
-                    dismissProgressDialog();
+                    cancelLoadingDialog();
                 }
             }
         });

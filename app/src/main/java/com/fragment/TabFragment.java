@@ -49,17 +49,7 @@ public class TabFragment extends BaseViewPagerFragment {
     }
 
     /**
-     * FragmentActivity销毁或HOME键时调用
-     */
-    @Override
-    public void onPause() {
-        super.onPause();
-        pauseNum--;
-        textView.setText("Resume:" + resumeNum + " Pause:" + pauseNum);
-    }
-
-    /**
-     * 展示时显示,代替onResume
+     * 展示时显示,完全代替onResume
      */
     @Override
     public void onViewPagerFragmentResume() {
@@ -68,7 +58,7 @@ public class TabFragment extends BaseViewPagerFragment {
     }
 
     /**
-     * 切换走时(非销毁)可在这里写逻辑
+     * 不显示时调用,完全替代onPause(可以把viewPager的每个fragment看成一个activity的生命周期过程)
      */
     @Override
     public void onViewPagerFragmentPause() {

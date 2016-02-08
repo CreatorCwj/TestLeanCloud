@@ -11,5 +11,6 @@
         <attr name="autoRefresh" format="boolean" />
         <attr name="dividerHeight" format="dimension" />
         <attr name="dividerColor" format="color" />
+        <attr name="emptyView" format="reference" />
     </declare-styleable>
 </resources>

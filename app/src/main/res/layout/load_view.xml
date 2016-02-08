@@ -4,13 +4,12 @@
     android:layout_height="wrap_content"
     android:padding="5dp">
 
-    <ProgressBar
-        android:id="@+id/loadMoreProgressBar"
+    <include
+        android:id="@+id/circleProgressBar"
+        layout="@layout/progress_bar_layout"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_centerInParent="true"
-        android:indeterminateDrawable="@anim/progress_circle"
-        android:indeterminateDuration="1150"
         android:visibility="gone" />
 
     <TextView

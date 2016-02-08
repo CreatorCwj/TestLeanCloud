@@ -79,7 +79,7 @@ public class QueryActivity extends BaseActivity {
      * 混合查询
      */
     public void queryOr() {
-        showProgressDialog();
+        showLoadingDialog();
         AVQuery<GameScore> queryHighScore = AVQuery.getQuery(GameScore.class);
         queryHighScore.whereGreaterThanOrEqualTo(GameScore.SCORE, 90);
         AVQuery<GameScore> queryLowScore = AVQuery.getQuery(GameScore.class);
@@ -93,7 +93,7 @@ public class QueryActivity extends BaseActivity {
                 for (GameScore gameScore : objects)
                     sb.append(gameScore.text());
                 textView.setText(sb.toString());
-                dismissProgressDialog();
+                cancelLoadingDialog();
             }
         });
     }
@@ -102,7 +102,7 @@ public class QueryActivity extends BaseActivity {
      * 计数查询
      */
     public void queryCount() {
-        showProgressDialog();
+        showLoadingDialog();
         AVQuery<Comment> query = AVQuery.getQuery(Comment.class);
         try {
             query.whereEqualTo(Comment.COMMENT_POST, AVObject.createWithoutData(Post.class, "yMKvhJ2Oc0"));
@@ -114,7 +114,7 @@ public class QueryActivity extends BaseActivity {
             @Override
             public void done(int count, AVException e) {
                 textView.setText("Count:" + count);
-                dismissProgressDialog();
+                cancelLoadingDialog();
             }
         });
     }
@@ -123,7 +123,7 @@ public class QueryActivity extends BaseActivity {
      * 关系型查询
      */
     public void queryRelative() {
-        showProgressDialog();
+        showLoadingDialog();
         AVQuery<Post> postQuery = AVQuery.getQuery(Post.class);
         postQuery.whereStartsWith(Post.POST_TITLE, "Do");
         AVQuery<Comment> commentQuery = AVQuery.getQuery(Comment.class);
@@ -140,7 +140,7 @@ public class QueryActivity extends BaseActivity {
                     sb.append(comment.text() + comment.getPost().text() + "\n");
                 }
                 textView.setText(sb.toString());
-                dismissProgressDialog();
+                cancelLoadingDialog();
             }
         });
     }
@@ -149,7 +149,7 @@ public class QueryActivity extends BaseActivity {
      * 查询数组值和字符串值
      */
     public void queryArrayAndString() {
-        showProgressDialog();
+        showLoadingDialog();
         AVQuery<GameScore> query = AVQuery.getQuery(GameScore.class);
         query.whereContainsAll(GameScore.SKILLS, Arrays.asList("s0", "s4"));//查到的数组值中包含这些
         query.whereStartsWith(GameScore.PLAYER_NAME, "L");//查到的字符串值是以其开头的
@@ -161,7 +161,7 @@ public class QueryActivity extends BaseActivity {
                     sb.append(gameScore.text());
                 }
                 textView.setText(sb.toString());
-                dismissProgressDialog();
+                cancelLoadingDialog();
             }
         });
     }
@@ -170,7 +170,7 @@ public class QueryActivity extends BaseActivity {
      * 查询指定列
      */
     public void querySelectKeys() {
-        showProgressDialog();
+        showLoadingDialog();
         AVQuery<GameScore> query = AVQuery.getQuery(GameScore.class);
         query.selectKeys(Arrays.asList(GameScore.PLAYER_NAME, GameScore.SCORE));
         query.findInBackground(new FindCallback<GameScore>() {//获取多个
@@ -190,7 +190,7 @@ public class QueryActivity extends BaseActivity {
                             sb.append(((GameScore) gameScore).text());
                         }
                         textView.setText(sb.toString());
-                        dismissProgressDialog();
+                        cancelLoadingDialog();
                     }
                 });
             }
@@ -204,7 +204,7 @@ public class QueryActivity extends BaseActivity {
                     @Override
                     public void done(GameScore object, AVException e) {
                         textView.setText(object.text());
-                        dismissProgressDialog();
+                        dismissLoadingDialog();
                     }
                 });
             }
@@ -215,7 +215,7 @@ public class QueryActivity extends BaseActivity {
      * 多表连接查询
      */
     public void queryMatchesKey() {
-        showProgressDialog();
+        showLoadingDialog();
         AVQuery<TeamWork> teamQuery = AVQuery.getQuery(TeamWork.class);
         teamQuery.whereGreaterThanOrEqualTo(TeamWork.TEAMWORK_SCORE, 80);
         AVQuery<Student> studentQuery = AVQuery.getQuery(Student.class);
@@ -233,7 +233,7 @@ public class QueryActivity extends BaseActivity {
                 } else {
                     textView.setText(e.getMessage());
                 }
-                dismissProgressDialog();
+                cancelLoadingDialog();
             }
         });
     }
@@ -245,7 +245,7 @@ public class QueryActivity extends BaseActivity {
         String playerName = inputPlayerName.getText().toString();
         if (TextUtils.isEmpty(playerName))
             return;
-        showProgressDialog();
+        showLoadingDialog();
         AVQuery<GameScore> query = AVQuery.getQuery(GameScore.class);
         //某一字段值等于指定集合里的值的(还有notContained等),Where(NOT)Exists是(不)包含某一字段的数据
         query.whereContainedIn(GameScore.PLAYER_NAME, Arrays.asList(playerName.split(",")));
@@ -258,10 +258,10 @@ public class QueryActivity extends BaseActivity {
                         sb.append(gameScore.text());
                     }
                     textView.setText(sb.toString());
-                    dismissProgressDialog();
+                    cancelLoadingDialog();
                 } else {
                     textView.setText(e.getMessage());
-                    dismissProgressDialog();
+                    cancelLoadingDialog();
                 }
             }
         });
@@ -274,7 +274,7 @@ public class QueryActivity extends BaseActivity {
         String playerName = inputPlayerName.getText().toString();
         if (TextUtils.isEmpty(playerName))
             return;
-        showProgressDialog();
+        showLoadingDialog();
         AVQuery<GameScore> query = AVQuery.getQuery(GameScore.class);
         //可设置多个筛选条件来筛选(相当于多个And)
         query.whereNotEqualTo(GameScore.PLAYER_NAME, playerName);//(not)equal以某一字段是否等于某一值来筛选
@@ -291,10 +291,10 @@ public class QueryActivity extends BaseActivity {
                         sb.append(gameScore.text());
                     }
                     textView.setText(sb.toString());
-                    dismissProgressDialog();
+                    cancelLoadingDialog();
                 } else {
                     textView.setText(e.getMessage());
-                    dismissProgressDialog();
+                    cancelLoadingDialog();
                 }
             }
         });
@@ -343,7 +343,7 @@ public class QueryActivity extends BaseActivity {
             } else {
                 textView.setText(e.getMessage());
             }
-            dismissProgressDialog();
+            cancelLoadingDialog();
         }
     };
 }

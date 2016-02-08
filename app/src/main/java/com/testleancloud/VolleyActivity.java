@@ -63,7 +63,7 @@ public class VolleyActivity extends BaseActivity {
             Utils.showToast(this, "请输入城市名");
             return;
         }
-        showProgressDialog();
+        showLoadingDialog();
         Map<String, String> params = new HashMap<>();
         params.put("area", city);
         new Network<>(this, NowWeather.class)
@@ -75,13 +75,13 @@ public class VolleyActivity extends BaseActivity {
                     @Override
                     public void onRequestSuccess(NowWeather result) {
                         if (result == null || result.getShowapi_res_body() == null) {
-                            dismissProgressDialog();
+                            cancelLoadingDialog();
                             return;
                         }
                         textView.setText(result.toString());
                         if (result.getShowapi_res_body().getNow() != null) {
                             String img = result.getShowapi_res_body().getNow().getWeather_pic();
-                            ImageLoader.loadImage(weatherImage, img, new ImageProgressStateListener() {
+                            ImageLoader.displayImage(weatherImage, img, new ImageProgressStateListener() {
 
                                 @Override
                                 public void onLoadingStarted(ImageView imageView, String imgUrl) {
@@ -94,13 +94,13 @@ public class VolleyActivity extends BaseActivity {
                                 }
                             });
                         }
-                        dismissProgressDialog();
+                        cancelLoadingDialog();
                     }
 
                     @Override
                     public void onRequestError(String errorMessage) {
                         textView.setText(errorMessage);
-                        dismissProgressDialog();
+                        cancelLoadingDialog();
                     }
 
                     @Override

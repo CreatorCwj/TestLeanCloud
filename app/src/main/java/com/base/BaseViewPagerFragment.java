@@ -6,23 +6,45 @@ package com.base;
  */
 public abstract class BaseViewPagerFragment extends BaseFragment {
 
+    private BaseFragmentPagerAdapter adapter;
+    private int position;
+
+    public void attachToAdapter(BaseFragmentPagerAdapter adapter, int position) {
+        this.adapter = adapter;
+        this.position = position;
+    }
+
     /**
      * 使用onViewPagerFragmentResume替代更准确
      */
     @Override
     final public void onResume() {
         super.onResume();
+        if (adapter.getCurrentIndex() == position) {
+            onViewPagerFragmentResume();
+        }
     }
 
     /**
-     * viewPager里的fragment展现时调用（可以完全替代onResume）
+     * viewPager里的fragment展现时调用（包括第一次创建,切换viewPager和从Home、电源键等回来可以完全替代onResume）
      */
     public void onViewPagerFragmentResume() {
 
     }
 
     /**
-     * viewPager里的fragment切走时调用
+     * 使用onViewPagerFragmentPause替代更准确
+     */
+    @Override
+    final public void onPause() {
+        super.onPause();
+        if (adapter.getCurrentIndex() == position) {
+            onViewPagerFragmentPause();
+        }
+    }
+
+    /**
+     * viewPager里的fragment不显示时调用(包括且换viewPager,退出界面和按Home、电源键等,完全替代onPause)
      */
     public void onViewPagerFragmentPause() {
 

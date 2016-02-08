@@ -27,7 +27,7 @@ public class NormalRecyclerAdapter extends RecyclerViewAdapter<String> {
             ImageView imageView = normalImageViewHolder.imageView;
 //            String imgUrl = "http://pic14.nipic.com/20110522/7411759_164157418126_2.jpg";
             String imgUrl = getDataItem(position);
-            ImageLoader.loadImage(imageView, imgUrl);
+            ImageLoader.displayImage(imageView, imgUrl);
         }
     }
 

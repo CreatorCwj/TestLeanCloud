@@ -53,7 +53,7 @@ public class AuthorActivity extends BaseActivity {
         String title = setPostTitle.getText().toString();
         if (TextUtils.isEmpty(title))
             return;
-        showProgressDialog();
+        showLoadingDialog();
         //在application里可以设值默认的ACL来统一整个app的ACL方式
         Post post = new Post();
         post.setTitle(title);
@@ -67,7 +67,7 @@ public class AuthorActivity extends BaseActivity {
         final String title = setPostTitle.getText().toString();
         if (TextUtils.isEmpty(title))
             return;
-        showProgressDialog();
+        showLoadingDialog();
         AVQuery<AVUser> query = AVUser.getQuery();
         query.findInBackground(new FindCallback<AVUser>() {
             @Override
@@ -94,7 +94,7 @@ public class AuthorActivity extends BaseActivity {
         AVUser user = AVUser.getCurrentUser();
         if (TextUtils.isEmpty(title) || user == null)
             return;
-        showProgressDialog();
+        showLoadingDialog();
         Post post = new Post();
         post.setTitle(title);
         post.setACL(new AVACL(user));//仅有当前用户可以读写的权限

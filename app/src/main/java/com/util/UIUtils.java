@@ -47,7 +47,7 @@ public class UIUtils {
      * @param context 上下文
      * @return 返回宽高数组
      */
-    public static int[] getScreenWithHeightPX(Context context) {
+    public static int[] getScreenWidthHeightPX(Context context) {
         return new int[]{getScreenWidthPX(context), getScreenHeightPX(context)};
     }
 }

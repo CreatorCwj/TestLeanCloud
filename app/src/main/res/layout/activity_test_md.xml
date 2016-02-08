@@ -14,6 +14,12 @@
             android:text="@string/hello_world" />
 
         <Button
+            android:id="@+id/testMain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="测试LeanCloud" />
+
+        <Button
             android:id="@+id/testSimpleAnim"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -60,6 +66,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="测试大图查看模式" />
+
+        <Button
+            android:id="@+id/testDatePicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="测试日期选择" />
+
+        <Button
+            android:id="@+id/testIndexLV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="测试IndexLV" />
+
+        <Button
+            android:id="@+id/testDialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="测试自定义dialog" />
 
     </LinearLayout>
 

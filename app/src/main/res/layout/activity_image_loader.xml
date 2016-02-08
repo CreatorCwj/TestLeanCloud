@@ -18,6 +18,7 @@
         android:layout_height="wrap_content"
         app:dividerColor="@android:color/darker_gray"
         app:dividerHeight="1dp"
+        app:emptyView="@layout/empty"
         app:layoutType="linear">
 
     </com.widget.rlrView.view.RLRView>
