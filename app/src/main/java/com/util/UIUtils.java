@@ -20,6 +20,15 @@ public class UIUtils {
     }
 
     /**
+     * 将sp单位转为px单位
+     */
+    public static int sp2px(Context context, float spValue) {
+
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, spValue, context.getResources().getDisplayMetrics());
+
+    }
+
+    /**
      * 获取屏幕宽度
      *
      * @param context

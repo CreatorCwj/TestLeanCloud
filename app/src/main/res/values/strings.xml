@@ -29,4 +29,5 @@
     <string name="title_activity_index_list_view">IndexListViewActivity</string>
     <string name="title_activity_dialog">DialogActivity</string>
     <string name="title_activity_main_adapter">MainAdapterActivity</string>
+    <string name="title_activity_image_view_pager">ImageViewPagerActivity</string>
 </resources>

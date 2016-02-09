@@ -124,6 +124,10 @@
             android:name=".MainAdapterActivity"
             android:label="@string/title_activity_main_adapter" >
         </activity>
+        <activity
+            android:name=".ImageViewPagerActivity"
+            android:label="@string/title_activity_image_view_pager" >
+        </activity>
     </application>
 
 </manifest>

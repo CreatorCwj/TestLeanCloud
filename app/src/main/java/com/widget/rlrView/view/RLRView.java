@@ -3,7 +3,6 @@ package com.widget.rlrView.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -58,7 +57,6 @@ public class RLRView extends SwipeRefreshLayout implements SwipeRefreshLayout.On
 
     public RLRView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        addChild();//先添加可加载的view
         initAttrs(context, attrs);//初始化布局属性
         initProps();//初始化一些样式
         initPage();//初始化page(把分页逻辑统一)
@@ -70,25 +68,21 @@ public class RLRView extends SwipeRefreshLayout implements SwipeRefreshLayout.On
 
     private void initAttrs(Context context, AttributeSet attrs) {
         if (attrs != null) {
-            TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RefreshAndLoad);
-            //布局样式
-            int layoutType = typedArray.getInt(R.styleable.RefreshAndLoad_layoutType, LoadMoreRecyclerView.LINEAR);//默认线性
-            int columnCount = typedArray.getInt(R.styleable.RefreshAndLoad_columnCount, 2);//需要的话默认2列
-            setLayoutType(layoutType, columnCount);
-            //加载状态
-            boolean canLoadMore = typedArray.getBoolean(R.styleable.RefreshAndLoad_canLoadMore, true);//默认可加载
-            setCanLoadMore(canLoadMore);
-            //自动刷新状态
-            autoRefresh = typedArray.getBoolean(R.styleable.RefreshAndLoad_autoRefresh, true);
-            //divider
-            int height = typedArray.getDimensionPixelSize(R.styleable.RefreshAndLoad_dividerHeight, 0);
-            int color = typedArray.getColor(R.styleable.RefreshAndLoad_dividerColor, Color.TRANSPARENT);
-            setDivider(height, color);
+            TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RLRView);
+            //是否自动刷新
+            autoRefresh = typedArray.getBoolean(R.styleable.RLRView_autoRefresh, true);
             //empty显示
-            int id = typedArray.getResourceId(R.styleable.RefreshAndLoad_emptyView, -1);
+            int id = typedArray.getResourceId(R.styleable.RLRView_emptyView, -1);
             setEmptyView(id);
             typedArray.recycle();
         }
+        addChild(attrs);
+    }
+
+    private void addChild(AttributeSet attrs) {
+        loadMoreRecyclerView = new LoadMoreRecyclerView(getContext(), attrs);
+        loadMoreRecyclerView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        addView(loadMoreRecyclerView);
     }
 
     private void setEmptyView(int id) {
@@ -131,12 +125,6 @@ public class RLRView extends SwipeRefreshLayout implements SwipeRefreshLayout.On
         loadMoreRecyclerView.setDivider(height, color);
     }
 
-    private void addChild() {
-        loadMoreRecyclerView = new LoadMoreRecyclerView(getContext());
-        loadMoreRecyclerView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-        addView(loadMoreRecyclerView);
-    }
-
     private void initProps() {
         this.setOnRefreshListener(this);
         loadMoreRecyclerView.setOnLoadListener(this);
@@ -166,8 +154,8 @@ public class RLRView extends SwipeRefreshLayout implements SwipeRefreshLayout.On
      * @param layoutType
      * @param columnCount
      */
-    public void setLayoutType(int layoutType, int columnCount) {
-        loadMoreRecyclerView.setLayoutType(layoutType, columnCount);
+    public void setLayoutType(int layoutType, int columnCount, int orientation) {
+        loadMoreRecyclerView.setLayoutType(layoutType, columnCount, orientation);
     }
 
     //通过反射拿到listener
