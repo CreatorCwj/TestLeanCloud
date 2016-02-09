@@ -20,7 +20,7 @@ public abstract class BaseViewPagerFragment extends BaseFragment {
     @Override
     final public void onResume() {
         super.onResume();
-        if (adapter.getCurrentIndex() == position) {
+        if (adapter != null && adapter.getCurrentIndex() == position) {
             onViewPagerFragmentResume();
         }
     }
@@ -38,7 +38,7 @@ public abstract class BaseViewPagerFragment extends BaseFragment {
     @Override
     final public void onPause() {
         super.onPause();
-        if (adapter.getCurrentIndex() == position) {
+        if (adapter != null && adapter.getCurrentIndex() == position) {
             onViewPagerFragmentPause();
         }
     }

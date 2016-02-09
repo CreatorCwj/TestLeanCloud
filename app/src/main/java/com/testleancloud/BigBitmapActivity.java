@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
-import com.adapter.BigBitmapFragmentAdapter;
+import com.base.BaseFragmentPagerAdapter;
 import com.fragment.BigBitmapFragment;
 import com.imageLoader.ImageLoader;
 import com.widget.dialog.SelectDialog;
@@ -75,7 +75,7 @@ public class BigBitmapActivity extends RoboFragmentActivity implements ViewPager
             for (String url : imgUrls) {
                 fragments.add(BigBitmapFragment.newInstance(url));
             }
-            new BigBitmapFragmentAdapter(this, getSupportFragmentManager(), viewPager, fragments, firstPage);
+            new BaseFragmentPagerAdapter<>(this, viewPager, fragments, firstPage);
             setViewPagerListener();
         }
     }

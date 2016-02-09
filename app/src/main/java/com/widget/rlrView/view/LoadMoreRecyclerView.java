@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
@@ -24,6 +25,7 @@ import java.util.List;
  * 可上拉加载更多的RecyclerView
  * 支持刷新不加载,加载不刷新
  * 滑动时图片加载模式
+ * 支持横向或垂直的布局
  * 与{@link RLRView}联合使用,不用单独使用这个view
  */
 public class LoadMoreRecyclerView extends RecyclerView {
@@ -53,7 +55,18 @@ public class LoadMoreRecyclerView extends RecyclerView {
      */
     public static final int WATER_FALL = 2;
 
+    /**
+     * 垂直
+     */
+    public static final int VERTICAL = 0;
+
+    /**
+     * 水平
+     */
+    public static final int HORIZONTAL = 1;
+
     private int layoutType = -1;
+    private int orientation = -1;
 
     /**
      * 由RLRView控制的load回调
@@ -92,17 +105,18 @@ public class LoadMoreRecyclerView extends RecyclerView {
 
     private void initAttrs(Context context, AttributeSet attrs) {
         if (attrs != null) {
-            TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RefreshAndLoad);
+            TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RLRView);
             //布局样式
-            int layoutType = typedArray.getInt(R.styleable.RefreshAndLoad_layoutType, LINEAR);//默认线性
-            int columnCount = typedArray.getInt(R.styleable.RefreshAndLoad_columnCount, 2);//需要的话默认2列
-            setLayoutType(layoutType, columnCount);
+            int layoutType = typedArray.getInt(R.styleable.RLRView_layoutType, LINEAR);//默认线性
+            int columnCount = typedArray.getInt(R.styleable.RLRView_columnCount, 2);//需要的话默认2列
+            int orientation = typedArray.getInt(R.styleable.RLRView_orientation, VERTICAL);//默认为垂直
+            setLayoutType(layoutType, columnCount, orientation);
             //加载状态
-            boolean canLoadMoreTmp = typedArray.getBoolean(R.styleable.RefreshAndLoad_canLoadMore, true);//默认可加载
+            boolean canLoadMoreTmp = typedArray.getBoolean(R.styleable.RLRView_canLoadMore, true);//默认可加载
             setCanLoadMore(canLoadMoreTmp);//改变可否加载状态
             //divider
-            int height = typedArray.getDimensionPixelSize(R.styleable.RefreshAndLoad_dividerHeight, 0);
-            int color = typedArray.getColor(R.styleable.RefreshAndLoad_dividerColor, Color.TRANSPARENT);
+            int height = typedArray.getDimensionPixelSize(R.styleable.RLRView_dividerHeight, 0);
+            int color = typedArray.getColor(R.styleable.RLRView_dividerColor, Color.TRANSPARENT);
             setDivider(height, color);
             typedArray.recycle();
         }
@@ -122,19 +136,34 @@ public class LoadMoreRecyclerView extends RecyclerView {
      * @param layoutType  布局样式
      * @param columnCount 列数(线性布局样式时无效)
      */
-    public void setLayoutType(int layoutType, int columnCount) {
-        if (this.layoutType != layoutType) {//和原来相同则不变
+    public void setLayoutType(int layoutType, int columnCount, int orientation) {
+        if (this.layoutType != layoutType && this.orientation != orientation) {//和原来相同则不变
             this.layoutType = layoutType;
+            this.orientation = orientation;
             switch (this.layoutType) {
                 case LINEAR:
-                    setLayoutManager(new LinearLayoutManager(getContext()));
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+                    if (this.orientation == VERTICAL)
+                        linearLayoutManager.setOrientation(OrientationHelper.VERTICAL);
+                    else if (this.orientation == HORIZONTAL)
+                        linearLayoutManager.setOrientation(OrientationHelper.HORIZONTAL);
+                    setLayoutManager(linearLayoutManager);
                     break;
                 case GRID:
-                    setLayoutManager(new GridLayoutManager(getContext(), columnCount));
+                    GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), columnCount);
+                    if (this.orientation == VERTICAL)
+                        gridLayoutManager.setOrientation(OrientationHelper.VERTICAL);
+                    else if (this.orientation == HORIZONTAL)
+                        gridLayoutManager.setOrientation(OrientationHelper.HORIZONTAL);
+                    setLayoutManager(gridLayoutManager);
                     break;
                 case WATER_FALL:
                     StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
                     manager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
+                    if (this.orientation == VERTICAL)
+                        manager.setOrientation(OrientationHelper.VERTICAL);
+                    else if (this.orientation == HORIZONTAL)
+                        manager.setOrientation(OrientationHelper.HORIZONTAL);
                     setLayoutManager(manager);
                     break;
             }

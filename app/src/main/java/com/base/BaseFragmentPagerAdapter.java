@@ -2,6 +2,7 @@ package com.base;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
@@ -19,8 +20,9 @@ import java.util.List;
  * 3.展示提供新周期方法进行处理(比如每次展示都要重新加载一些数据)
  * 4.切换走时提供新周期方法进行处理
  * 5.3-4需要使用{@link BaseViewPagerFragment}作为fragment基类
+ * 6.作为非抽象类,如果没用特殊地方则直接new该基类即可
  */
-public abstract class BaseFragmentPagerAdapter<T extends BaseViewPagerFragment> extends PagerAdapter implements ViewPager.OnPageChangeListener {
+public class BaseFragmentPagerAdapter<T extends BaseViewPagerFragment> extends PagerAdapter implements ViewPager.OnPageChangeListener {
 
     private static final int DEFAULT_FIRST_PAGE = 0;//首页默认为第一页
 
@@ -29,19 +31,18 @@ public abstract class BaseFragmentPagerAdapter<T extends BaseViewPagerFragment> 
     protected ViewPager viewPager;
     protected List<T> fragments;
 
-    private int currentIndex = DEFAULT_FIRST_PAGE;//当前页索引
-    private int firstPage;
+    private int currentIndex;//当前页索引
 
-    public BaseFragmentPagerAdapter(Context context, FragmentManager fm, ViewPager viewPager, List<T> fragments) {
-        this(context, fm, viewPager, fragments, DEFAULT_FIRST_PAGE);
+    public BaseFragmentPagerAdapter(FragmentActivity fa, ViewPager viewPager, List<T> fragments) {
+        this(fa, viewPager, fragments, DEFAULT_FIRST_PAGE);
     }
 
-    public BaseFragmentPagerAdapter(Context context, FragmentManager fm, ViewPager viewPager, List<T> fragments, int firstPage) {
-        this.context = context;
-        this.fm = fm;
+    public BaseFragmentPagerAdapter(FragmentActivity fa, ViewPager viewPager, List<T> fragments, int firstPage) {
+        this.context = fa;
+        this.fm = fa.getSupportFragmentManager();
         this.viewPager = viewPager;
         this.fragments = fragments;
-        this.firstPage = firstPage;
+        this.currentIndex = firstPage;
         attachFragment();
         initViewPager();
         setFirstPage();
@@ -55,7 +56,6 @@ public abstract class BaseFragmentPagerAdapter<T extends BaseViewPagerFragment> 
     }
 
     private void setFirstPage() {
-        currentIndex = firstPage;
         viewPager.setCurrentItem(currentIndex);
     }
 
