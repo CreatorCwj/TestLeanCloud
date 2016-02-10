@@ -128,6 +128,10 @@
             android:name=".ImageViewPagerActivity"
             android:label="@string/title_activity_image_view_pager" >
         </activity>
+        <activity
+            android:name=".DrawableActivity"
+            android:label="@string/title_activity_drawable" >
+        </activity>
     </application>
 
 </manifest>

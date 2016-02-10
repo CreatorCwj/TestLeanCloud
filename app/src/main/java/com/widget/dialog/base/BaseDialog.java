@@ -20,20 +20,23 @@ public abstract class BaseDialog {
     protected int maxWidth;
     protected int maxHeight;
 
+    protected int radius;//圆角弧度
+
     public BaseDialog(Context context) {
         this(context, R.style.dialogTheme);
     }
 
     public BaseDialog(Context context, int themeResId) {
         this.context = context;
-        setMaxSize();//设置最大尺寸
+        setSize();//设置最大尺寸
         dialog = new Dialog(context, themeResId);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);//保证在屏幕居中
         setProps();//设置一些属性
         setView();//设置view
     }
 
-    private void setMaxSize() {
+    private void setSize() {
+        radius = UIUtils.dp2px(context, 3);
         int[] screenSize = UIUtils.getScreenWidthHeightPX(context);
         maxWidth = screenSize[0] * 3 / 4;
         maxHeight = screenSize[1] * 3 / 4;

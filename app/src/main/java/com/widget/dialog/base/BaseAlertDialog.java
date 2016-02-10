@@ -1,6 +1,7 @@
 package com.widget.dialog.base;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.testleancloud.R;
+import com.util.DrawableUtils;
 
 /**
  * Created by cwj on 16/2/7.
@@ -24,6 +26,7 @@ public abstract class BaseAlertDialog extends BaseDialog {
     private TextView titleTextView;
     private TextView positiveTextView;
     private TextView negativeTextView;
+    RelativeLayout contentLayout;
 
     private View.OnClickListener customPositiveListener;
     private View.OnClickListener customNegativeListener;
@@ -51,12 +54,19 @@ public abstract class BaseAlertDialog extends BaseDialog {
     @Override
     final protected void onViewCreated(View view) {
         view.setLayoutParams(new FrameLayout.LayoutParams(maxWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-        buttonLayout = (LinearLayout) view.findViewById(R.id.alert_dialog_button_layout);
+        buttonLayout = (LinearLayout) view.findViewById(R.id.alert_dialog_textView_layout);
         titleTextView = (TextView) view.findViewById(R.id.alert_dialog_title_textView);
         positiveTextView = (TextView) view.findViewById(R.id.alert_dialog_positive_textView);
         negativeTextView = (TextView) view.findViewById(R.id.alert_dialog_negative_textView);
+        contentLayout = (RelativeLayout) view.findViewById(R.id.alert_dialog_content_layout);
+        //background
+        titleTextView.setBackground(DrawableUtils.getDrawable(radius, radius, 0, 0, context.getResources().getColor(R.color.colorPrimary)));
+        positiveTextView.setBackground(DrawableUtils.getStateDrawable(new DrawableUtils.CornerStateDrawable(new int[]{DrawableUtils.STATE_UNPRESSED}, 0, 0, 0, radius, Color.WHITE)
+                , new DrawableUtils.CornerStateDrawable(new int[]{DrawableUtils.STATE_PRESSED}, 0, 0, 0, radius, context.getResources().getColor(R.color.dividerColor))));
+        negativeTextView.setBackground(DrawableUtils.getStateDrawable(new DrawableUtils.CornerStateDrawable(new int[]{DrawableUtils.STATE_UNPRESSED}, 0, 0, radius, 0, Color.WHITE)
+                , new DrawableUtils.CornerStateDrawable(new int[]{DrawableUtils.STATE_PRESSED}, 0, 0, radius, 0, context.getResources().getColor(R.color.dividerColor))));
+        contentLayout.setBackground(DrawableUtils.getDrawable(0, 0, 0, 0, Color.WHITE));
         setListener();//设置监听器
-        RelativeLayout contentLayout = (RelativeLayout) view.findViewById(R.id.alert_dialog_content_layout);
         View contentView = onCreateContentView();
         contentLayout.addView(contentView);
         onContentViewCreated(contentView);
@@ -133,11 +143,15 @@ public abstract class BaseAlertDialog extends BaseDialog {
     }
 
     /**
-     * 是否隐藏按钮
+     * 是否隐藏按钮,也决定中间的背景
      */
     public void hideButton(boolean hide) {
-        if (hide)
+        if (hide && buttonLayout.getVisibility() != View.GONE) {
             buttonLayout.setVisibility(View.GONE);
-        else buttonLayout.setVisibility(View.VISIBLE);
+            contentLayout.setBackground(DrawableUtils.getDrawable(0, 0, radius, radius, Color.WHITE));
+        } else if (!hide && buttonLayout.getVisibility() != View.VISIBLE) {
+            buttonLayout.setVisibility(View.VISIBLE);
+            contentLayout.setBackground(DrawableUtils.getDrawable(0, 0, 0, 0, Color.WHITE));
+        }
     }
 }

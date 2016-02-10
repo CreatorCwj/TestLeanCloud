@@ -1,11 +1,14 @@
 package com.widget.dialog;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
 import com.testleancloud.R;
+import com.util.DrawableUtils;
+import com.util.UIUtils;
 import com.widget.dialog.base.BaseDialog;
 
 /**
@@ -39,6 +42,8 @@ public class LoadingDialog extends BaseDialog {
 
     @Override
     protected void onViewCreated(View view) {
+        radius = UIUtils.dp2px(context, 5);
+        view.setBackground(DrawableUtils.getDrawable(radius, Color.parseColor("#60000000")));
         textView = (TextView) view.findViewById(R.id.loadingTextView);
     }
 
