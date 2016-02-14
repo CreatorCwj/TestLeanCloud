@@ -23,21 +23,21 @@ public class LoadingDialog extends BaseDialog {
 
     public LoadingDialog(Context context) {
         super(context);
+        init();
     }
 
     public LoadingDialog(Context context, int themeResId) {
         super(context, themeResId);
+        init();
+    }
+
+    private void init() {
+        setCanceledOnTouchOutside(false);
     }
 
     @Override
     protected View onCreateView() {
         return LayoutInflater.from(context).inflate(R.layout.loading_dialog, null);
-    }
-
-    @Override
-    protected void setProps() {
-        super.setProps();
-        dialog.setCanceledOnTouchOutside(false);
     }
 
     @Override

@@ -31,7 +31,9 @@ public abstract class BaseDialog {
         setSize();//设置最大尺寸
         dialog = new Dialog(context, themeResId);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);//保证在屏幕居中
-        setProps();//设置一些属性
+        //设置一些属性
+        setCanceledOnTouchOutside(true);
+        setCancelable(true);
         setView();//设置view
     }
 
@@ -49,11 +51,21 @@ public abstract class BaseDialog {
     }
 
     /**
-     * 设置dialog属性
+     * 设置是否触摸外部消失
+     *
+     * @param cancelOnTouchOutside
      */
-    protected void setProps() {
-        dialog.setCanceledOnTouchOutside(true);//默认可以取消
-        dialog.setCancelable(true);//可以按回退键强制取消
+    public void setCanceledOnTouchOutside(boolean cancelOnTouchOutside) {
+        dialog.setCanceledOnTouchOutside(cancelOnTouchOutside);
+    }
+
+    /**
+     * 设置是否按退出键消失
+     *
+     * @param cancelable
+     */
+    public void setCancelable(boolean cancelable) {
+        dialog.setCancelable(cancelable);
     }
 
     /**
