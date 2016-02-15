@@ -1,6 +1,7 @@
 package com.application;
 
 import android.app.Application;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
@@ -31,9 +32,16 @@ import com.volley.Network;
  */
 public class MyApplication extends Application {
 
+    private static Context appContext;
+
+    public static Context getAppContext() {
+        return appContext;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
+        appContext = getApplicationContext();
 //        Parse.enableLocalDatastore(this);//是否启动本地数据存储库,存储临时数据（不需要上传的数据和稍后可以进行同步的数据）
         //注册子类后不能再使用new,只能使用子类(因为表已经关联到子类了)
         initSubClass();//注册各个子类(要在init之前)

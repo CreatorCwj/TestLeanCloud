@@ -213,6 +213,7 @@ public class RoundProgressBar extends View {
 
     public void setCricleColor(int cricleColor) {
         this.roundColor = cricleColor;
+        invalidate();
     }
 
     public int getCricleProgressColor() {
@@ -221,6 +222,7 @@ public class RoundProgressBar extends View {
 
     public void setCricleProgressColor(int cricleProgressColor) {
         this.roundProgressColor = cricleProgressColor;
+        invalidate();
     }
 
     public int getTextColor() {
@@ -229,6 +231,7 @@ public class RoundProgressBar extends View {
 
     public void setTextColor(int textColor) {
         this.textColor = textColor;
+        invalidate();
     }
 
     public float getTextSize() {
@@ -237,6 +240,7 @@ public class RoundProgressBar extends View {
 
     public void setTextSize(float textSize) {
         this.textSize = textSize;
+        invalidate();
     }
 
     public float getRoundWidth() {
@@ -245,9 +249,11 @@ public class RoundProgressBar extends View {
 
     public void setRoundWidth(float roundWidth) {
         this.roundWidth = roundWidth;
+        invalidate();
     }
 
     public void setTextIsDisplayable(boolean textIsDisplayable) {
         this.textIsDisplayable = textIsDisplayable;
+        invalidate();
     }
 }

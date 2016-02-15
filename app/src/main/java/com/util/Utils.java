@@ -6,6 +6,8 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.Toast;
 
+import com.application.MyApplication;
+
 /**
  * Created by cwj on 15/12/3.
  * 工具类
@@ -36,6 +38,20 @@ public class Utils {
 
     public static void showSnack(View view, String content) {
         showSnack(view, content, Snackbar.LENGTH_SHORT);
+    }
+
+    /**
+     * 测试时间用
+     */
+    private static long startTime;
+
+    public static void startTime() {
+        startTime = System.currentTimeMillis();
+    }
+
+    public static void endTime() {
+        long endTime = System.currentTimeMillis();
+        Utils.showToast(MyApplication.getAppContext(), "" + (endTime - startTime));
     }
 
 }

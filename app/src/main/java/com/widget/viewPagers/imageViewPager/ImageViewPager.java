@@ -242,6 +242,28 @@ public class ImageViewPager extends RelativeLayout implements ViewPager.OnPageCh
     }
 
     /**
+     * 设置圆点边框宽度,px
+     *
+     * @param width
+     */
+    public void setPointStrokeWidth(int width) {
+        for (int i = 0; i < pointViews.size(); ++i) {
+            pointViews.get(i).setStrokeWidth(width);
+        }
+    }
+
+    /**
+     * 设置圆点边框颜色
+     *
+     * @param color
+     */
+    public void setPointStrokeColor(int color) {
+        for (int i = 0; i < pointViews.size(); ++i) {
+            pointViews.get(i).setStrokeColor(color);
+        }
+    }
+
+    /**
      * 设置point选中颜色
      *
      * @param selectColor

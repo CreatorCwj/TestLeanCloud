@@ -7,6 +7,8 @@
         <attr name="bottomTextColor" format="color" />
         <attr name="bottomTextSize" format="dimension" />
         <attr name="defaultImage" format="reference" />
+        <attr name="pointStrokeWidth" format="dimension"/>
+        <attr name="pointStrokeColor" format="color"/>
         <attr name="pointGravity" format="enum">
             <enum name="center" value="0" />
             <enum name="right" value="1" />
