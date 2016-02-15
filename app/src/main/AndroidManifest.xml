@@ -110,23 +110,28 @@
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
         <activity
             android:name=".DatePickerActivity"
-            android:label="@string/title_activity_date_picker" >
-        </activity>
+            android:label="@string/title_activity_date_picker" />
         <activity
             android:name=".IndexListViewActivity"
-            android:label="@string/title_activity_index_list_view" >
-        </activity>
+            android:label="@string/title_activity_index_list_view" />
         <activity
             android:name=".DialogActivity"
-            android:label="@string/title_activity_dialog" >
-        </activity>
+            android:label="@string/title_activity_dialog" />
         <activity
             android:name=".MainAdapterActivity"
-            android:label="@string/title_activity_main_adapter" >
-        </activity>
+            android:label="@string/title_activity_main_adapter" />
         <activity
             android:name=".ImageViewPagerActivity"
-            android:label="@string/title_activity_image_view_pager" >
+            android:label="@string/title_activity_image_view_pager" />
+        <activity
+            android:name=".DrawableActivity"
+            android:label="@string/title_activity_drawable" />
+        <activity
+            android:name=".ScannerActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
+        <activity
+            android:name=".RoundImageActivity"
+            android:label="@string/title_activity_round_image" >
         </activity>
     </application>
 

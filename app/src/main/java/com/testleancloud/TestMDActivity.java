@@ -58,6 +58,15 @@ public class TestMDActivity extends BaseActivity {
     @InjectView(R.id.testImageViewPager)
     private Button testImageViewPager;
 
+    @InjectView(R.id.testDrawable)
+    private Button testDrawable;
+
+    @InjectView(R.id.testScanner)
+    private Button testScanner;
+
+    @InjectView(R.id.testRoundImage)
+    private Button testRoundImage;
+
     @Override
     protected void setListener() {
         testSimpleAnim.setOnClickListener(this);
@@ -74,6 +83,9 @@ public class TestMDActivity extends BaseActivity {
         testMain.setOnClickListener(this);
         testMainAdapter.setOnClickListener(this);
         testImageViewPager.setOnClickListener(this);
+        testDrawable.setOnClickListener(this);
+        testScanner.setOnClickListener(this);
+        testRoundImage.setOnClickListener(this);
     }
 
     @Override
@@ -124,6 +136,15 @@ public class TestMDActivity extends BaseActivity {
                 break;
             case R.id.testImageViewPager:
                 startActivity(new Intent(TestMDActivity.this, ImageViewPagerActivity.class));
+                break;
+            case R.id.testDrawable:
+                startActivity(new Intent(TestMDActivity.this, DrawableActivity.class));
+                break;
+            case R.id.testScanner:
+                startActivity(new Intent(TestMDActivity.this, ScannerActivity.class));
+                break;
+            case R.id.testRoundImage:
+                startActivity(new Intent(TestMDActivity.this, RoundImageActivity.class));
                 break;
         }
     }

@@ -50,10 +50,9 @@ public class BigBitmapActivity extends RoboFragmentActivity implements ViewPager
 
     private void initSelectDialog() {
         selectDialog = new SelectDialog(this, Arrays.asList(items));
-        selectDialog.getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        selectDialog.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectDialog.cancel();
                 if (position == 0) {//保存图片
                     ImageLoader.saveImage(BigBitmapActivity.this, imgUrls.get(viewPager.getCurrentItem()));
                 }

@@ -97,6 +97,24 @@
             android:layout_height="wrap_content"
             android:text="测试滑动图片" />
 
+        <Button
+            android:id="@+id/testDrawable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="测试自定义drawable" />
+
+        <Button
+            android:id="@+id/testScanner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="测试扫一扫" />
+
+        <Button
+            android:id="@+id/testRoundImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="测试圆角图片" />
+
     </LinearLayout>
 
 </ScrollView>

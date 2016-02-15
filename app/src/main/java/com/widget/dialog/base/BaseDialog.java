@@ -20,20 +20,25 @@ public abstract class BaseDialog {
     protected int maxWidth;
     protected int maxHeight;
 
+    protected int radius;//圆角弧度
+
     public BaseDialog(Context context) {
         this(context, R.style.dialogTheme);
     }
 
     public BaseDialog(Context context, int themeResId) {
         this.context = context;
-        setMaxSize();//设置最大尺寸
+        setSize();//设置最大尺寸
         dialog = new Dialog(context, themeResId);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);//保证在屏幕居中
-        setProps();//设置一些属性
+        //设置一些属性
+        setCanceledOnTouchOutside(true);
+        setCancelable(true);
         setView();//设置view
     }
 
-    private void setMaxSize() {
+    private void setSize() {
+        radius = UIUtils.dp2px(context, 3);
         int[] screenSize = UIUtils.getScreenWidthHeightPX(context);
         maxWidth = screenSize[0] * 3 / 4;
         maxHeight = screenSize[1] * 3 / 4;
@@ -46,11 +51,21 @@ public abstract class BaseDialog {
     }
 
     /**
-     * 设置dialog属性
+     * 设置是否触摸外部消失
+     *
+     * @param cancelOnTouchOutside
      */
-    protected void setProps() {
-        dialog.setCanceledOnTouchOutside(true);//默认可以取消
-        dialog.setCancelable(true);//可以按回退键强制取消
+    public void setCanceledOnTouchOutside(boolean cancelOnTouchOutside) {
+        dialog.setCanceledOnTouchOutside(cancelOnTouchOutside);
+    }
+
+    /**
+     * 设置是否按退出键消失
+     *
+     * @param cancelable
+     */
+    public void setCancelable(boolean cancelable) {
+        dialog.setCancelable(cancelable);
     }
 
     /**
