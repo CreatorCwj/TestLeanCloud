@@ -61,13 +61,14 @@ public class BigBitmapFragment extends BaseViewPagerFragment {
             public void onProgress(ImageView imageView, String imgUrl, int current, int total, int progress) {
                 super.onProgress(imageView, imgUrl, current, total, progress);
                 //设置进度
+                progressCircle.setTextIsDisplayable(true);
                 progressCircle.setProgress(progress);
             }
 
             @Override
             public void onLoadingStarted(ImageView imageView, String imgUrl) {
                 super.onLoadingStarted(imageView, imgUrl);
-                loading();
+                startLoad();
             }
 
             @Override
@@ -127,10 +128,12 @@ public class BigBitmapFragment extends BaseViewPagerFragment {
         imageView.setLayoutParams(params);
     }
 
-    private void loading() {
+    private void startLoad() {
         progressCircle.setVisibility(View.VISIBLE);
         imageView.setVisibility(View.GONE);
-        progressCircle.setProgress(0);
+        //一开始不显示进度
+        progressCircle.setProgress(100);
+        progressCircle.setTextIsDisplayable(false);
     }
 
     private void loaded() {

@@ -247,4 +247,7 @@ public class RoundProgressBar extends View {
         this.roundWidth = roundWidth;
     }
 
+    public void setTextIsDisplayable(boolean textIsDisplayable) {
+        this.textIsDisplayable = textIsDisplayable;
+    }
 }

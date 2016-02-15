@@ -5,7 +5,6 @@ import android.view.View;
 import android.widget.Button;
 
 import com.base.BaseActivity;
-import com.google.zxing.client.android.CaptureActivity;
 import com.util.MockData;
 
 import java.util.ArrayList;
@@ -65,6 +64,9 @@ public class TestMDActivity extends BaseActivity {
     @InjectView(R.id.testScanner)
     private Button testScanner;
 
+    @InjectView(R.id.testRoundImage)
+    private Button testRoundImage;
+
     @Override
     protected void setListener() {
         testSimpleAnim.setOnClickListener(this);
@@ -83,6 +85,7 @@ public class TestMDActivity extends BaseActivity {
         testImageViewPager.setOnClickListener(this);
         testDrawable.setOnClickListener(this);
         testScanner.setOnClickListener(this);
+        testRoundImage.setOnClickListener(this);
     }
 
     @Override
@@ -139,6 +142,9 @@ public class TestMDActivity extends BaseActivity {
                 break;
             case R.id.testScanner:
                 startActivity(new Intent(TestMDActivity.this, ScannerActivity.class));
+                break;
+            case R.id.testRoundImage:
+                startActivity(new Intent(TestMDActivity.this, RoundImageActivity.class));
                 break;
         }
     }
