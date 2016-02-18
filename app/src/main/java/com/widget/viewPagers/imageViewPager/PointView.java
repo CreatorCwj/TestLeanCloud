@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -26,8 +27,13 @@ public class PointView extends View {
     private int strokeWidth;
     private int strokeColor;
 
+    private String text = "";
+    private int textColor;
+    private float textSize;
+
     private Paint paint;
     private Paint strokePaint;
+    private Paint textPaint;
 
     public PointView(Context context) {
         this(context, null);
@@ -45,6 +51,9 @@ public class PointView extends View {
             unSelectColor = typedArray.getColor(R.styleable.ImageViewPager_unSelectColor, Color.GRAY);
             strokeWidth = typedArray.getDimensionPixelSize(R.styleable.ImageViewPager_pointStrokeWidth, 0);
             strokeColor = typedArray.getColor(R.styleable.ImageViewPager_pointStrokeColor, Color.TRANSPARENT);
+            text = typedArray.getString(R.styleable.ImageViewPager_pointText);
+            textColor = typedArray.getColor(R.styleable.ImageViewPager_pointTextColor, Color.WHITE);
+            textSize = typedArray.getDimensionPixelSize(R.styleable.ImageViewPager_pointTextSize, 15);
             typedArray.recycle();
         }
     }
@@ -76,6 +85,19 @@ public class PointView extends View {
         strokePaint.setColor(strokeColor);
         strokePaint.setStrokeWidth(strokeWidth);
         canvas.drawCircle(centerX, centerY, radius - strokeWidth / 2, strokePaint);
+
+        //绘制文字
+        if (TextUtils.isEmpty(text))
+            return;
+        if (textPaint == null)
+            textPaint = new Paint();
+        textPaint.setColor(textColor);
+        textPaint.setTextSize(textSize);
+        float textWidth = textPaint.measureText(text); // 测量字体宽度，我们需要根据字体的宽度设置在圆环中间
+        //根据font属性来决定baseline作为字体的y轴中心
+        Paint.FontMetricsInt fontMetrics = textPaint.getFontMetricsInt();
+        int baseline = (getMeasuredHeight() - fontMetrics.bottom + fontMetrics.top) / 2 - fontMetrics.top;
+        canvas.drawText(text, centerX - textWidth / 2, baseline, textPaint); // 画出文字
     }
 
     public void setSelectColor(int selectColor) {
@@ -95,6 +117,21 @@ public class PointView extends View {
 
     public void setStrokeColor(int strokeColor) {
         this.strokeColor = strokeColor;
+        invalidate();
+    }
+
+    public void setText(String text) {
+        this.text = text;
+        invalidate();
+    }
+
+    public void setTextColor(int textColor) {
+        this.textColor = textColor;
+        invalidate();
+    }
+
+    public void setTextSize(float textSize) {
+        this.textSize = textSize;
         invalidate();
     }
 }

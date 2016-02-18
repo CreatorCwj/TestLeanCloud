@@ -18,4 +18,14 @@
         app:imageNum="4"
         app:pointGravity="right" />
 
+    <com.widget.viewPagers.imageViewPager.PointView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:pointStrokeColor="@android:color/darker_gray"
+        app:pointStrokeWidth="2dp"
+        app:pointText="20"
+        app:pointTextColor="@color/colorPrimary"
+        app:pointTextSize="14sp"
+        app:unSelectColor="@android:color/holo_red_light" />
+
 </LinearLayout>

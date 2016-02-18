@@ -28,8 +28,11 @@ public class BaseDBHelper<T, K> implements SyncDBImpl<T, K>, AsyncDBImpl<T> {
         this.clazz = clazz;
     }
 
+    /**
+     * 获得到单例的session对象
+     */
     protected static DaoSession getDaoSession() {
-        return DaoManager.getInstance().getDaoSession();
+        return DaoManager.getDaoSession();
     }
 
     @Override

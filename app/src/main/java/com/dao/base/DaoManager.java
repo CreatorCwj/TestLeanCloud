@@ -1,6 +1,7 @@
 package com.dao.base;
 
-import com.application.MyApplication;
+import android.content.Context;
+
 import com.dao.generate.DaoMaster;
 import com.dao.generate.DaoSession;
 
@@ -10,26 +11,27 @@ import com.dao.generate.DaoSession;
  */
 public class DaoManager {
 
-    private static DaoManager instance;
-    private DaoSession daoSession;
+    private static final String DB_NAME = "leanCloud_db";
 
-    private DaoManager() {
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(MyApplication.getAppContext(), "note_db", null);
-        daoSession = new DaoMaster(helper.getWritableDatabase()).newSession();
-    }
+    private static DaoSession daoSession;
 
-    public static DaoManager getInstance() {
-        if (instance == null) {
+    /**
+     * 一定要初始化
+     *
+     * @param context
+     */
+    public static void initGreenDao(Context context) {
+        if (daoSession == null) {
             synchronized (DaoManager.class) {
-                if (instance == null) {
-                    instance = new DaoManager();
+                if (daoSession == null) {
+                    DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(context, DB_NAME, null);
+                    daoSession = new DaoMaster(helper.getWritableDatabase()).newSession();
                 }
             }
         }
-        return instance;
     }
 
-    public DaoSession getDaoSession() {
+    public static DaoSession getDaoSession() {
         return daoSession;
     }
 }

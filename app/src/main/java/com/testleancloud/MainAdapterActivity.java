@@ -6,6 +6,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.adapter.SlideFragmentAdapter;
+import com.base.BaseFragmentActivity;
 import com.fragment.TabFragment;
 import com.util.DrawableUtils;
 
@@ -17,7 +18,7 @@ import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
 @ContentView(R.layout.activity_main_adapter)
-public class MainAdapterActivity extends RoboFragmentActivity {
+public class MainAdapterActivity extends BaseFragmentActivity {
 
     @InjectView(R.id.main_radioGroup)
     RadioGroup radioGroup;

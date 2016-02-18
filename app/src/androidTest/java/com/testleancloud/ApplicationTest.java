@@ -28,14 +28,14 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         if (data != null && data.data != null) {
             List<City> cities = new ArrayList<>();
             for (int i = 0; i < data.data.size(); ++i) {
-                CitySiftModel model = data.data.get(i);
-                City city = new City();
-                city.setId(model.getId());
-                city.setName(model.getName());
-                city.setPinyin(model.getPinyin());
-                city.setShortPinyin(model.getShortPinyin());
-                city.setIndex(i);
-                cities.add(city);
+//                CitySiftModel model = data.data.get(i);
+//                City city = new City();
+//                city.setId(model.getId());
+//                city.setName(model.getName());
+//                city.setPinyin(model.getPinyin());
+//                city.setShortPinyin(model.getShortPinyin());
+//                city.setIndex(i);
+//                cities.add(city);
             }
             for (int i = 378; i < cities.size(); ++i) {
                 Log.i(TAG, i + "");
