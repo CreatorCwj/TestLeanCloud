@@ -2,13 +2,22 @@ package com.fragment;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.base.BaseViewPagerFragment;
 import com.testleancloud.R;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import roboguice.inject.InjectView;
 
 
 public class TabFragment extends BaseViewPagerFragment {
@@ -18,7 +27,14 @@ public class TabFragment extends BaseViewPagerFragment {
     private int pos;
     private int resumeNum;
     private int pauseNum;
+
+    @InjectView(R.id.fragment_content)
     private TextView textView;
+
+    @InjectView(R.id.lv)
+    private ListView listView;
+
+    private ChildFragment childFragment;
 
     public static TabFragment newInstance(int position) {
         TabFragment fragment = new TabFragment();
@@ -34,6 +50,7 @@ public class TabFragment extends BaseViewPagerFragment {
         if (getArguments() != null) {
             pos = getArguments().getInt(KEY);
         }
+        childFragment = new ChildFragment();
     }
 
     @Override
@@ -45,7 +62,6 @@ public class TabFragment extends BaseViewPagerFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        textView = (TextView) view.findViewById(R.id.fragment_content);
         textView.setText("TAB" + pos);
 
         //test color
@@ -74,7 +90,33 @@ public class TabFragment extends BaseViewPagerFragment {
                 break;
         }
         view.setBackgroundColor(color);
+
+        List<String> data = new ArrayList<>();
+        for (int i = 0; i < 50; i++) {
+            data.add("" + i);
+        }
+        listView.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line, data));
+
+        //测试childFragment
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                FragmentTransaction fm = getChildFragmentManager().beginTransaction();
+                if (childFragment.isAdded()) {
+                    if (childFragment.isVisible()) {
+                        fm.hide(childFragment);
+                    } else {
+                        fm.show(childFragment);
+                    }
+                } else {
+                    fm.add(R.id.child_fragment_content, childFragment);
+                }
+                fm.commitAllowingStateLoss();
+            }
+        });
     }
+
+
 
     /**
      * 展示时显示,完全代替onResume

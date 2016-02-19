@@ -1,11 +1,13 @@
 package com.testleancloud;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.base.BaseActivity;
 import com.util.MockData;
+import com.util.UIUtils;
 import com.util.Utils;
 import com.widget.viewPagers.imageViewPager.ImageViewPager;
 
@@ -45,11 +47,12 @@ public class ImageViewPagerActivity extends BaseActivity {
 
     @Override
     protected void setListener() {
-
+        textView.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-
+        imageViewPager.setPointStrokeWidth(UIUtils.dp2px(this, 1));
+        imageViewPager.setPointStrokeColor(Color.BLACK);
     }
 }

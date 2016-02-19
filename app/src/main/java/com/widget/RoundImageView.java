@@ -38,6 +38,7 @@ public class RoundImageView extends ImageView {
     private Paint zonePaint;
     private Paint strokePaint;
     private RectF rectF;
+    private RectF strokeRect;
 
     public RoundImageView(Context context) {
         this(context, null);
@@ -72,15 +73,17 @@ public class RoundImageView extends ImageView {
         zonePaint.setColor(Color.WHITE);
         //stroke
         strokePaint = new Paint();
-        setStrokePaint();
         //rect
+        strokeRect = new RectF();
         rectF = new RectF();
     }
 
-    private void setStrokePaint() {
+    //更新边框
+    private void updateStroke() {
         strokePaint.setStyle(Paint.Style.STROKE);
         strokePaint.setColor(strokeColor);
         strokePaint.setStrokeWidth(strokeWidth);
+        strokeRect.set(strokeWidth / 2, strokeWidth / 2, rectF.right - strokeWidth / 2, rectF.bottom - strokeWidth / 2);
     }
 
     /**
@@ -90,6 +93,7 @@ public class RoundImageView extends ImageView {
      */
     public void setImageType(int imageType) {
         this.imageType = imageType;
+        invalidate();
     }
 
     /**
@@ -99,6 +103,7 @@ public class RoundImageView extends ImageView {
      */
     public void setRadius(float radius) {
         this.radius = radius;
+        invalidate();
     }
 
     /**
@@ -108,7 +113,6 @@ public class RoundImageView extends ImageView {
      */
     public void setStrokeWidth(int strokeWidth) {
         this.strokeWidth = strokeWidth;
-        setStrokePaint();
         invalidate();
     }
 
@@ -119,7 +123,6 @@ public class RoundImageView extends ImageView {
      */
     public void setStrokeColor(int strokeColor) {
         this.strokeColor = strokeColor;
-        setStrokePaint();
         invalidate();
     }
 
@@ -143,11 +146,12 @@ public class RoundImageView extends ImageView {
         canvas.saveLayer(rectF, maskPaint, Canvas.ALL_SAVE_FLAG);
         super.draw(canvas);
         //根据类型画stroke
+        updateStroke();
         if (imageType == ROUND) {
-            canvas.drawRoundRect(rectF, radius, radius, strokePaint);
+            canvas.drawRoundRect(strokeRect, radius, radius, strokePaint);
         } else if (imageType == CIRCLE) {
             canvas.drawCircle((rectF.right - rectF.left) / 2,
-                    (rectF.bottom - rectF.top) / 2, (rectF.right - rectF.left) / 2, strokePaint);
+                    (rectF.bottom - rectF.top) / 2, (rectF.right - rectF.left - strokeWidth) / 2, strokePaint);
         }
         canvas.restore();
     }

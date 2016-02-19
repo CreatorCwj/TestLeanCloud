@@ -22,6 +22,8 @@ class ImageConfiguration {
         File file = FileCache.getCacheDir();
         if (file != null)
             configuration.diskCache(new UnlimitedDiskCache(file));
+        //Wifi环境下载器
+        configuration.imageDownloader(new WifiDownloader(context));
         //内存缓存默认为当前应用可用内存的1/8大小的LruMemoryCache,也可设置 memoryCache
         //也可设置内存和disk缓存的最大宽度高度质量格式等 memoryCacheExtraOptions discCacheExtraOptions
         return configuration.build();

@@ -34,6 +34,6 @@ dependencies {
     compile 'com.google.code.gson:gson:2.3'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile 'se.emilsjolander:stickylistheaders:2.7.0'
-//    compile 'com.google.zxing:core:3.1.0'
     compile 'com.meituan.android.zxing:library:0.1.18'
+    compile('de.greenrobot:greendao:2.1.0')
 }

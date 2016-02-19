@@ -7,24 +7,34 @@ import android.widget.BaseAdapter;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
-import com.model.CitySiftModel;
+import com.dao.dbHelpers.CityHelper;
+import com.dao.generate.City;
+import com.google.inject.Inject;
 import com.util.UIUtils;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+
+import roboguice.RoboGuice;
 
 /**
  * Created by cwj on 16/2/5.
  */
 public class SiftCityAdapter extends BaseAdapter implements SectionIndexer {
 
-    private final String sections = "#ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private final String sections = "最ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     private Context context;
-    private List<CitySiftModel> list;
+    private List<City> list = new ArrayList<>();
 
-    public SiftCityAdapter(Context context, List<CitySiftModel> list) {
+    @Inject
+    private CityHelper cityHelper;
+
+    public SiftCityAdapter(Context context) {
         this.context = context;
-        this.list = list;
+        RoboGuice.getInjector(context).injectMembersWithoutViews(this);
     }
 
     @Override
@@ -33,7 +43,7 @@ public class SiftCityAdapter extends BaseAdapter implements SectionIndexer {
     }
 
     @Override
-    public CitySiftModel getItem(int position) {
+    public City getItem(int position) {
         return list.get(position);
     }
 
@@ -44,7 +54,7 @@ public class SiftCityAdapter extends BaseAdapter implements SectionIndexer {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHodler viewHodler = null;
+        ViewHodler viewHodler;
         if (convertView == null) {
             convertView = new TextView(context);
             convertView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, UIUtils.dp2px(context, 80)));
@@ -96,6 +106,48 @@ public class SiftCityAdapter extends BaseAdapter implements SectionIndexer {
     @Override
     public int getSectionForPosition(int position) {
         return 0;
+    }
+
+    public void addList(List<City> cities) {
+        //构建数据
+        list.addAll(cities);
+        //添加A-Z的item
+        for (char i = 'A'; i <= 'Z'; i++) {
+            City cA = new City();
+            cA.setPinyin(String.valueOf(i));
+            cA.setName(String.valueOf(i));
+            list.add(cA);
+        }
+        //排序
+        Collections.sort(list, new Comparator<City>() {
+            @Override
+            public int compare(City city1, City city2) {
+                String sc1 = city1.getPinyin().toLowerCase();
+                String sc2 = city2.getPinyin().toLowerCase();
+                return sc1.compareTo(sc2);
+            }
+        });
+        //加入最近使用
+        addRecentUse();
+//        //加入全部城市item
+//        City allCity = new City();
+//        allCity.setName("全部城市");
+//        allCity.setPinyin("全部城市");
+//        list.add(0, allCity);
+    }
+
+    private void addRecentUse() {
+        //从数据库取出指定数量最近使用城市
+        List<City> recentlyUsed = cityHelper.getRecentlyUsed();
+        if (recentlyUsed.size() <= 0)
+            return;
+        //增加最近使用item
+        City recentlyCity = new City();
+        recentlyCity.setName("最近使用");
+        recentlyCity.setPinyin("最近使用");
+        recentlyUsed.add(0, recentlyCity);
+        //放入到集合中
+        list.addAll(0, recentlyUsed);
     }
 
     class ViewHodler {

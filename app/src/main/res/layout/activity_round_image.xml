@@ -19,7 +19,7 @@
         android:src="@drawable/ic_contact"
         app:imageType="circle"
         app:strokeColor="@color/black"
-        app:strokeWidth="5dp" />
+        app:strokeWidth="2dp" />
 
     <com.widget.RoundImageView
         android:layout_width="80dp"
@@ -38,7 +38,7 @@
         app:imageType="round"
         app:radius="5dp"
         app:strokeColor="@color/black"
-        app:strokeWidth="5dp" />
+        app:strokeWidth="2dp" />
 
     <com.widget.RoundImageView
         android:layout_width="80dp"

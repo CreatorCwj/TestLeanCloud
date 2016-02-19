@@ -8,6 +8,7 @@ public class CitySiftModel {
     private int id;
     private String name;
     private String pinyin;
+    private String shortPinyin;
 
     public CitySiftModel() {
 
@@ -17,6 +18,13 @@ public class CitySiftModel {
         this.id = id;
         this.name = name;
         this.pinyin = pinyin;
+    }
+
+    public CitySiftModel(int id, String name, String pinyin, String shortPinyin) {
+        this.id = id;
+        this.name = name;
+        this.pinyin = pinyin;
+        this.shortPinyin = shortPinyin;
     }
 
     public int getId() {
@@ -41,5 +49,13 @@ public class CitySiftModel {
 
     public void setPinyin(String pinyin) {
         this.pinyin = pinyin;
+    }
+
+    public String getShortPinyin() {
+        return shortPinyin;
+    }
+
+    public void setShortPinyin(String shortPinyin) {
+        this.shortPinyin = shortPinyin;
     }
 }
