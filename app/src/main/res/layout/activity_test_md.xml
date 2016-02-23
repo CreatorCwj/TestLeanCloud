@@ -115,6 +115,12 @@
             android:layout_height="wrap_content"
             android:text="测试圆角图片" />
 
+        <Button
+            android:id="@+id/testPullImg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="测试弹性图片" />
+
     </LinearLayout>
 
 </ScrollView>

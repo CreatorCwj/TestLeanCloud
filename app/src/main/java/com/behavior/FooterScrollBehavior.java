@@ -138,7 +138,7 @@ public class FooterScrollBehavior extends CoordinatorLayout.Behavior<View> {
         return super.onNestedFling(coordinatorLayout, child, target, velocityX, velocityY, consumed);
     }
 
-    //停止滚动或自由滑动时
+    //停止(滚动/自由滑动)时
     @Override
     public void onStopNestedScroll(CoordinatorLayout coordinatorLayout, View child, View target) {
         scrollDirection = NONE;//重置
