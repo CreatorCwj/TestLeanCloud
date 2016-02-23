@@ -33,4 +33,7 @@
     <string name="title_activity_drawable">DrawableActivity</string>
     <string name="title_activity_round_image">RoundImageActivity</string>
     <string name="title_activity_pull_img">PullImgActivity</string>
+    <string name="title_activity_baidu_location">BaiduLocationActivity</string>
+    <string name="title_activity_map">MapActivity</string>
+    <string name="title_activity_routes">RoutesActivity</string>
 </resources>

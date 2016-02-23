@@ -13,6 +13,7 @@ import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.PushService;
 import com.avos.avoscloud.SaveCallback;
+import com.baidu.mapapi.SDKInitializer;
 import com.dao.base.DaoManager;
 import com.imageLoader.ImageLoader;
 import com.model.City;
@@ -51,6 +52,9 @@ public class MyApplication extends Application {
         AVOSCloud.initialize(this, getResources().getString(R.string.app_id), getResources().getString(R.string.app_key));
         initPush();//初始化推送
 //        setDefaultACL();//可以设置默认的ACL，第二个参数是当前用户是否可以读写
+
+        //地图
+        SDKInitializer.initialize(getApplicationContext());
 
         //Volley
         Network.initNetwork(this);
@@ -95,4 +99,5 @@ public class MyApplication extends Application {
         AVObject.registerSubclass(TeamWork.class);
         AVObject.registerSubclass(Place.class);
     }
+
 }

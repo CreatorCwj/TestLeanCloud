@@ -70,6 +70,12 @@ public class TestMDActivity extends BaseActivity {
     @InjectView(R.id.testPullImg)
     private Button testPullImg;
 
+    @InjectView(R.id.testLocation)
+    private Button testLocation;
+
+    @InjectView(R.id.testMap)
+    private Button testMap;
+
     @Override
     protected void setListener() {
         testSimpleAnim.setOnClickListener(this);
@@ -90,6 +96,8 @@ public class TestMDActivity extends BaseActivity {
         testScanner.setOnClickListener(this);
         testRoundImage.setOnClickListener(this);
         testPullImg.setOnClickListener(this);
+        testLocation.setOnClickListener(this);
+        testMap.setOnClickListener(this);
     }
 
     @Override
@@ -153,6 +161,31 @@ public class TestMDActivity extends BaseActivity {
             case R.id.testPullImg:
                 startActivity(new Intent(TestMDActivity.this, PullImgActivity.class));
                 break;
+            case R.id.testLocation:
+                startActivity(new Intent(TestMDActivity.this, BaiduLocationActivity.class));
+                break;
+            case R.id.testMap:
+                startActivity(new Intent(TestMDActivity.this, MapActivity.class));
+                break;
         }
     }
+
+//    private long preTime = -1500;
+//
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        if (keyCode == KeyEvent.KEYCODE_BACK
+//                && event.getAction() == KeyEvent.ACTION_DOWN) {
+//            if ((System.currentTimeMillis() - preTime) >= 1500) {
+//                Toast.makeText(getApplicationContext(), "再按一次退出应用",
+//                        Toast.LENGTH_SHORT).show();
+//                preTime = System.currentTimeMillis();
+//            } else {
+//                finish();
+//                System.exit(0);
+//            }
+//            return true;
+//        }
+//        return super.onKeyDown(keyCode, event);
+//    }
 }
