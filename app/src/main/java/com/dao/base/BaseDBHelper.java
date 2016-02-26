@@ -1,8 +1,8 @@
 package com.dao.base;
 
 import com.dao.generate.DaoSession;
-import com.dao.impl.AsyncDBImpl;
-import com.dao.impl.SyncDBImpl;
+import com.dao.inter.AsyncDBInterface;
+import com.dao.inter.SyncDBInterface;
 import com.dao.listener.DBOperationListener;
 
 import java.util.List;
@@ -18,7 +18,7 @@ import de.greenrobot.dao.query.Query;
  * Dao的处理基类,提供基础的增删改查方法
  * 可以直接new使用,如果没用特殊方法需要定义时
  */
-public class BaseDBHelper<T, K> implements SyncDBImpl<T, K>, AsyncDBImpl<T> {
+public class BaseDBHelper<T, K> implements SyncDBInterface<T, K>, AsyncDBInterface<T> {
 
     protected AbstractDao<T, K> dao;
     protected Class<T> clazz;

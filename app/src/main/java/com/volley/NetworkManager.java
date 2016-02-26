@@ -25,7 +25,7 @@ class NetworkManager {
         if (requestQueue == null) {
             synchronized (NetworkManager.class) {
                 if (requestQueue == null) {
-                    requestQueue = Volley.newRequestQueue(context);
+                    requestQueue = Volley.newRequestQueue(context.getApplicationContext());
                 }
             }
         }

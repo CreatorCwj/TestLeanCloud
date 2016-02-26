@@ -24,7 +24,7 @@ public class DaoManager {
         if (daoSession == null) {
             synchronized (DaoManager.class) {
                 if (daoSession == null) {
-                    DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(context, DB_NAME, null);
+                    DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(context.getApplicationContext(), DB_NAME, null);
                     daoSession = new DaoMaster(helper.getWritableDatabase()).newSession();
                 }
             }

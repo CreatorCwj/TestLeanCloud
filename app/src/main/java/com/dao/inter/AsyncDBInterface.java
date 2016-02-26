@@ -1,4 +1,4 @@
-package com.dao.impl;
+package com.dao.inter;
 
 import com.dao.listener.DBOperationListener;
 
@@ -10,7 +10,7 @@ import de.greenrobot.dao.query.Query;
  * Created by cwj on 16/2/17.
  * GreenDao异步方法
  */
-public interface AsyncDBImpl<T> {
+public interface AsyncDBInterface<T> {
 
     /**
      * 插入一组数据

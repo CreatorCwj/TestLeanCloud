@@ -1,4 +1,4 @@
-package com.dao.impl;
+package com.dao.inter;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import java.util.List;
  * Created by cwj on 16/2/17.
  * GreenDao同步方法
  */
-public interface SyncDBImpl<T, K> {
+public interface SyncDBInterface<T, K> {
 
     /**
      * 插入一个数据

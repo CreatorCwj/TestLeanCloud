@@ -10,12 +10,11 @@ import android.widget.TextView;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
-import com.avos.avoscloud.FindCallback;
-import com.avos.avoscloud.GetCallback;
 import com.base.BaseActivity;
+import com.leancloud.ContextFindCallback;
+import com.leancloud.ContextGetCallback;
 import com.model.Place;
-import com.model.Post;
-import com.volley.Network;
+import com.util.Utils;
 
 import java.util.List;
 
@@ -49,18 +48,20 @@ public class LocationActivity extends BaseActivity {
             return;
         showLoadingDialog("正在查询指定place...");
         AVQuery<Place> specQuery = AVObject.getQuery(Place.class);
-        specQuery.getInBackground(placeId, new GetCallback<Place>() {
+        specQuery.getInBackground(placeId, new ContextGetCallback<Place>(this) {
             @Override
-            public void done(Place object, AVException e) {
+            public void getResult(Place object, AVException e) {
+                Utils.showToast(LocationActivity.this, "回来了");
                 if (e == null) {
                     cancelLoadingDialog();
                     showLoadingDialog("正在查找目标place...");
                     AVQuery<Place> query = AVObject.getQuery(Place.class);
 //                    query.whereNear(Place.PLACE_LOCATION, object.getLocation());//按距离排序由近到远
                     query.whereWithinKilometers(Place.PLACE_LOCATION, object.getLocation(), 5);//5km之内的
-                    query.findInBackground(new FindCallback<Place>() {
+                    query.findInBackground(new ContextFindCallback<Place>(LocationActivity.this) {
                         @Override
-                        public void done(List<Place> objects, AVException e) {
+                        public void findResult(List<Place> objects, AVException e) {
+                            Utils.showToast(LocationActivity.this, "回来了");
                             if (e == null) {
                                 StringBuilder sb = new StringBuilder("");
                                 for (Place place : objects) {
@@ -79,7 +80,6 @@ public class LocationActivity extends BaseActivity {
                 }
             }
         });
-        Network<List<Post>> network;
     }
 
     @Override

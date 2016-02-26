@@ -16,6 +16,7 @@ import com.avos.avoscloud.SaveCallback;
 import com.baidu.mapapi.SDKInitializer;
 import com.dao.base.DaoManager;
 import com.imageLoader.ImageLoader;
+import com.location.Location;
 import com.model.City;
 import com.model.Comment;
 import com.model.GameScore;
@@ -55,13 +56,14 @@ public class MyApplication extends Application {
 
         //地图
         SDKInitializer.initialize(getApplicationContext());
-
-        //Volley
-        Network.initNetwork(this);
-        //ImageLoader
-        ImageLoader.initConfig(this, new ColorDrawable(Color.GRAY));
-        //GreenDao
-        DaoManager.initGreenDao(this);
+        //定位
+        Location.init(getApplicationContext());
+        //Volley网络
+        Network.initNetwork(getApplicationContext());
+        //ImageLoader图片加载
+        ImageLoader.initConfig(getApplicationContext(), new ColorDrawable(Color.GRAY));
+        //GreenDao本地数据库
+        DaoManager.initGreenDao(getApplicationContext());
     }
 
     private void initPush() {

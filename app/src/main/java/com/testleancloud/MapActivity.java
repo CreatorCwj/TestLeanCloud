@@ -37,8 +37,9 @@ import com.baidu.mapapi.search.route.WalkingRouteLine;
 import com.baidu.mapapi.search.route.WalkingRoutePlanOption;
 import com.baidu.mapapi.search.route.WalkingRouteResult;
 import com.base.BaseActivity;
+import com.location.Location;
+import com.location.OnLocationListener;
 import com.model.Place;
-import com.util.LocationUtils;
 import com.util.Utils;
 
 import java.util.ArrayList;
@@ -155,7 +156,7 @@ public class MapActivity extends BaseActivity implements OnGetRoutePlanResultLis
     }
 
     private void locateMySelf() {
-        LocationUtils.requestLocation(this, new LocationUtils.OnLocationListener() {
+        Location.requestLocation(this, new OnLocationListener() {
             @Override
             public void onPreExecute() {
 
