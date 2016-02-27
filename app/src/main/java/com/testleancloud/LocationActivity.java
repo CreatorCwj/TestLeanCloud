@@ -11,8 +11,8 @@ import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.base.BaseActivity;
-import com.leancloud.ContextFindCallback;
-import com.leancloud.ContextGetCallback;
+import com.leancloud.SafeFindCallback;
+import com.leancloud.SafeGetCallback;
 import com.model.Place;
 import com.util.Utils;
 
@@ -48,7 +48,7 @@ public class LocationActivity extends BaseActivity {
             return;
         showLoadingDialog("正在查询指定place...");
         AVQuery<Place> specQuery = AVObject.getQuery(Place.class);
-        specQuery.getInBackground(placeId, new ContextGetCallback<Place>(this) {
+        specQuery.getInBackground(placeId, new SafeGetCallback<Place>(this) {
             @Override
             public void getResult(Place object, AVException e) {
                 Utils.showToast(LocationActivity.this, "回来了");
@@ -58,7 +58,7 @@ public class LocationActivity extends BaseActivity {
                     AVQuery<Place> query = AVObject.getQuery(Place.class);
 //                    query.whereNear(Place.PLACE_LOCATION, object.getLocation());//按距离排序由近到远
                     query.whereWithinKilometers(Place.PLACE_LOCATION, object.getLocation(), 5);//5km之内的
-                    query.findInBackground(new ContextFindCallback<Place>(LocationActivity.this) {
+                    query.findInBackground(new SafeFindCallback<Place>(LocationActivity.this) {
                         @Override
                         public void findResult(List<Place> objects, AVException e) {
                             Utils.showToast(LocationActivity.this, "回来了");

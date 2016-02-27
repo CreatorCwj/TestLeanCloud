@@ -33,21 +33,14 @@ public class ChildFragment extends BaseFragment {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (getParentFragment() != null) {//可见的话就消失,消费之
-                    getParentFragment().getChildFragmentManager()
-                            .beginTransaction().hide(ChildFragment.this).commitAllowingStateLoss();
-                }
+                hideFragment();
             }
         });
     }
 
     @Override
     public boolean onBackPress() {
-        if (getParentFragment() != null && getParentFragment().isVisible() && isVisible()) {//可见的话就消失,消费之
-            getParentFragment().getChildFragmentManager()
-                    .beginTransaction().hide(this).commitAllowingStateLoss();
-            return true;
-        }
-        return super.onBackPress();
+        hideFragment();
+        return true;
     }
 }

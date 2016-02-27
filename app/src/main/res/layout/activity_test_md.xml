@@ -133,6 +133,12 @@
             android:layout_height="wrap_content"
             android:text="测试地图" />
 
+        <Button
+            android:id="@+id/testSortFilter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="测试筛选排序" />
+
     </LinearLayout>
 
 </ScrollView>

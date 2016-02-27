@@ -9,14 +9,16 @@ import java.util.List;
 
 /**
  * Created by cwj on 16/1/16.
- * Adapter基类
+ * Adapter基类(数据层面)
  */
 public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    protected Context context;
     protected LayoutInflater layoutInflater;
     protected List<T> dataList;
 
     public BaseRecyclerViewAdapter(Context context) {
+        this.context = context;
         this.layoutInflater = LayoutInflater.from(context);
         dataList = new ArrayList<>();
     }
