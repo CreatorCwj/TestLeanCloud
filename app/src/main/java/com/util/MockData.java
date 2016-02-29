@@ -1,5 +1,7 @@
 package com.util;
 
+import com.model.Area;
+import com.model.Category;
 import com.model.CitySiftModel;
 
 import java.util.ArrayList;
@@ -73,5 +75,84 @@ public class MockData {
         list.add(new CitySiftModel(22, "四川", "sichuan"));
         list.add(new CitySiftModel(23, "湖南", "hunan"));
         return list;
+    }
+
+    public static List<Category> getCategory() {
+        List<Category> categories = new ArrayList<>();
+        categories.add(new Category(101, "电影", -1));
+        categories.add(new Category(102, "KTV", -1));
+        categories.add(new Category(103, "美食", -1));
+        categories.add(new Category(104, "游乐场", -1));
+        categories.add(new Category(105, "酒店", -1));
+        categories.add(new Category(106, "汽车服务", -1));
+        categories.add(new Category(107, "摄影", -1));
+        categories.add(new Category(108, "美容美发", -1));
+        categories.add(new Category(109, "婚庆", -1));
+        categories.add(new Category(110, "外卖", -1));
+        categories.add(new Category(111, "鲜果", -1));
+        categories.add(new Category(112, "摄影", -1));
+        categories.add(new Category(113, "美容美发", -1));
+        categories.add(new Category(114, "婚庆", -1));
+        categories.add(new Category(115, "外卖", -1));
+        categories.add(new Category(116, "鲜果", -1));
+        return categories;
+    }
+
+    public static List<Category> getSubCategory(int parentId) {
+        //生成所有的次级品类
+        List<Category> origins = new ArrayList<>();
+        origins.add(new Category(117, "西餐", 103));
+        origins.add(new Category(118, "快餐", 103));
+        origins.add(new Category(119, "中餐", 103));
+        origins.add(new Category(120, "便捷式", 105));
+        origins.add(new Category(121, "高级宾馆", 105));
+        origins.add(new Category(122, "洗车服务", 106));
+        origins.add(new Category(123, "配件专卖", 106));
+        origins.add(new Category(124, "保养服务", 106));
+        //获取
+        List<Category> subCategories = new ArrayList<>();
+        for (Category category : origins) {
+            if (category.getParentId() == parentId)
+                subCategories.add(category);
+        }
+        return subCategories;
+    }
+
+    public static List<Area> getArea() {
+        List<Area> categories = new ArrayList<>();
+        categories.add(new Area(101, "北京", -1));
+        categories.add(new Area(102, "天津", -1));
+        categories.add(new Area(103, "保定", -1));
+        categories.add(new Area(104, "上海", -1));
+        categories.add(new Area(105, "广州", -1));
+        categories.add(new Area(106, "安阳", -1));
+        categories.add(new Area(107, "合肥", -1));
+        categories.add(new Area(108, "西安", -1));
+        categories.add(new Area(109, "杭州", -1));
+        categories.add(new Area(110, "广东", -1));
+        categories.add(new Area(111, "南京", -1));
+        categories.add(new Area(112, "长沙", -1));
+        categories.add(new Area(113, "武汉", -1));
+        return categories;
+    }
+
+    public static List<Area> getSubArea(int parentId) {
+        //生成所有的次级品类
+        List<Area> origins = new ArrayList<>();
+        origins.add(new Area(117, "密云", 101));
+        origins.add(new Area(118, "朝阳", 101));
+        origins.add(new Area(119, "怀柔", 101));
+        origins.add(new Area(120, "西青", 102));
+        origins.add(new Area(121, "南开", 102));
+        origins.add(new Area(122, "蒲城", 108));
+        origins.add(new Area(123, "华阴", 108));
+        origins.add(new Area(124, "老城区", 108));
+        //获取
+        List<Area> subCategories = new ArrayList<>();
+        for (Area category : origins) {
+            if (category.getParentId() == parentId)
+                subCategories.add(category);
+        }
+        return subCategories;
     }
 }

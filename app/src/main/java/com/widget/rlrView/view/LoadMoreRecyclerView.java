@@ -26,6 +26,8 @@ import java.util.List;
  * 支持刷新不加载,加载不刷新
  * 滑动时图片加载模式
  * 支持横向或垂直的布局
+ * 支持自定义选中item的方法
+ * 支持置顶item的方法
  * 与{@link RLRView}联合使用,不用单独使用这个view
  */
 public class LoadMoreRecyclerView extends RecyclerView {
@@ -204,9 +206,23 @@ public class LoadMoreRecyclerView extends RecyclerView {
         return canLoadMoreInit;
     }
 
-    //置顶
+    /**
+     * 置顶
+     */
     public void backToTop() {
-        scrollToPosition(0);
+        scrollTo(0);
+    }
+
+    /**
+     * 滚动到某项
+     */
+    public void scrollTo(int position) {
+        LayoutManager layoutManager = getLayoutManager();
+        if (layoutManager instanceof LinearLayoutManager) {
+            ((LinearLayoutManager) layoutManager).scrollToPositionWithOffset(position, 0);//置顶
+        } else {
+            scrollToPosition(position);
+        }
     }
 
     /**
@@ -253,9 +269,15 @@ public class LoadMoreRecyclerView extends RecyclerView {
             onItemClickListener.onItemClick(position);
     }
 
-    public void performItemLongClick(int position) {
-        if (onItemLongClickListener != null)
+    /**
+     * 外部(adapter)调用,返回true说明已消费,否则为未消费
+     */
+    public boolean performItemLongClick(int position) {
+        if (onItemLongClickListener != null) {
             onItemLongClickListener.onItemLongClick(position);
+            return true;
+        }
+        return false;
     }
 
     private OnScrollListener onLoadScrollListener = new OnScrollListener() {
@@ -323,6 +345,34 @@ public class LoadMoreRecyclerView extends RecyclerView {
     }
 
     /**
+     * 选中某一项
+     * 位置,是否选中,是否滚动到该项,是否清除其它选中项
+     */
+    public void setSelected(int position, boolean isSelected, boolean scrollTo, boolean clearOtherSelected) {
+        RecyclerViewAdapter adapter = (RecyclerViewAdapter) getAdapter();
+        if (adapter != null) {
+            if (clearOtherSelected) {//清除其它选中项
+                clearSelected();
+            }
+            adapter.setSelected(position, isSelected);//设置选中项
+            if (scrollTo) {//置顶该项
+                scrollTo(position);
+            }
+            adapter.notifyDataSetChanged();//更新
+        }
+    }
+
+    /**
+     * 清除选中项
+     */
+    public void clearSelected() {
+        RecyclerViewAdapter adapter = (RecyclerViewAdapter) getAdapter();
+        if (adapter != null) {
+            adapter.clearSelected();
+        }
+    }
+
+    /**
      * 添加头部
      *
      * @param headerViewHolder
@@ -363,6 +413,7 @@ public class LoadMoreRecyclerView extends RecyclerView {
         RecyclerViewAdapter adapter = (RecyclerViewAdapter) getAdapter();
         if (adapter != null) {
             adapter.resetData(dataList);
+            adapter.clearSelected();
         }
     }
 
@@ -373,6 +424,7 @@ public class LoadMoreRecyclerView extends RecyclerView {
         RecyclerViewAdapter adapter = (RecyclerViewAdapter) getAdapter();
         if (adapter != null) {
             adapter.clearData();
+            adapter.clearSelected();
         }
     }
 

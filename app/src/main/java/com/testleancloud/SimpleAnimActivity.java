@@ -93,6 +93,7 @@ public class SimpleAnimActivity extends BaseActivity implements RLRView.OnRefres
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.textView:
+                rlrView.refresh();
                 Utils.showSnack(rlrView, "Success!");
                 break;
         }

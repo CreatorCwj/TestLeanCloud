@@ -9,15 +9,21 @@ import com.testleancloud.R;
 import com.widget.rlrView.view.LoadMoreRecyclerView;
 import com.widget.rlrView.viewHolder.LoadViewHolder;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by cwj on 16/1/17.
  * 刷新加载界面用的adapter基类
  * RecyclerView使用的adapter的基类,可以添加FOOTER
  * 自己处理基本的逻辑,暴露出自定义的接口来实现adapter
+ * 提供选中方法
  */
 public abstract class RecyclerViewAdapter<T> extends BaseRecyclerViewAdapter<T> {
 
     private LoadMoreRecyclerView loadMoreView;
+
+    private Map<Integer, Boolean> selected = new HashMap<>();
 
     public static final int FOOTER = Integer.MIN_VALUE;
     public static final int HEADER = Integer.MAX_VALUE;
@@ -63,9 +69,9 @@ public abstract class RecyclerViewAdapter<T> extends BaseRecyclerViewAdapter<T> 
                     @Override
                     public boolean onLongClick(View v) {
                         if (loadMoreView != null) {
-                            loadMoreView.performItemLongClick(realDataPosition);
+                            return loadMoreView.performItemLongClick(realDataPosition);
                         }
-                        return true;//结束动作捕捉
+                        return false;
                     }
                 });
             }
@@ -179,4 +185,16 @@ public abstract class RecyclerViewAdapter<T> extends BaseRecyclerViewAdapter<T> 
      */
     abstract public RecyclerView.ViewHolder onCreateHolder(ViewGroup parent, int viewType);
 
+    public boolean isSelected(int position) {
+        Boolean b = selected.get(position);
+        return b == null ? false : b;
+    }
+
+    public void setSelected(int position, boolean isSelected) {
+        selected.put(position, isSelected);
+    }
+
+    public void clearSelected() {
+        selected.clear();
+    }
 }

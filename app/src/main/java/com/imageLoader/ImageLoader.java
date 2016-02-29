@@ -31,51 +31,51 @@ import java.io.IOException;
  */
 public class ImageLoader {
 
-    private static void initImageLodaer(Context context, DisplayImageOptions options) {
-        ImageLoaderConfiguration configuration = ImageConfiguration.getConfiguration(context, options);
+    private static void initImageLoader(Context context, DisplayImageOptions options) {
+        ImageLoaderConfiguration configuration = ImageConfiguration.getConfiguration(context.getApplicationContext(), options);
         com.nostra13.universalimageloader.core.ImageLoader.getInstance().init(configuration);
     }
 
     /**
      * InitConfig:传入不同的参数来初始化ImageLoader框架,只能初始化一次
-     * <p>
+     * <p/>
      * 参数:loading/failImageId:加载中和加载失败的图片的drawableId
      * loading/failImage:加载中和加载失败的图片的drawable
      * defaultImage/Id:加载中和加载失败使用统一的图片
      */
     public static void initConfig(Context context) {
         DisplayImageOptions options = ImageDisplayOptions.getOptions();
-        initImageLodaer(context, options);
+        initImageLoader(context, options);
     }
 
     public static void initConfig(Context context, int loadingImageId, Drawable failImage) {
         DisplayImageOptions options = ImageDisplayOptions.getOptions(loadingImageId, failImage);
-        initImageLodaer(context, options);
+        initImageLoader(context, options);
     }
 
     public static void initConfig(Context context, Drawable loadingImage, int failImageId) {
         DisplayImageOptions options = ImageDisplayOptions.getOptions(loadingImage, failImageId);
-        initImageLodaer(context, options);
+        initImageLoader(context, options);
     }
 
     public static void initConfig(Context context, int loadingImageId, int failImageId) {
         DisplayImageOptions options = ImageDisplayOptions.getOptions(loadingImageId, failImageId);
-        initImageLodaer(context, options);
+        initImageLoader(context, options);
     }
 
     public static void initConfig(Context context, Drawable loadingImage, Drawable failImage) {
         DisplayImageOptions options = ImageDisplayOptions.getOptions(loadingImage, failImage);
-        initImageLodaer(context, options);
+        initImageLoader(context, options);
     }
 
     public static void initConfig(Context context, int defaultImageId) {
         DisplayImageOptions options = ImageDisplayOptions.getOptions(defaultImageId);
-        initImageLodaer(context, options);
+        initImageLoader(context, options);
     }
 
     public static void initConfig(Context context, Drawable defaultImage) {
         DisplayImageOptions options = ImageDisplayOptions.getOptions(defaultImage);
-        initImageLodaer(context, options);
+        initImageLoader(context, options);
     }
 
     /**

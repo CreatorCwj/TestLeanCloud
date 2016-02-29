@@ -6,7 +6,8 @@ import android.widget.Button;
 
 import com.baidu.location.BDLocation;
 import com.base.BaseActivity;
-import com.util.LocationUtils;
+import com.location.Location;
+import com.location.OnLocationListener;
 
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
@@ -37,7 +38,7 @@ public class BaiduLocationActivity extends BaseActivity {
     }
 
     private void locate() {
-        LocationUtils.requestLocation(this, new LocationUtils.OnLocationListener() {
+        Location.requestLocation(this, new OnLocationListener() {
             @Override
             public void onPreExecute() {
                 textView.setText("正在定位...");

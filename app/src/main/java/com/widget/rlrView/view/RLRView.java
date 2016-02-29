@@ -24,7 +24,9 @@ import java.util.List;
 /**
  * Created by cwj on 16/1/16.
  * 可设置是否刷新、自动刷新与否以及外部手动刷新的刷新控件
- * 支持刷新不加载,加载不刷新
+ * 支持刷新不加载,加载时可刷新(重置)
+ * 支持自定义选中item的方法
+ * 支持置顶item的方法
  * 与{@link LoadMoreRecyclerView}联合使用
  */
 public class RLRView extends SwipeRefreshLayout implements SwipeRefreshLayout.OnRefreshListener, LoadMoreRecyclerView.OnLoadListener {
@@ -197,8 +199,8 @@ public class RLRView extends SwipeRefreshLayout implements SwipeRefreshLayout.On
      * 外部主动调用
      */
     public void refresh() {
-        //刷新或加载时不允许刷新,不允许刷新时不调用
-        if (!isEnabled() || isRefreshing() || isLoading())
+        //刷新或加载时允许刷新,不允许刷新时不调用
+        if (!isEnabled())
             return;
         invokeRefresh();
     }
@@ -279,10 +281,14 @@ public class RLRView extends SwipeRefreshLayout implements SwipeRefreshLayout.On
     final public void onRefresh() {
         //swipe手势刷新时会调用此方法将refresh状态设置为true,如果此时在加载,不可以刷新,而且要讲刷新状态设置为false
         //为了统一写法加上isEnable判断,其实不可刷新时调不到这里
-        if (!isEnabled() || isLoading()) {
+        if (!isEnabled()) {
             setRefreshing(false);
             return;
         }
+        //允许加载时刷新(重置)
+        //正在加载时取消加载(相关请求在触发刷新时自己调用:比如筛选排序等情况)
+        if (isLoading())
+            stopLoadMore();
         //重置页数
         page.reset();
         //否则可以调用刷新,记住要恢复加载状态
@@ -292,9 +298,18 @@ public class RLRView extends SwipeRefreshLayout implements SwipeRefreshLayout.On
         }
     }
 
-    //置顶
+    /**
+     * 置顶
+     */
     public void backToTop() {
-        loadMoreRecyclerView.backToTop();
+        scrollTo(0);
+    }
+
+    /**
+     * 滚动到某项
+     */
+    public void scrollTo(int position) {
+        loadMoreRecyclerView.scrollTo(position);
     }
 
     /**
@@ -413,6 +428,21 @@ public class RLRView extends SwipeRefreshLayout implements SwipeRefreshLayout.On
     public void stopRL() {
         stopRefresh();
         stopLoadMore();
+    }
+
+    /**
+     * 选中某一项
+     * 位置,是否选中,是否滚动到该项,是否清除其它选中项
+     */
+    public void setSelected(int position, boolean isSelected, boolean scrollTo, boolean clearOtherSelected) {
+        loadMoreRecyclerView.setSelected(position, isSelected, scrollTo, clearOtherSelected);
+    }
+
+    /**
+     * 清除选中项
+     */
+    public void clearSelected() {
+        loadMoreRecyclerView.clearSelected();
     }
 
     /**
