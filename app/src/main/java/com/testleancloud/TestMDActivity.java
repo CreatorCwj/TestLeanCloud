@@ -79,6 +79,9 @@ public class TestMDActivity extends BaseActivity {
     @InjectView(R.id.testSortFilter)
     private Button testSortFilter;
 
+    @InjectView(R.id.testNested)
+    private Button testNested;
+
     @Override
     protected void setListener() {
         testSimpleAnim.setOnClickListener(this);
@@ -102,6 +105,7 @@ public class TestMDActivity extends BaseActivity {
         testLocation.setOnClickListener(this);
         testMap.setOnClickListener(this);
         testSortFilter.setOnClickListener(this);
+        testNested.setOnClickListener(this);
     }
 
     @Override
@@ -173,6 +177,9 @@ public class TestMDActivity extends BaseActivity {
                 break;
             case R.id.testSortFilter:
                 startActivity(new Intent(TestMDActivity.this, SortFilterActivity.class));
+                break;
+            case R.id.testNested:
+                startActivity(new Intent(TestMDActivity.this, NestedActivity.class));
                 break;
         }
     }

@@ -178,6 +178,10 @@
             android:name=".SortFilterActivity"
             android:label="@string/title_activity_sort_filter" >
         </activity>
+        <activity
+            android:name=".NestedActivity"
+            android:label="@string/title_activity_nested" >
+        </activity>
     </application>
 
 </manifest>
