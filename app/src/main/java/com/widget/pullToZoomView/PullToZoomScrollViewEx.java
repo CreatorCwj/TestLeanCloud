@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import com.testleancloud.R;
+import com.widget.SafeScrollView;
 
 public class PullToZoomScrollViewEx extends PullToZoomBase<ScrollView> {
     private static final String TAG = PullToZoomScrollViewEx.class.getSimpleName();
@@ -291,7 +292,7 @@ public class PullToZoomScrollViewEx extends PullToZoomBase<ScrollView> {
         }
     }
 
-    protected class InternalScrollView extends ScrollView {
+    protected class InternalScrollView extends SafeScrollView {
         private OnScrollViewChangedListener onScrollViewChangedListener;
 
         public InternalScrollView(Context context) {
