@@ -139,6 +139,13 @@
             android:layout_height="wrap_content"
             android:text="测试筛选排序" />
 
+        <Button
+            android:id="@+id/testNested"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="测试内部滚动" />
+
+
     </LinearLayout>
 
 </ScrollView>

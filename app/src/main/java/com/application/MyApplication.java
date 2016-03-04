@@ -20,6 +20,8 @@ import com.location.Location;
 import com.model.City;
 import com.model.Comment;
 import com.model.GameScore;
+import com.model.MyArea;
+import com.model.MyCategory;
 import com.model.Place;
 import com.model.Post;
 import com.model.Student;
@@ -100,6 +102,8 @@ public class MyApplication extends Application {
         AVObject.registerSubclass(Student.class);
         AVObject.registerSubclass(TeamWork.class);
         AVObject.registerSubclass(Place.class);
+        AVObject.registerSubclass(MyArea.class);
+        AVObject.registerSubclass(MyCategory.class);
     }
 
 }
